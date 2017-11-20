@@ -11,6 +11,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends ModuleModel
 {
+
+    public function assignNewFlows($flows_id) {
+
+    	foreach ($flows_id as $flow_id) {
+            if ($flow_id) {
+                Flow::find($flow_id)->update(['project_id' => $this->id]);
+            }    
+        }
+    }
+
 	public static function getMy ($id) {
 		return static::where('enable','1')->where('manager_id',$id)->orderBy('name')->get();
 	}

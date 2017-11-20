@@ -80,6 +80,12 @@ class TasksController extends ModuleController
 
         $object = Task::find($id);
 
+        if (!$object) {
+
+            $data['message']='not-found';
+            return view('layouts.error',compact('data'));
+        }
+
         if (!$object->isActive()) {
 
             $data['message']='deleted-object';
@@ -127,6 +133,12 @@ class TasksController extends ModuleController
 
         $object = Task::find($id);
 
+        if (!$object) {
+
+            $data['message']='not-found';
+            return view('layouts.error',compact('data'));
+        }
+
         if (!$object->isActive()) {
 
             $data['message']='deleted-object';
@@ -146,45 +158,24 @@ class TasksController extends ModuleController
 
     public function create() {
 
-        $validator =  Validator::make(request()->all(), $this->validation_arr);
+        $validator = Validator::make(request()->all(), $this->validation_arr);
 
         $errors=$validator->errors();
-
-        $plaintime = Task::formPlaintime(request('plaintime'));
-
-        if (!$plaintime) {
-            $errors->add('plaintime',trans('strings.messages.plaintime-fail'));
-        }
         
-        if (!$errors->all()) {
-
-            Task::create([
-                'enable' => '1',
-                'name' => request('name'),
-                'status' => request('status'),
-                'deadline' => request('deadline'),
-                'plaintime' => $plaintime,
-                'workarea_id' => request('workarea_id'),
-                'stage_id' => request('stage_id'),
-                'director_id' => '10',
-                'executor_id' => request('executor_id'),
-                'description' => request('description')
-
-            ] );
-
-            $newtask = Task::find(Task::getNew());
-
-            if (($newtask->status == 'began')) {
-
-                Notification::notifyAboutTask('assign-to-task', $newtask, $newtask->executor_id);
-            }
-
-            return redirect('/tasks?success='.date('U'));
-
-        } else {
+        if ($errors->all()) {
 
             return redirect('/tasks/add/')->withErrors($validator)->withInput();
         }
+
+        $newtask = Task::createObject(request()->all());
+
+        if (($newtask->status == 'began')) {
+
+            Notification::notifyAboutTask('assign-to-task', $newtask, $newtask->executor_id);
+
+        }
+
+        return redirect('/tasks?success='.date('U'));
   
     }
 
@@ -194,59 +185,40 @@ class TasksController extends ModuleController
 
         $errors=$validator->errors();
 
-        if (!Task::isExist(request('id'))) {
-
-            $data['message']='not-found';
-
-            return view('layouts.error',compact('data'));
-        }
-
-        $plaintime = Task::formPlaintime(request('plaintime'));
-
-        if (!$plaintime) {
-            $errors->add('plaintime',$plaintime);
-        }
-
-        if (!$errors->all()) {
-
-            $task = Task::find(request('id'));
-
-            if ((request('executor_id') != $task->executor_id) && (request('status')=='began')) {
-                Notification::notifyAboutTask('assign-to-task', $task, request('executor_id'));
-                Notification::notifyAboutTask('remove-from-task', $task, $task->executor_id);
-            }
-
-            if ((request('status') != $task->status) && (request('status')=='complete')) {
-                Notification::notifyAboutTask('complete-task', $task, $task->director_id);
-
-            }
-
-            $task->update([
-                'name' => request('name'),
-                'status' => request('status'),
-                'deadline' => request('deadline'),
-                'plaintime' => $plaintime,
-                'workarea_id' => request('workarea_id'),
-                'stage_id' => request('stage_id'),
-                'executor_id' => request('executor_id'),
-                'description' => request('description')
-
-            ] );
-
-            return redirect('/tasks?success='.date('U'));
-
-        } else {
+        if ($errors->all()) {
 
         return redirect('/tasks/edit/'.request('id'))->withErrors($validator)->withInput();
   
         }
+        
+        $task = Task::find(request('id'));
+
+        if (!$task) {
+
+            $data['message']='not-found';
+            return view('layouts.error',compact('data'));
+        }
+
+        if ((request('executor_id') != $task->executor_id) && (request('status')=='began')) {
+            Notification::notifyAboutTask('assign-to-task', $task, request('executor_id'));
+            Notification::notifyAboutTask('remove-from-task', $task, $task->executor_id);
+        }
+
+        if ((request('status') != $task->status) && (request('status')=='complete')) {
+            Notification::notifyAboutTask('complete-task', $task, $task->director_id);
+        }
+
+        $task->updateObject(request()->all());
+
+        return redirect('/tasks?success='.date('U'));
+
     }
 
     public function delete() {
         
         if (request('deleting')) {
             foreach (request('deleting') as $deleting_id) {
-                Task::find($deleting_id)->update(['enable' => '0']);
+                Task::disable($deleting_id);
             }
         }
 

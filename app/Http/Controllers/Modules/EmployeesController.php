@@ -38,7 +38,7 @@ class EmployeesController extends ModuleController
 
         $data = array();
 
-        $data ['module-code'] = $this->module_code;
+        $data['module-code'] = $this->module_code;
 
         $data['common-fields'] = $this->common_fields;
 
@@ -75,6 +75,12 @@ class EmployeesController extends ModuleController
         $data ['module-code'] = $this->module_code;
 
         $object = Employee::find($id);
+
+        if (!$object) {
+
+            $data['message']='not-found';
+            return view('layouts.error',compact('data'));
+        }
 
         if (!$object->isActive()) {
 
@@ -121,6 +127,12 @@ class EmployeesController extends ModuleController
 
         $object = Employee::find($id);
 
+        if (!$object) {
+
+            $data['message']='not-found';
+            return view('layouts.error',compact('data'));
+        }
+
         if (!$object->isActive()) {
 
             $data['message']='deleted-object';
@@ -142,42 +154,17 @@ class EmployeesController extends ModuleController
 
         $errors=$validator->errors();
         
-        if (Employee::where('email',request('email'))->count()>0) {
+        if (Employee::isEmailExist(request('email'))) {
             $errors->add('email',trans('strings.messages.email-dublicate'));
-
         }
         
-    	if (!$errors->all()) {
-
-            $hash_options = [
-                'cost' => 11,
-                'salt' => mcrypt_create_iv(22, MCRYPT_DEV_URANDOM),
-            ];
-
-            $pass = password_hash(request('email'), PASSWORD_BCRYPT,$hash_options);
-
-            Employee::create([
-                'enable' => '1',
-                'password' => $pass,
-                'surname' => request('surname'),
-                'firstname' => request('firstname'),
-                'lastname' => request('lastname'),
-                'sex' => request('sex'),
-                'dob' => request('dob'),
-                'role_id' => request('role_id'),
-                'post' => request('post'),
-                'email' => request('email'),
-                'tel' => request('tel'),
-                'skype' => request('skype')
-
-            ] );
-
-            return redirect('/employees?success='.date('U'));
-
-        } else {
-
+    	if ($errors->all()) {
             return redirect('/employees/add/')->withErrors($validator)->withInput();
         }
+
+        $new_employee = Employee::createObject(request()->all());
+
+        return $new_employee ? redirect('/employees?success='.date('U')) : redirect('/employees/add/');
   
     }
 
@@ -187,42 +174,29 @@ class EmployeesController extends ModuleController
 
     	$errors=$validator->errors();
 
-        if (!Employee::isExist(request('id'))) {
-
-        	$data['message']='not-found';
-
-        	return view('layouts.error',compact('data'));
+        if ($errors->all()) {
+            return redirect('/employees/edit/'.request('id'))->withErrors($validator)->withInput();
         }
 
-        if (!$errors->all()) {
+        $employee = Employee::find(request('id'));
 
-            Employee::find(request('id'))->update([
-                'surname' => request('surname'),
-                'firstname' => request('firstname'),
-                'lastname' => request('lastname'),
-                'sex' => request('sex'),
-                'dob' => request('dob'),
-                'role_id' => request('role_id'),
-                'post' => request('post'),
-                'email' => request('email'),
-                'tel' => request('tel'),
-                'skype' => request('skype')
-            ] );
+        if (!$employee) {
 
-            return redirect('/employees?success='.date('U'));
-
-        } else {
-
-        return redirect('/employees/edit/'.request('id'))->withErrors($validator)->withInput();
-  
+            $data['message']='not-found';
+            return view('layouts.error',compact('data'));
         }
+
+        $employee->updateObject(request()->all());
+
+        return redirect('/employees?success='.date('U'));
+
     }
 
     public function delete() {
         
         if (request('deleting')) {
             foreach (request('deleting') as $deleting_id) {
-                Employee::find($deleting_id)->update(['enable' => '0']);
+                Employee::disable($deleting_id);
             }
         }
 

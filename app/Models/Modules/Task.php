@@ -8,8 +8,36 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends ModuleModel
 {
-	public static function getMy ($id) {
-		return static::where('enable','1')->where('executor_id',$id)->where('status','began')->orderBy('deadline')->get();
+
+	public static function createObject($data) {
+
+        if (!$data) return;
+
+        $data = static::filterRequest($data);
+
+        $data['enable'] = 1;
+        $data['director_id'] = 10;
+        $data['plaintime'] = static::formPlaintime($data['plaintime']);
+
+        return static::create($data);
+
+    }
+
+    public function updateObject($data) {
+
+    	if (!$data) return;
+
+    	$data = static::filterRequest($data);
+
+    	$data['plaintime'] = static::formPlaintime($data['plaintime']);
+
+    	$this->update($data);
+
+    }
+
+
+	public static function getMy ($executor_id) {
+		return static::where('enable','1')->where('executor_id',$executor_id)->where('status','began')->orderBy('deadline')->get();
 	}
 
 	public function getAssignment() {
@@ -43,8 +71,8 @@ class Task extends ModuleModel
         // from '** h ** m' to '**:**:**'
         $hours = (is_numeric(substr($str,0,2))) ? substr($str,0,2) : '';
         $minutes = (is_numeric(substr($str,6,2))) ? substr($str,6,2) : '';
-        if (!$hours || !$minutes) return '';
-        if (intval($minutes) > 59) return '';
+        if (!$hours || !$minutes) return '00:00:00';
+        if (intval($minutes) > 59) return '00:00:00';
         return $hours.':'.$minutes.':00';
     }
 

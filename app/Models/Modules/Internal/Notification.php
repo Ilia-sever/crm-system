@@ -4,18 +4,15 @@ namespace App\Models\Modules\Internal;
 
 use App;
 use App\Models;
-
+use App\Models\MainModel;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Modules\Employee;
 use App\Models\Modules\Task;
 use App\Models\Modules\Project;
 
-class Notification extends Model
+class Notification extends MainModel
 {
-    public $timestamps = false;
-	protected $guarded = [];
-
 	public function getDatetimeof() {
 		$date = new \DateTime($this->datetimeof);
 		return $date->format('H:i   d.m.Y');

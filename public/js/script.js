@@ -148,6 +148,7 @@ function modalWindowFunctional() {
     });
 
     $(".flow-item__edit").click(function(event) {
+        event.stopPropagation();
         event.preventDefault();
         let project = $("input[name='id']").val();
         if (project == '') project=0;
@@ -161,6 +162,7 @@ function modalWindowFunctional() {
     });
 
     $(".flow-item__delete").click(function(event) {
+        event.stopPropagation();
         event.preventDefault();
         let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
@@ -206,6 +208,7 @@ function modalWindowFunctional() {
     })
 
     $(".stage-item__edit").click(function(event) {
+        event.stopPropagation();
         event.preventDefault();
         $.ajax({
             type: "GET",
@@ -217,6 +220,7 @@ function modalWindowFunctional() {
     });
 
     $(".stage-item__delete").click(function(event) {
+        event.stopPropagation();
         event.preventDefault();
         let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         $.ajax({

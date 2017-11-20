@@ -7,9 +7,60 @@ body {
 	height: 1px;
 	overflow-x: hidden;
 }
-a,p,span,button,input,label,tr,td,h1,h2,h3,h4,h5 {
-	font-family: Century Gothic;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+span,
+i,
+u,
+b,
+a,
+li,
+td,
+th,
+input,
+textarea,
+button,
+label {
+    font-family: Century Gothic;
+    
+    color: #000;
 }
+
+p,
+span,
+i,
+u,
+b,
+a,
+li,
+td,
+input,
+textarea,
+button,
+label {
+	font-size: 14px;
+}
+
+label {
+    font-weight: normal;
+}
+
+a:focus,
+a:hover {
+    color: unset;
+}
+
+a,
+button {
+    cursor: pointer;
+}
+
+
 .header {
 	background-color: #13151e;
 	padding: 15px 10px 15px 10px;
@@ -355,7 +406,8 @@ h1 {
 
 #fancybox-content {
 	padding-top: 40px;
-	min-width: 300px;
+	min-height: 200px;
+	width: 300px;
 	display: none;
 }
 .confirmation {
@@ -373,6 +425,21 @@ h1 {
 	display: block;
 	min-width: 100px;
 	margin: 20px auto 0 auto;
+}
+
+
+@media (min-width: 768px) {
+	#fancybox-content {
+		min-height: 300px;
+		width: 500px;
+	}
+}
+
+@media (min-width: 1170px) {
+	#fancybox-content {
+		min-height: 300px;
+		width: 600px;
+	}
 }
 
 

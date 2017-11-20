@@ -20,7 +20,11 @@ class StagesController extends \App\Http\Controllers\Controller
     public function control($flow_id,$id) {
 
     	if ($id) {
+
     		$stage = Stage::find($id);
+
+            if (!$stage) return;
+
     		$data = array(
     			'title' => trans('strings.operations.edit-stage').' ('.$stage->getFlow()->name.') ',
     			'id' => $stage->id,
@@ -29,7 +33,10 @@ class StagesController extends \App\Http\Controllers\Controller
                 'status' => $stage->status,
     			'sort_order' => $stage->sort_order
     		);
+
     	} else {
+
+            if (!$flow_id) return;
 
             $flow = Flow::find($flow_id);
 
@@ -52,50 +59,40 @@ class StagesController extends \App\Http\Controllers\Controller
 
         $errors=$validator->errors();
 
-        if (!$errors->all()) {
+        if ($errors->all()) {
 
-        	if (request('id')) {
-
-	            Stage::find(request('id'))->update([
-	                'name' => request('name'),
-                    'status' => request('status'),
-	                'sort_order' => request('sort_order'),
-                    'flow_id' => request('flow_id')
-                    
-	            ] );
-
-        	} else {
-        		Stage::create([
-	                'name' => request('name'),
-                    'status' => request('status'),
-	                'sort_order' => request('sort_order'),
-                    'flow_id' => request('flow_id')
-                    
-	            ] );
-        	}
-
-        	return '';
-
-    	} else {
-
-    		$data = array(
-    			'title' => trans('strings.operations.add-stage'),
-    			'id' => request('id'),
-    			'flow_id' => request('flow_id'),
-    			'name' => request('name'),
+            $data = array(
+                'title' => trans('strings.operations.add-stage'),
+                'id' => request('id'),
+                'flow_id' => request('flow_id'),
+                'name' => request('name'),
                 'status' => request('status'),
-    			'sort_order' => request('sort_order')
-    		);
+                'sort_order' => request('sort_order')
+            );
 
 
-    		return view('module-objects.projects.stages.control',compact('data'))->withErrors($validator);
-    	}
- 
+            return view('module-objects.projects.stages.control',compact('data'))->withErrors($validator);
+        }
+
+        if (!request('id')) {
+
+            Stage::createObject(request()->all());
+
+        } else {
+
+            $stage = Stage::find(request('id'));
+        	
+            $stage->updateObject(request()->all());
+        	
+        }
+
+        return '';
     }
 
     public function delete() {
 
-    	Stage::find(request('deleting'))->delete();
+    	$stage = Stage::find(request('deleting'));
+        $stage->delete();
 
     }
 

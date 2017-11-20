@@ -72,6 +72,12 @@ class ProjectsController extends ModuleController
 
         $object = Project::find($id);
 
+        if (!$object) {
+
+            $data['message']='not-found';
+            return view('layouts.error',compact('data'));
+        }
+
         if (!$object->isActive()) {
 
             $data['message']='deleted-object';
@@ -117,6 +123,12 @@ class ProjectsController extends ModuleController
 
         $object = Project::find($id);
 
+        if (!$object) {
+
+            $data['message']='not-found';
+            return view('layouts.error',compact('data'));
+        }
+
         if (!$object->isActive()) {
 
             $data['message']='deleted-object';
@@ -142,34 +154,17 @@ class ProjectsController extends ModuleController
 
         $errors=$validator->errors();
 
-        if (!$errors->all()) {
-
-            Project::create([
-                'enable' => '1',
-                'name' => request('name'),
-                'client_id' => request('client_id'),
-                'manager_id' => request('manager_id')
-
-            ] );
-
-            $newproject = Project::getNew();
-
-            $flows_id = explode(';', request('flows'));
-
-            foreach ($flows_id as $flow_id) {
-                if ($flow_id) {
-                    Flow::find($flow_id)->update(['project_id' => $newproject->id]);
-                }
-            }
-
-            Notification::notifyAboutProject('assign-to-project', $newproject, $newproject->manager_id);
-
-            return redirect('/projects?success='.date('U'));
-
-        } else {
+        if ($errors->all()) {
 
             return redirect('/projects/add/')->withErrors($validator)->withInput();
         }
+
+        $newproject = Project::createObject(request()->all());
+        $newproject->assignNewFlows(explode(';', request('flows')));
+
+        Notification::notifyAboutProject('assign-to-project', $newproject, $newproject->manager_id);
+
+        return redirect('/projects?success='.date('U'));
   
     }
 
@@ -179,50 +174,34 @@ class ProjectsController extends ModuleController
 
         $errors=$validator->errors();
 
-        if (!Project::isExist(request('id'))) {
+        if ($errors->all()) {
+
+            return redirect('/projects/edit/'.request('id'))->withErrors($validator)->withInput();
+        }
+            
+        $project = Project::find(request('id'));
+
+        if (!$project) {
 
             $data['message']='not-found';
-
             return view('layouts.error',compact('data'));
         }
 
-        if (!$errors->all()) {
-
-            $project = Project::find(request('id'));
-
-            if ((request('manager_id') != $project->manager_id)) {
-                Notification::notifyAboutProject('assign-to-project', $project, request('manager_id'));
-            }
-
-            $project->update([
-                'name' => request('name'),
-                'client_id' => request('client_id'),
-                'manager_id' => request('manager_id')
-
-            ] );
-
-            $flows_id = explode(';', request('flows'));
-
-            foreach ($flows_id as $flow_id) {
-                if ($flow_id) {
-                    Flow::find($flow_id)->update(['project_id' => request('id')]);
-                }
-            }
-
-            return redirect('/projects?success='.date('U'));
-
-        } else {
-
-        return redirect('/projects/edit/'.request('id'))->withErrors($validator)->withInput();
-  
+        if ((request('manager_id') != $project->manager_id)) {
+            Notification::notifyAboutProject('assign-to-project', $project, request('manager_id'));
         }
+
+        $project->updateObject(request()->all());
+        $project->assignNewFlows(explode(';', request('flows')));
+
+        return redirect('/projects?success='.date('U'));
     }
 
     public function delete() {
         
         if (request('deleting')) {
             foreach (request('deleting') as $deleting_id) {
-                Project::find($deleting_id)->update(['enable' => '0']);
+                Project::disable();
             }
 
         }
@@ -236,21 +215,25 @@ class ProjectsController extends ModuleController
 
         $flows_id = explode(';', request('flows'));
         $data['flows'] = array();
+        $sort_arr = array();
 
         foreach ($flows_id as $flow_id) {
+
             if ($flow_id) {
-                if (Flow::where('id',$flow_id)->count()>0)
-                $data['flows'][] = Flow::find($flow_id);
+
+                $flow = Flow::find($flow_id);
+
+                if ($flow) { 
+
+                    $data['flows'][] = $flow;
+
+                    $sort_arr[] = $flow->sort_order;
+                }
             }
         }
 
-        $sort_arr = array();
-
-        foreach($data['flows'] as $flow) {
-            $sort_arr[] = $flow->sort_order;
-        }
-
         array_multisort($sort_arr, SORT_ASC, $data['flows']);
+
         return view('module-objects.projects.flows-stages-control',compact('data'));
     }
 
