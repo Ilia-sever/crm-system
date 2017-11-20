@@ -30,17 +30,30 @@ class ModuleModel extends MainModel
     	if ($obj) $obj->update(['enable' => '0']);
     }
 
+    public static function getObjects($params) {
+
+     	if ($params['sort_by'] && $params['db_sort_possible']) {
+
+    		$sort = $params['sort_by'];
+    		$order = ($params['order_by'] == 'desc') ? 'desc' : 'asc';
+
+    		return static::where('enable','1')->orderBy($sort,$order)->get();
+
+    	} else {
+
+    		return static::where('enable','1')->get();
+    	}
+		
+	}
+
+    public static function getActive() {
+        return static::where('enable','1')->get();
+
+    }
 
 	public function isActive() {
 		return ($this->enable=='0') ? false: true;
 	}
 
-	public static function getActive() {
-		return static::where('enable','1')->get();
-	}
-
-	public static function getSorted($sort_field,$sort_order) {
-		return static::where('enable','1')->orderBy($sort_field,$sort_order)->get();
-	}
 
 }

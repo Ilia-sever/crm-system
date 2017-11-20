@@ -16,6 +16,7 @@ use Validator;
 
 class ProjectsController extends ModuleController
 {
+    protected $model = "\App\Models\Modules\Project";
     protected $module_code = 'projects';
 
     protected $validation_arr = array(
@@ -26,23 +27,19 @@ class ProjectsController extends ModuleController
 
     protected $common_fields = array('name','client','manager');
 
+    protected $default_sort_field = 'name';
+
     protected $editable_fields = array('name','client_id','manager_id');
 
-    protected function getRecords ($objects='') {
+    protected function formRecords($params) {
 
-        $projects = ($objects) ? $objects : Project::getActive();
+        $projects = Project::getObjects($params);
 
-        $data = array();
-
-        $data['module-code'] = $this->module_code;
-
-        $data['common-fields'] = $this->common_fields;
-
-        $data['records'] = array();
+        $records = array();
 
         foreach ($projects as $num => $project) {
 
-            $data['records'][$num] = array(
+            $records[$num] = array(
                 'id' => $project->id,
                 'name' => $project->name,
                 'client' => $project->getClient(),
@@ -50,7 +47,7 @@ class ProjectsController extends ModuleController
             );
         }
 
-        return $data;
+        return $records;
     }
 
     public function sort($sort_field,$sort_order) {
@@ -195,20 +192,6 @@ class ProjectsController extends ModuleController
         $project->assignNewFlows(explode(';', request('flows')));
 
         return redirect('/projects?success='.date('U'));
-    }
-
-    public function delete() {
-        
-        if (request('deleting')) {
-            foreach (request('deleting') as $deleting_id) {
-                Project::disable();
-            }
-
-        }
-
-        $data = $this->getRecords();
-
-        return view('module-objects.table-rows',compact('data'));  
     }
 
     public function getFlowsPanel () {

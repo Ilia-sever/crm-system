@@ -13,6 +13,8 @@ use Validator;
 
 class EmployeesController extends ModuleController
 {
+
+    protected $model = "\App\Models\Modules\Employee";
 	protected $module_code = 'employees';
 
 	protected $validation_arr = array(
@@ -30,22 +32,18 @@ class EmployeesController extends ModuleController
 
     protected $common_fields = array('fullname','email','tel','role');
 
+    protected $default_sort_field = 'fullname';
+
 	protected $editable_fields = array('surname','firstname','lastname','sex','dob','role_id','post','email','tel','skype');
 
-    protected function getRecords ($objects='') {
+    protected function formRecords($params) {
 
-        $employees = ($objects) ? $objects : Employee::getActive();
+        $employees = Employee::getObjects($params);
 
-        $data = array();
-
-        $data['module-code'] = $this->module_code;
-
-        $data['common-fields'] = $this->common_fields;
-
-        $data['records'] = array();
+        $records = array();
 
         foreach ($employees as $num => $employee) {
-            $data['records'][$num] = array(
+            $records[$num] = array(
                 'id' => $employee->id,
                 'fullname' => $employee->getFullname(), 
                 'email' => $employee->email,
@@ -54,18 +52,7 @@ class EmployeesController extends ModuleController
             );
         }
 
-        return $data;
-    }
-
-    public function sort($sort_field,$sort_order) {
-
-        if (Employee::isFieldExist($sort_field)) {
-            $data = $this->getRecords(Employee::getSorted($sort_field,$sort_order));
-        } else {
-            $data = $this->sortRecords($this->getRecords(),$sort_field,$sort_order);
-        }
-
-        return view('module-objects.table-rows',compact('data'));
+        return $records;
     }
 
     public function show($id) {
@@ -190,18 +177,5 @@ class EmployeesController extends ModuleController
 
         return redirect('/employees?success='.date('U'));
 
-    }
-
-    public function delete() {
-        
-        if (request('deleting')) {
-            foreach (request('deleting') as $deleting_id) {
-                Employee::disable($deleting_id);
-            }
-        }
-
-        $data = $this->getRecords();
-
-        return view('module-objects.table-rows',compact('data'));  
     }
 }

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Input;
 
 class TasksController extends ModuleController
 {
+    protected $model = "\App\Models\Modules\Task";
     protected $module_code = 'tasks';
 
     protected $validation_arr = array(
@@ -30,23 +31,19 @@ class TasksController extends ModuleController
 
     protected $common_fields = array('name','status','deadline','plaintime','assignment','director','executor');
 
+    protected $default_sort_field = 'status';
+
     protected $editable_fields = array('name','status','deadline','plaintime','workarea_id','stage_id','executor_id','description');
 
-    protected function getRecords ($objects='') {
+    protected function formRecords($params) {
 
-        $tasks = ($objects) ? $objects : Task::getActive();
+        $tasks = Task::getObjects($params);
 
-        $data = array();
-
-        $data['module-code'] = $this->module_code;
-
-        $data['common-fields'] = $this->common_fields;
-
-        $data['records'] = array();
+        $records = array();
 
         foreach ($tasks as $num => $task) {
 
-            $data['records'][$num] = array(
+            $records[$num] = array(
                 'id' => $task->id,
                 'name' => $task->name,
                 'status' => trans('strings.fields-name.statuses.'.$task->status),
@@ -58,18 +55,7 @@ class TasksController extends ModuleController
             );
         }
 
-        return $data;
-    }
-
-    public function sort($sort_field,$sort_order) {
-
-        if (Task::isFieldExist($sort_field)) {
-            $data = $this->getRecords(Task::getSorted($sort_field,$sort_order));
-        } else {
-            $data = $this->sortRecords($this->getRecords(),$sort_field,$sort_order);
-        }
-
-        return view('module-objects.table-rows',compact('data'));
+        return $records;
     }
 
     public function show($id) {
@@ -212,21 +198,6 @@ class TasksController extends ModuleController
 
         return redirect('/tasks?success='.date('U'));
 
-    }
-
-    public function delete() {
-        
-        if (request('deleting')) {
-            foreach (request('deleting') as $deleting_id) {
-                Task::disable($deleting_id);
-            }
-        }
-
-        $data = $this->getRecords();
-
-        return view('module-objects.table-rows',compact('data'));  
-    }
-
-    
+    }    
 
 }

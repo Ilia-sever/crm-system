@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\Models\Modules\Task;
 
 class ModuleController extends \App\Http\Controllers\Controller
 {
+    protected $default_sort_field = '';
+    protected $default_sort_order = '';
+
 	public function index() {
 
-        $data = $this->getRecords();
+        $data['module-code'] = $this->module_code;
+        $data['common-fields'] = $this->common_fields;
 
         if (request('search-field')) {
             $data['search-field'] = request('search-field');
@@ -26,60 +31,82 @@ class ModuleController extends \App\Http\Controllers\Controller
         return view('module-objects.table',compact('data'));
     }
 
-    public function search($search_field,$search_text) {
+    public function getRecords() {
 
-        $data = $this->searchRecords($this->getRecords(),$search_field,$search_text);
+        $data['module-code'] = $this->module_code;
+        $data['common-fields'] = $this->common_fields;
+
+        $params = array(
+            'sort_by' => request('sort') ? request('sort') : $this->default_sort_field,
+            'order_by' => request('order') ? request('order') : $this->default_sort_order,
+            'search_field' => request('search_field') ? request('search_field') : '',
+            'search_value' => request('search_value') ? request('search_value') : '',
+        );
+
+        $params['db_sort_possible'] = true;
+
+        if (isset($this->model) && $params['sort_by']) {
+
+            $model = $this->model;
+
+            $params['db_sort_possible'] = $model::isFieldExist($params['sort_by']);
+        }
+
+        $data['records'] = $this->formRecords($params);
+
+        if ($data['records'] && $params['sort_by'] && !$params['db_sort_possible']) {
+
+            $sort_arr = array();
+
+            foreach($data['records'] as $record) {
+                $sort_arr[] = $record[$params['sort_by']];
+            }
+
+            $order = ($params['order_by']=='desc') ? SORT_DESC : SORT_ASC;
+
+            array_multisort($sort_arr, $order, $data['records']);
+
+        }
+
+        if ($data['records'] && $params['search_field'] && $params['search_value']) {
+
+            $suitable_records = array();
+
+            $field = $params['search_field'];
+            $text = $params['search_value'];
+
+            foreach ($data['records'] as $num => $record) {
+                if ($field !== 'all') {
+                    if  (strpos($record[$field], $text)!==false) {
+                        $suitable_records[$num]=$record;
+                    }
+                    continue;
+                }
+                foreach ($data['common-fields'] as $common_field) {
+                    if ((strpos($record[$common_field], $text)!==false)&&(!isset($suitable_records[$num]))) {
+                        $suitable_records[$num]=$record;
+                    }
+                }
+                var_dump($suitable_records);
+            }
+
+            $data['records'] = $suitable_records;
+        }
 
         return view('module-objects.table-rows',compact('data'));
     }
 
-    public function searchRecords($data,$search_field,$search_text) {
+    public function delete() {
 
-        $suitable_records = array();
+        $model = $this->model;
+        
+        if (request('deleting')) {
+            foreach (request('deleting') as $deleting_id) {
+                $model::disable($deleting_id);
+            }
+        }
 
-        if ($search_text != 'all') {
-
-	        foreach ($data['records'] as $num => $record) {
-	        	if ($search_field !== 'all') {
-	        		if  (strpos($record[$search_field], $search_text)!==false) {
-	        			$suitable_records[$num]=$record;
-	        		}
-	        		continue;
-	        	}
-	        	foreach ($data['common-fields'] as $key => $visible_field) {
-	        		if ((strpos($record[$visible_field], $search_text)!==false)&&(!isset($suitable_records[$num]))) {
-	        			$suitable_records[$num]=$record;
-	        		}
-	        	}
-	        }
-
-	        $data['records'] = $suitable_records;
-
-    	}
-
-    	return $data;
-
+        return $this->getRecords();  
     }
 
-
-    public function sortRecords($data,$sort_field,$sort_order) {
-
-    	$sort_arr = array();
-
-    	foreach($data['records'] as $record) {
-			$sort_arr[] = $record[$sort_field];
-		}
-
-		$order = ($sort_order=='asc') ? SORT_ASC : SORT_DESC;
-
-		array_multisort($sort_arr, $order, $data['records']);
-
-		return $data;
-    }
-
-    public static function getNew() {
-
-		return static::latest('id')->value('id');
-		
-	}
 }

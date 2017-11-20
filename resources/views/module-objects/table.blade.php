@@ -30,14 +30,16 @@
             @foreach ($data['common-fields'] as $field)
             <th>
                 {{trans('strings.fields-name.'. $field)}}
-                <a class="sort-button" id="{{$field}}" value="asc"></a>
+                <a class="sort-button" id="{{$field}}" value="desc"></a>
             </th>
             @endforeach
             <th>{{trans('strings.fields-name.actions')}}</th>
         </tr>
     </thead>
     <tbody>
-        @include('module-objects.table-rows')
+        <tr class="records-table__row_empty">
+            <td colspan=100>{{trans('strings.messages.loading')}}</td>
+        </tr>
     </tbody>
 </table>
 <button type="button" class="btn delete-all-button btn-danger">

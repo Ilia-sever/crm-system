@@ -5,43 +5,62 @@ function getModuleName() {
 
 function resetSortButtons() {
     //вернуть иконки сортировок в первоначальный вид
+    $('.sort-button').removeClass("sort-button_active");
     $('.sort-button').removeClass("sort-button_active-desc");
     $('.sort-button').removeClass("sort-button_active-asc");
-    $('.sort-button').attr('value','asc');
+    $('.sort-button').attr('value','desc');
 }
 
 function refreshRecords(records) {
-    //загрузить новые записи в таблицу объектов модуля
+    //загрузить новые записи в таблицу объектов модуля + загрузить функционал чекбоксов и кнопок удаления
     $(".records-table tbody").html(records);
+
     $(".checkbox-main").prop('checked', false);
     $(".checkbox-table").prop('checked', false);
+    $(".checkbox-main").change(function() {
+        if ($(this).is(':checked')) {
+            $(".checkbox-table").prop('checked', true);
+        } else {
+            $(".checkbox-table").prop('checked', false);
+        }
+    });
+    $(".checkbox-table").change(function() {
+        if (!$(this).is(':checked')) {
+            if ($(".checkbox-main").is(':checked')) {
+                $(".checkbox-main").prop('checked', false);
+            }
+        }
+    });
+
+    $(".delete-button").click(function() {
+        deleteConfirmation($(this).attr('name'));
+    })
+    $(".delete-all-button").click(function() {
+        if ($(".checkbox-table:checked").length > 0) {
+            deleteConfirmation();
+        }
+    })
 }
 
-function searchRecords() {
-    //ajax на получение новых записей в таблицу согласно запросу поиска
-    let search_field = $(".search-select select option:selected").val();
-    let search_text = $(".search-input input").val();
-    if (search_text == '') search_text = 'all';
+function getRecords() {
+    //ajax на получение новых записей в таблицу согласно парамертам запроса
+    let params = {
+        'search_field': $(".search-select select option:selected").val(),
+        'search_value' : $(".search-input input").val(),
+        'sort' : $('.sort-button_active').attr('id'),
+        'order' : $('.sort-button_active').attr('value')
+    };
+         
     $.ajax({
         type: "GET",
-        url: "/" + getModuleName() + "/search/" + search_field + "/" + search_text,
+        url: "/" + getModuleName() + "/getRecords",
+        data: params,
         success: function(records) {
             refreshRecords(records);
-            resetSortButtons();
         }
     });
 }
 
-function sortRecords(field, order) {
-    //ajax на получение новых записей в таблицу согласно выбранной сортировке
-    $.ajax({
-        type: "GET",
-        url: "/" + getModuleName() + "/sort/" + field + "/" + order,
-        success: function(records) {
-            refreshRecords(records);
-        }
-    });
-}
 
 function deleteConfirmation(delete_val) {
 
@@ -289,50 +308,30 @@ $(document).ready(function() {
     //главный скрипт
 
 
-    //1. запуск поиска новых записей при разных действиях
-
     
+    //1. первичная загрузка данных в таблицу модулей
+    
+    if ($(".records-table").length > 0) {
+        getRecords();
+    }
+
+
+
+    //2. запуск поиска новых записей при разных действиях
 
     if ($(".search-input input").length > 0) {
 
-        if ($(".search-input input").val()!='') searchRecords();
-        $(".search-input input").keyup(function() { searchRecords() });
-        $(".search-input button").click(function() { searchRecords() });
-        $(".search-select select").change(function() { searchRecords() });
+        if ($(".search-input input").val()!='') getRecords();;
+        $(".search-input input").keyup(function() { getRecords(); });
+        $(".search-input button").click(function() { getRecords(); });
+        $(".search-select select").change(function() { getRecords(); });
 
     }
-
-    //2.функционал чекбоксов в таблице
-
-    $(".checkbox-main").change(function() {
-        if ($(this).is(':checked')) {
-            $(".checkbox-table").prop('checked', true);
-        } else {
-            $(".checkbox-table").prop('checked', false);
-        }
-    });
-    $(".checkbox-table").change(function() {
-        if (!$(this).is(':checked')) {
-            if ($(".checkbox-main").is(':checked')) {
-                $(".checkbox-main").prop('checked', false);
-            }
-        }
-    });
+    
 
 
-    //3. запуск удаления записей при разных действиях
+    //4. запуск отправки мгновенного сообщения о выполнении задачи
 
-    $(".delete-button").click(function() {
-        deleteConfirmation($(this).attr('name'));
-    })
-    $(".delete-all-button").click(function() {
-        if ($(".checkbox-table:checked").length > 0) {
-            deleteConfirmation();
-        }
-    })
-
-
-    //4. запуск отправки сообщения о выполнении задачи
     $(".complete-button").click(function() {
         let task_id = $(this).attr('name');
         completeTask(task_id);
@@ -347,11 +346,14 @@ $(document).ready(function() {
         resetSortButtons();
         new_order = (order=='asc') ? 'desc' : 'asc';
         $(this).attr('value',new_order);
+        $(this).addClass('sort-button_active');
         $(this).addClass('sort-button_active-'+order);
-        sortRecords(sort, order);
+        getRecords();
     })
 
+
     //6. обработка всплывающего уведомления
+
     if ($('.message').length > 0) {
         $('.message').show('fade',1000);
         setTimeout(function() {$('.message').hide('fade',1000)}, 2000)

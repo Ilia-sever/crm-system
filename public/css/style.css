@@ -309,17 +309,17 @@ h1 {
 }
 .sort-button::after {
 	color: #000;
-	content: "▼"
+	content: '\25B2';
 }
 
 .sort-button_active-desc::after {
 	color: #5383B5;
-	content: "▲"
+	content: '\25B2';
 }
 
 .sort-button_active-asc::after {
 	color: #5383B5;
-	content: "▼"
+	content: '\25BC';
 }
 
 
@@ -406,7 +406,6 @@ h1 {
 
 #fancybox-content {
 	padding-top: 40px;
-	min-height: 200px;
 	width: 300px;
 	display: none;
 }
@@ -417,6 +416,7 @@ h1 {
 
 .confirmation__question {
 	display: block;
+	text-align: center;
 	width: 100%;
 	font-size: 18px;
 }
@@ -430,14 +430,12 @@ h1 {
 
 @media (min-width: 768px) {
 	#fancybox-content {
-		min-height: 300px;
 		width: 500px;
 	}
 }
 
 @media (min-width: 1170px) {
 	#fancybox-content {
-		min-height: 300px;
 		width: 600px;
 	}
 }
