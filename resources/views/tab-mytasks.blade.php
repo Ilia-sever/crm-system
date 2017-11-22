@@ -22,7 +22,6 @@
                 </td>
                 @endforeach
                 <td>
-                    <meta name="csrf-token" content="{{ csrf_token() }}" />
                     <a class="complete-button" title="{{trans('strings.operations.done')}}" name="{{$object['id']}}">✓</a>
                     <a href="/tasks/show/{{$object['id']}}" title="{{trans('strings.operations.detail')}}" class="show-button">👁</a>
                 </td>

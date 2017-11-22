@@ -16,6 +16,7 @@ class CreateEmployeesTable extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->increments('id');
             $table->boolean('enable')->nullable();
+            $table->rememberToken();
             $table->integer('role_id')->unsigned();
             $table->string('email', 100);
             $table->string('password', 256)->nullable();

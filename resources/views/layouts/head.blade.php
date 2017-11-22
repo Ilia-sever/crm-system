@@ -1,39 +1,34 @@
-<!DOCTYPE html>
-<html>
+@include ('layouts.header')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <link rel="stylesheet" href="{{URL::asset('css/lib/normalize.css')}}">
-    <link rel="stylesheet" href="{{URL::asset('css/lib/bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{URL::asset('css/lib/jquery-ui.min.css')}}">
-    <link rel="stylesheet" href="{{URL::asset('css/lib/jquery.fancybox.min.css')}}">
-    <link rel="stylesheet" href="{{URL::asset('css/style.css')}}">
-    <title>CRM</title>
-</head>
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 
-<body>
+@if (isset($data)) @if (isset($data['success']))
+<p class="message">{{trans('strings.messages.success')}}</p>
+@endif @endif
 
-    @if (isset($data)) @if (isset($data['success']))
-        <p class="message">{{trans('strings.messages.success')}}</p>
-    @endif @endif 
-
-    <div class="container-fluid wrapper">
-        <header class="row header">
-            <div class="logo">
-                <img src="{{URL::asset('images/logo3.png')}}">
-                <span>high level automatization</span>
-            </div>
-            <nav class="navigation">
-                <ul>
-                    <li><a class="navigation__link navigation__link_help" href="/help"></a></li>
-                    <li><a class="navigation__link navigation__link_user" href="/help"></a></li>
-                </ul>
-            </nav>
-        </header>
-        <a class="fancybox-init" href="#fancybox-content"></a>
-        <div id="fancybox-content"></div>
-        <div class="row main">
-            @include ('layouts.aside-panel')
-            <section class="content col-xs-12 col-md-10">
+<div class="container-fluid wrapper">
+    <header class="row header">
+        <div class="logo">
+            <img src="{{URL::asset('images/logo3.png')}}">
+            <span>high level automatization</span>
+        </div>
+        <nav class="navigation">
+            <ul>
+                <li><a class="navigation__link navigation__link_help" href="/help"></a></li>
+                <li class="acount-container">
+                    <a class="navigation__link navigation__link_acount"></a>
+                    <div class="acount-panel">
+                        <p class="acount-panel__title">{{ Auth::user()->firstname }}</p>
+                        <a class="acount-panel__link" href="/employees/show/{{ Auth::user()->id }}">{{trans('strings.operations.acount')}}</a>
+                        <a class="acount-panel__link acount-panel__link_logout">{{trans('strings.operations.logout')}}</a>
+                        <form class="acount-panel__form" method="POST" action="{{ route('logout') }}">{{ csrf_field() }}</form>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <a class="fancybox-init" href="#fancybox-content"></a>
+    <div id="fancybox-content"></div>
+    <div class="row main">
+        @include ('layouts.aside-panel')
+        <section class="content col-xs-12 col-md-10">

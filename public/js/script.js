@@ -44,6 +44,9 @@ function refreshRecords(records) {
 
 function getRecords() {
     //ajax на получение новых записей в таблицу согласно парамертам запроса
+
+    if (getModuleName()==undefined) return;
+
     let params = {
         'search_field': $(".search-select select option:selected").val(),
         'search_value' : $(".search-input input").val(),
@@ -386,6 +389,20 @@ $(document).ready(function() {
     });
 
      $( "#tabs" ).tabs();
+
+     //8
+
+     $('.navigation__link_acount').click(function() {
+        if ($('.acount-panel').css('display') =='none') {
+            $('.acount-panel').show();
+        } else {
+            $('.acount-panel').hide();
+        }
+     })
+
+     $('.acount-panel__link_logout').click(function() {
+        $('.acount-panel__form').submit();
+     })
 
 
 });

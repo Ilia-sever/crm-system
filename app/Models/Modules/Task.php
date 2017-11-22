@@ -6,6 +6,8 @@ use App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Facades\Auth;
+
 class Task extends ModuleModel
 {
 
@@ -16,7 +18,7 @@ class Task extends ModuleModel
         $data = static::filterRequest($data);
 
         $data['enable'] = 1;
-        $data['director_id'] = 10;
+        $data['director_id'] = Auth::user()->id;
         $data['plaintime'] = static::formPlaintime($data['plaintime']);
 
         return static::create($data);

@@ -134,6 +134,7 @@ return [
     'attributes'           => [
         'fullname'               => 'ФИО',
         'email'             => 'Email',
+        'password'          => 'Пароль',
         'tel'               => 'Телефон',
         'role'              => 'Роль',
         'surname'           => 'Фамилия',

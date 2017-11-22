@@ -6,6 +6,7 @@ use App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Modules\Internal\Notification;
+use Illuminate\Support\Facades\Hash;
 
 class Employee extends ModuleModel
 {
@@ -25,12 +26,7 @@ class Employee extends ModuleModel
 
     protected static function formPassword($value) {
 
-        $hash_options = [
-            'cost' => 11,
-            'salt' => mcrypt_create_iv(22, MCRYPT_DEV_URANDOM),
-        ];
-
-        return password_hash($value, PASSWORD_BCRYPT,$hash_options);
+        return Hash::make($request->newPassword);
 
     }
 
