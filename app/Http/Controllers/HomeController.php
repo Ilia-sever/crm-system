@@ -28,7 +28,7 @@ class HomeController extends Controller
 
         $data = array();
 
-        $data['notifications'] = $this->me->getNotifications();
+        $data['notifications'] = $this->me->getNotifications(config('settings.page-limit'));
 
         $data = $this->getTasksRecords($data);
 
@@ -80,6 +80,8 @@ class HomeController extends Controller
             );
         }
 
+        $data['tasks-records'] = array_slice($data['tasks-records'], 0, config('settings.page-limit'));
+
         return $data;
     }
 
@@ -113,6 +115,8 @@ class HomeController extends Controller
                 'client' => $project->getClient(),
             );
         }
+
+        $data['projects-records'] = array_slice($data['projects-records'], 0, config('settings.page-limit'));
 
         return $data;
     }

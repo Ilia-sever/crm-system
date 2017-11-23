@@ -19,6 +19,21 @@
     </td>
 </tr>
 @endforeach
+@if (isset($data['pagination'])) 
+<tr class="records-table__row_empty">
+    <td colspan=100>
+        <ul class="pagination">
+        @for ($i = 1; $i <= $data['pagination']['count']; $i++)
+            @if ($i == $data['pagination']['current'])
+            <li><button class="pagination__button pagination__button_active">{{$i}}</button></li>
+            @else
+            <li><button class="pagination__button">{{$i}}</button></li>
+            @endif
+        @endfor
+        </ul>
+    </td>
+</tr>
+@endif
 @else 
 <tr class="records-table__row_empty">
     <td colspan=100>{{trans('strings.messages.empty')}}</td>

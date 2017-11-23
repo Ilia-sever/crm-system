@@ -43,9 +43,9 @@ class Employee extends ModuleModel
     	return static::formatDate($this->dob);
     }
 
-    public function getNotifications() {
-    	$nots = Notification::where('employee_id',$this->id)->orderBy('datetimeof','desc')->get();
-    	Notification::where('employee_id',$this->id)->update(['viewed' => 1]);
+    public function getNotifications($limit) {
+    	$nots = Notification::where('employee_id',$this->id)->orderBy('datetimeof','desc')->limit($limit)->get();
+    	Notification::where('employee_id',$this->id)->where('viewed',0)->limit($limit)->update(['viewed' => 1]);
     	return $nots;
 
     }

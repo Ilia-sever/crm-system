@@ -2,6 +2,6 @@
 
 return [
 
-	'page-limit' => 25,
+	'page-limit' => 3,
 
 ];

@@ -41,6 +41,7 @@ class ModuleController extends \App\Http\Controllers\Controller
             'order_by' => request('order') ? request('order') : $this->default_sort_order,
             'search_field' => request('search_field') ? request('search_field') : '',
             'search_value' => request('search_value') ? request('search_value') : '',
+            'page' => request('page') ? intval(request('page')) : 1,
         );
 
         $params['db_sort_possible'] = true;
@@ -91,6 +92,25 @@ class ModuleController extends \App\Http\Controllers\Controller
             }
 
             $data['records'] = $suitable_records;
+        }
+
+        $page_limit = config('settings.page-limit');
+
+        $records_count = count($data['records']);
+
+        if ($records_count > $page_limit) {
+
+            $pages_count = ceil($records_count / $page_limit);
+
+            $records_start = ($params['page'] - 1) * $page_limit;
+
+            $data['records'] = array_slice($data['records'], $records_start, $page_limit);
+
+            $data['pagination'] = array(
+                'count' => $pages_count,
+                'current' => $params['page'],
+            );
+
         }
 
         return view('module-objects.table-rows',compact('data'));

@@ -12,7 +12,7 @@ function resetSortButtons() {
 }
 
 function refreshRecords(records) {
-    //загрузить новые записи в таблицу объектов модуля + загрузить функционал чекбоксов и кнопок удаления
+    //загрузить новые записи в таблицу объектов модуля + загрузить функционал табличных элементов
     $(".records-table tbody").html(records);
 
     $(".checkbox-main").prop('checked', false);
@@ -40,18 +40,27 @@ function refreshRecords(records) {
             deleteConfirmation();
         }
     })
+
+    $('.pagination__button').click(function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        getRecords($(this).text());
+    })
 }
 
-function getRecords() {
+function getRecords(page) {
     //ajax на получение новых записей в таблицу согласно парамертам запроса
 
     if (getModuleName()==undefined) return;
+
+    if (page == undefined) page = 1;
 
     let params = {
         'search_field': $(".search-select select option:selected").val(),
         'search_value' : $(".search-input input").val(),
         'sort' : $('.sort-button_active').attr('id'),
-        'order' : $('.sort-button_active').attr('value')
+        'order' : $('.sort-button_active').attr('value'),
+        'page' : page
     };
          
     $.ajax({
@@ -403,6 +412,5 @@ $(document).ready(function() {
      $('.acount-panel__link_logout').click(function() {
         $('.acount-panel__form').submit();
      })
-
 
 });

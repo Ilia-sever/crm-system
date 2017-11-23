@@ -331,6 +331,8 @@ h1 {
 	margin-top: 0px;
 	background-color: #fff;
 	overflow-x: scroll;
+	max-width: 100%;
+	
 }
 
 .records-table tbody tr:hover {
@@ -342,6 +344,14 @@ h1 {
 	border: 1px solid #ccc;
 }
 
+.records-table__row_empty {
+
+}
+
+.records-table__row_empty:hover {
+	background-color: transparent !important;
+
+}
 .records-table__row_empty td {
 	text-align: center;
 }
@@ -496,6 +506,30 @@ h1 {
 	border-bottom: 1px solid #e6e6e6;
 }
 
+.pagination {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
+}
+
+.pagination li {
+	margin: 0 5px 0 5px;
+}
+
+.pagination__button {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: #fff;
+	padding: 0 6px 0 6px;
+	font-size: 12px;
+}
+
+.pagination__button_active {
+	background-color: #13151e;
+	color: #fff;
+}
 
 
 
