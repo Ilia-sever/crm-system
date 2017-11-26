@@ -12,7 +12,7 @@
 */
 Auth::routes();
 
-Route::group(array('middleware' =>'auth'), function()
+Route::group(array('middleware' =>['auth','init']), function()
 {
 
 Route::get('/', 'HomeController@index');

@@ -6,10 +6,25 @@ use App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Modules\Task;
 
-class ModuleController extends \App\Http\Controllers\Controller
+abstract class ModuleController extends \App\Http\Controllers\Controller
 {
+    protected $model = '';
+    protected $module_code = '';
+    protected $common_fields = '';
     protected $default_sort_field = '';
     protected $default_sort_order = '';
+
+    abstract protected function formRecords($params);
+
+    abstract public function show($params);
+
+    abstract public function add();
+
+    abstract public function create();
+
+    abstract public function edit($id);
+    
+    abstract public function update();
 
 	public function index() {
 
@@ -46,7 +61,7 @@ class ModuleController extends \App\Http\Controllers\Controller
 
         $params['db_sort_possible'] = true;
 
-        if (isset($this->model) && $params['sort_by']) {
+        if ($this->model && $params['sort_by']) {
 
             $model = $this->model;
 
@@ -117,6 +132,8 @@ class ModuleController extends \App\Http\Controllers\Controller
     }
 
     public function delete() {
+
+        if (!$this->model) return;
 
         $model = $this->model;
         
