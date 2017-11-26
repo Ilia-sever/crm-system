@@ -14,7 +14,29 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $path = explode('/', request()->path());
+
+        $modules = config('settings.including-modules');
+
+        foreach ($modules as $num => $module) {
+            $modules[$num] = strtolower($module);
+        }
+
+        $current_module = '';
+
+        if (!$path[0]) {
+
+            $current_module = 'home';
+        }
+
+        elseif (in_array($path[0], $modules)) {
+
+            $current_module = $path[0]; 
+        }
+
+        view()->share('modules',$modules);
+
+        view()->share('module_code',$current_module);
     }
 
     /**

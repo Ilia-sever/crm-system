@@ -213,70 +213,45 @@ button {
 }
 
 .modules-list__item {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+
+
+.modules-list__item {
 	width: 100%;
 	border-bottom: 1px solid #424D5E;
 	padding: 8px 10px 8px 20px;
 }
+
+.modules-list__item img {
+	width: 20px;
+	opacity: 0.5;
+	height: auto;
+}
+
 .modules-list__item a {
 	max-width: 100%;
 	display: block;
-	padding: 0 10px 0 30px;
+	padding: 0 0 0 10px;
+	color: #AFC4E8;
+	opacity: 0.8;
+}
+
+.modules-list__item_selected img {
+	opacity: 1;
+}
+.modules-list__item_selected a {
+	font-weight: bold;
+	opacity: 1;
 }
 
 .modules-list__item a:hover {
 	text-decoration: none;
 	text-shadow: #5dc8e5 0 0 10px;
-
-}
-
-.modules-list__item_home a {
-	background: url('/images/module-icons/home.png') no-repeat;
-	background-position: left center;
-	background-size: 20px auto;
-}
-.modules-list__item_projects a {
-	background: url('/images/module-icons/projects.png') no-repeat;
-	background-position: left center;
-	background-size: 20px auto;
-}
-.modules-list__item_tasks a {
-	background: url('/images/module-icons/tasks.png') no-repeat;
-	background-position: left center;
-	background-size: 20px auto;
-}
-.modules-list__item_clients a {
-	background: url('/images/module-icons/clients.png') no-repeat;
-	background-position: left center;
-	background-size: 20px auto;
-}
-.modules-list__item_employees a {
-	background: url('/images/module-icons/employees.png') no-repeat;
-	background-position: left center;
-	background-size: 20px auto;
-}
-.modules-list__item_contacts a {
-	background: url('/images/module-icons/contacts.png') no-repeat;
-	background-position: left center;
-	background-size: 20px auto;
-}
-.modules-list__item_workareas a {
-	background: url('/images/module-icons/workareas.png') no-repeat;
-	background-position: left center;
-	background-size: 20px auto;
-}
-.modules-list__item_transactions a {
-	background: url('/images/module-icons/transactions.png') no-repeat;
-	background-position: left center;
-	background-size: 20px auto;
-}
-.modules-list__item_files  a {
-	background: url('/images/module-icons/files.png') no-repeat;
-	background-position: left center;
-	background-size: 20px auto;
-}
-
-.modules-list__item a {
-	color: #AFC4E8;
 }
 
 .content {

@@ -17,8 +17,7 @@ use Validator;
 class ProjectsController extends ModuleController
 {
     protected $model = "\App\Models\Modules\Project";
-    protected $module_code = 'projects';
-
+    
     protected $validation_arr = array(
         'name' => 'min:3|max:100|required',
         'client_id' => 'numeric|nullable|max:100',
@@ -65,8 +64,6 @@ class ProjectsController extends ModuleController
 
         $data = array();
 
-        $data['module-code'] = $this->module_code;
-
         $object = Project::find($id);
 
         if (!$object) {
@@ -97,8 +94,6 @@ class ProjectsController extends ModuleController
 
         $data = array();
 
-        $data['module-code'] = $this->module_code;
-
         foreach ($this->editable_fields as $field) {
             $data['object'][$field] = (request()->old($field)) ? request()->old($field) : '';
         }
@@ -115,8 +110,6 @@ class ProjectsController extends ModuleController
     public function edit($id) {
 
         $data = array();
-
-        $data['module-code'] = $this->module_code;
 
         $object = Project::find($id);
 

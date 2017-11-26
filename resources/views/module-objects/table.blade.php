@@ -1,8 +1,8 @@
 @extends ('layouts.master') @section ('content')
 @include('layouts.delete-confirmation')
-<meta id="module-code" value="{{$data['module-code']}}">
-<h1>{{trans_choice('strings.modules.' . $data['module-code'],2)}}</h1>
-<a href="/{{$data['module-code']}}/add/">
+<meta id="module-code" value="{{$module_code}}">
+<h1>{{trans_choice('strings.modules.' . $module_code,2)}}</h1>
+<a href="/{{$module_code}}/add/">
     <button type="button" class="add-button btn btn-success">{{trans('strings.operations.add')}}</button>
 </a>
 <div class="search">

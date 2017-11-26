@@ -1,15 +1,15 @@
 @extends ('layouts.master') @section ('content')
 
 @if ($data['object']['id']) 
-    <h1>{{trans('strings.operations.editing-object')}}{{trans_choice('strings.modules.' . $data['module-code'],1)}}</h1>
-    <form class="object-form" method="POST" action="/{{$data['module-code']}}/update">
+    <h1>{{trans('strings.operations.editing-object')}}{{trans_choice('strings.modules.' . $module_code,1)}}</h1>
+    <form class="object-form" method="POST" action="/{{$module_code}}/update">
     <input type="hidden" name="id" value="{{$data['object']['id']}}">
 @else
     <h1>
     {{trans('strings.operations.creating-object')}}
-    {{trans_choice('strings.modules.' . $data['module-code'],1)}}
+    {{trans_choice('strings.modules.' . $module_code,1)}}
     </h1>
-    <form class="object-form" method="POST" action="/{{$data['module-code']}}/create">
+    <form class="object-form" method="POST" action="/{{$module_code}}/create">
     <input type="hidden" name="id" value="">
     
 @endif

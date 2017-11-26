@@ -12,14 +12,14 @@
 */
 Auth::routes();
 
-Route::group(array('middleware' =>['auth','init']), function()
+Route::group(array('middleware' =>'auth'), function()
 {
 
 Route::get('/', 'HomeController@index');
 
 Route::post('/complete', 'HomeController@completingTask');
 
-$modules = array('Projects', 'Tasks', 'Employees', 'Clients','Contacts','Workareas','Transactions','Files');
+$modules = config('settings.including-modules');
 
 foreach ($modules as $key => $module) {
 

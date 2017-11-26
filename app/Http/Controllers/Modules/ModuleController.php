@@ -9,7 +9,6 @@ use App\Models\Modules\Task;
 abstract class ModuleController extends \App\Http\Controllers\Controller
 {
     protected $model = '';
-    protected $module_code = '';
     protected $common_fields = '';
     protected $default_sort_field = '';
     protected $default_sort_order = '';
@@ -28,7 +27,6 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
 
 	public function index() {
 
-        $data['module-code'] = $this->module_code;
         $data['common-fields'] = $this->common_fields;
 
         if (request('search-field')) {
@@ -48,7 +46,6 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
 
     public function getRecords() {
 
-        $data['module-code'] = $this->module_code;
         $data['common-fields'] = $this->common_fields;
 
         $params = array(

@@ -15,7 +15,6 @@ class EmployeesController extends ModuleController
 {
 
     protected $model = "\App\Models\Modules\Employee";
-	protected $module_code = 'employees';
 
 	protected $validation_arr = array(
             'surname' => 'alpha_dash|min:2|max:100|nullable',
@@ -59,8 +58,6 @@ class EmployeesController extends ModuleController
 
         $data = array();
 
-        $data ['module-code'] = $this->module_code;
-
         $object = Employee::find($id);
 
         if (!$object) {
@@ -95,8 +92,6 @@ class EmployeesController extends ModuleController
 
     	$data = array();
 
-    	$data['module-code'] = $this->module_code;
-
         foreach ($this->editable_fields as $field) {
             $data['object'][$field] = (request()->old($field)) ? request()->old($field) : '';
         }
@@ -109,8 +104,6 @@ class EmployeesController extends ModuleController
     public function edit($id) {
 
         $data = array();
-
-        $data['module-code'] = $this->module_code;
 
         $object = Employee::find($id);
 

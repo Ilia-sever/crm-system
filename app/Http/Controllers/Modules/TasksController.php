@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Input;
 class TasksController extends ModuleController
 {
     protected $model = "\App\Models\Modules\Task";
-    protected $module_code = 'tasks';
 
     protected $validation_arr = array(
         'name' => 'min:5|max:100|required',
@@ -62,8 +61,6 @@ class TasksController extends ModuleController
 
         $data = array();
 
-        $data['module-code'] = $this->module_code;
-
         $object = Task::find($id);
 
         if (!$object) {
@@ -98,8 +95,6 @@ class TasksController extends ModuleController
 
         $data = array();
 
-        $data['module-code'] = $this->module_code;
-
         foreach ($this->editable_fields as $field) {
             $data['object'][$field] = (request()->old($field)) ? request()->old($field) : '';
         }
@@ -114,8 +109,6 @@ class TasksController extends ModuleController
     public function edit($id) {
 
         $data = array();
-
-        $data['module-code'] = $this->module_code;
 
         $object = Task::find($id);
 
