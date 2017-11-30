@@ -22,7 +22,7 @@
                 </td>
                 @endforeach
                 <td>
-                    <a href="/projects/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="show-button">👁</a>
+                    <a href="/projects/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="action-button show-button"></a>
                 </td>
             </tr>
             @endforeach

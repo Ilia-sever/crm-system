@@ -13,14 +13,14 @@
     {{$object->$field}}
     </td>
     @endforeach
-    <td>
+    <td class="actions-td">
         <meta name="csrf-token" content="{{ csrf_token() }}" />
-        <a href="/{{$module_code}}/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="show-button">👁</a>
+        <a href="/{{$module_code}}/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="action-button show-button"></a>
         @if (auth()->user()->can('update',"$module_code",$object))
-        <a href="/{{$module_code}}/edit/{{$object->id}}" title="{{trans('strings.operations.edit')}}" class="edit-button">✎</a>
+        <a href="/{{$module_code}}/edit/{{$object->id}}" title="{{trans('strings.operations.edit')}}" class="action-button edit-button"></a>
         @endif
         @if (auth()->user()->can('delete',"$module_code",$object))
-        <a class="delete-button" title="{{trans('strings.operations.delete')}}" name="{{$object->id}}">✖</a>
+        <a class="action-button delete-button" title="{{trans('strings.operations.delete')}}" name="{{$object->id}}"></a>
         @endif
     </td>
 </tr>

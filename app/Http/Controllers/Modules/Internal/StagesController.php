@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Modules\Internal;
 
 use Illuminate\Http\Request;
-use App\Models\Modules\Project;
-use App\Models\Modules\Internal\Flow;
-use App\Models\Modules\Internal\Stage;
-
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Input;
 use Validator;
+
+use App\Special\OldRequest;
+
+use App\Models\Modules;
 
 class StagesController extends \App\Http\Controllers\Controller
 {
@@ -20,9 +22,9 @@ class StagesController extends \App\Http\Controllers\Controller
 
     public function control($flow_id,$id) {
 
-        $stage = ($id) ? Stage::find($id) : null;
+        $stage = ($id) ? Modules\Internal\Stage::find($id) : null;
 
-        $flow = ($flow_id) ? Flow::find($flow_id) : Flow::find($stage->flow->id);
+        $flow = ($flow_id) ? Modules\Internal\Flow::find($flow_id) : Modules\Internal\Flow::find($stage->flow->id);
 
         if (!$this->checkAccess($flow)) return;
 
@@ -56,7 +58,7 @@ class StagesController extends \App\Http\Controllers\Controller
 
     public function save() {
 
-        $flow = Flow::find(request('flow_id'));
+        $flow = Modules\Internal\Flow::find(request('flow_id'));
 
         if (!$this->checkAccess($flow)) return;
 
@@ -81,11 +83,11 @@ class StagesController extends \App\Http\Controllers\Controller
 
         if (!request('id')) {
 
-            Stage::createObject(request()->all());
+            Modules\Internal\Stage::createObject(request()->all());
 
         } else {
 
-            $stage = Stage::find(request('id'));
+            $stage = Modules\Internal\Stage::find(request('id'));
         	
             $stage->updateObject(request()->all());
         	
@@ -96,9 +98,9 @@ class StagesController extends \App\Http\Controllers\Controller
 
     public function delete() {
 
-    	$stage = Stage::find(request('deleting'));
+    	$stage = Modules\Internal\Stage::find(request('deleting'));
 
-        $flow = Flow::find($stage->flow_id);
+        $flow = Modules\Internal\Flow::find($stage->flow_id);
 
         if (!$this->checkAccess($flow)) return;
 
@@ -112,7 +114,7 @@ class StagesController extends \App\Http\Controllers\Controller
 
         if ($flow->project) {
 
-            if (!auth()->user()->can('update','projects',Project::find($flow->project->id))) return false;
+            if (!auth()->user()->can('update','projects',Modules\Project::find($flow->project->id))) return false;
 
         } else {
 

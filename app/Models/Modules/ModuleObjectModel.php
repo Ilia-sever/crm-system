@@ -61,7 +61,7 @@ class ModuleObjectModel extends MainModel
     }
 
 	public function isActive() {
-		return ($this->enable=='0') ? false: true;
+		return ($this->enable == 0) ? false: true;
 	}
 
 

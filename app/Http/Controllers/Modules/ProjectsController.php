@@ -9,12 +9,7 @@ use Validator;
 
 use App\Special\OldRequest;
 
-use App\Models\Modules\Project;
-use App\Models\Modules\Task;
-use App\Models\Modules\Employee;
-
-use App\Models\Modules\Internal\Flow;
-use App\Models\Modules\Internal\Stage;
+use App\Models\Modules;
 use App\Models\Modules\Internal\Notification;
 
 class ProjectsController extends ModuleController
@@ -35,7 +30,7 @@ class ProjectsController extends ModuleController
 
     protected function formRecords($params) {
 
-        $projects = Project::getObjects($params);
+        $projects = Modules\Project::getObjects($params);
 
         $records = array();
 
@@ -51,7 +46,7 @@ class ProjectsController extends ModuleController
 
         $data = array();
 
-        $object = Project::find($id);
+        $object = Modules\Project::find($id);
 
         abort_if(!$object,404);
         abort_if(!auth()->user()->can('watch','projects',$object),403);
@@ -71,7 +66,7 @@ class ProjectsController extends ModuleController
 
         $data['object'] = new OldRequest();
 
-        $data['employees'] = Employee::getActive();
+        $data['employees'] = Modules\Employee::getActive();
 
         return view('module-objects.projects.control',compact('data'));
     }
@@ -80,7 +75,7 @@ class ProjectsController extends ModuleController
 
         $data = array();
 
-        $object = Project::find($id);
+        $object = Modules\Project::find($id);
 
         abort_if(!$object,404);
         abort_if(!auth()->user()->can('update','projects',$object),403);
@@ -88,7 +83,7 @@ class ProjectsController extends ModuleController
 
         $data['object'] = $object;
 
-        $data['employees'] = Employee::getActive();
+        $data['employees'] = Modules\Employee::getActive();
 
         return view('module-objects.projects.control',compact('data'));
     }
@@ -106,7 +101,7 @@ class ProjectsController extends ModuleController
             return redirect('/projects/add/')->withErrors($validator)->withInput();
         }
 
-        $newproject = Project::createObject(request()->all());
+        $newproject = Modules\Project::createObject(request()->all());
         $newproject->assignNewFlows(explode(';', request('flows_list')));
 
         Notification::notifyAboutProject('assign-to-project', $newproject, $newproject->manager_id);
@@ -126,7 +121,7 @@ class ProjectsController extends ModuleController
             return redirect('/projects/edit/'.request('id'))->withErrors($validator)->withInput();
         }
             
-        $project = Project::find(request('id'));
+        $project = Modules\Project::find(request('id'));
 
         abort_if(!auth()->user()->can('update','projects',$project),403);
 
@@ -144,7 +139,7 @@ class ProjectsController extends ModuleController
 
         if (request('id')) {
 
-            abort_if(!auth()->user()->can('update','projects',Project::find(request('id'))),403);
+            abort_if(!auth()->user()->can('update','projects',Modules\Project::find(request('id'))),403);
 
         } else {
 
@@ -159,7 +154,7 @@ class ProjectsController extends ModuleController
 
             if ($flow_id) {
 
-                $flow = Flow::find($flow_id);
+                $flow = Modules\Internal\Flow::find($flow_id);
 
                 if ($flow) { 
 

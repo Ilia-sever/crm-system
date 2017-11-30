@@ -2,12 +2,14 @@
 
 namespace App\Models\Modules;
 
-use App\Models;
-use App\Models\Modules\Employee;
-use App\Models\Modules\Internal\Flow;
-use App\Models\Modules\Internal\Stage;
-
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models;
+use App\Models\Role;
+use App\Models\Modules;
+use App\Models\Modules\Internal\Notification;
+
+use App\Special\Tools\DateTimeConverter;
 
 class Project extends ModuleObjectModel
 {
@@ -20,7 +22,7 @@ class Project extends ModuleObjectModel
     	foreach ($flows_id as $flow_id) {
             if ($flow_id) {
 
-                $flow = Flow::find($flow_id);
+                $flow = Modules\Internal\Flow::find($flow_id);
                 
                 if ($flow) { 
                 	$flow->update(['project_id' => $this->id]);
@@ -29,34 +31,25 @@ class Project extends ModuleObjectModel
         }
     }
 
-	public static function getMy ($id) {
-		return static::where('enable','1')->where('manager_id',$id)->orderBy('name')->get();
+	public static function getForManager($employee_id) {
+		return static::where('enable','1')->where('manager_id',$employee_id)->orderBy('name')->get();
 	}
 
 	public function getClient() {
-		if (!$this->client_id) return '';
-		if (Employee::where('id',$this->client_id)->count()==0) {
-			return '';
-		}
-		return Employee::find($this->client_id)->getFullname();
+		return Modules\Employee::find($this->client_id);
 	}
 
 	public function getManager() {
-		if (!$this->manager_id) return '';
-		if (Employee::where('id',$this->manager_id)->count()==0) {
-			return '';
-		}
-		return Employee::find($this->manager_id)->getFullname();
+		return Modules\Employee::find($this->manager_id);
 	}
 
 	public function getFlows() {
-		return Flow::where('project_id',$this->id)->orderBy('sort_order')->get();
+		return Modules\Internal\Flow::where('project_id',$this->id)->orderBy('sort_order')->get();
 	}
 
 	public function getFlowsList() {
-		$flows = Flow::where('project_id',$this->id)->orderBy('sort_order')->get();
 		$string_list = '';
-		foreach ($flows as $flow) {
+		foreach ($this->flows as $flow) {
 			$string_list .= $flow->id . ';';
 		}
 		return $string_list;

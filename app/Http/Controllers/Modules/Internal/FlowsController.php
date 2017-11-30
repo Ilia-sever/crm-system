@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Modules\Internal;
 
-use App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\Modules\Project;
-use App\Models\Modules\Internal\Flow;
-use App\Models\Modules\Internal\Stage;
-
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Input;
 use Validator;
+
+use App\Special\OldRequest;
+
+use App\Models\Modules;
 
 class FlowsController extends \App\Http\Controllers\Controller
 {
@@ -22,7 +23,7 @@ class FlowsController extends \App\Http\Controllers\Controller
 
         if ($project_id) {
 
-            if (!auth()->user()->can('update','projects',Project::find($project_id))) return;
+            if (!auth()->user()->can('update','projects',Modules\Project::find($project_id))) return;
 
         } else {
 
@@ -32,7 +33,7 @@ class FlowsController extends \App\Http\Controllers\Controller
 
         if ($id) {
 
-            $flow = Flow::find($id);
+            $flow = Modules\Internal\Flow::find($id);
 
             if (!$flow) return;
 
@@ -81,7 +82,7 @@ class FlowsController extends \App\Http\Controllers\Controller
 
         if (request('project_id')) {
 
-            if (!auth()->user()->can('update','projects',Project::find(request('project_id')))) return;
+            if (!auth()->user()->can('update','projects',Modules\Project::find(request('project_id')))) return;
 
         } else {
 
@@ -91,12 +92,12 @@ class FlowsController extends \App\Http\Controllers\Controller
 
         if (!request('id')) {
 
-            $newflow = Flow::createObject(request()->all());
+            $newflow = Modules\Internal\Flow::createObject(request()->all());
             return $newflow->id;
 
         }
 
-        $flow = Flow::find(request('id'));
+        $flow = Modules\Internal\Flow::find(request('id'));
 
         if ($flow) {
 
@@ -108,13 +109,13 @@ class FlowsController extends \App\Http\Controllers\Controller
 
     public function delete() {
 
-        $flow = Flow::find(request('deleting'));
+        $flow = Modules\Internal\Flow::find(request('deleting'));
 
         if (!$flow) return;
 
         if ($flow->project) {
 
-            if (!auth()->user()->can('update','projects',Project::find($flow->project->id))) return;
+            if (!auth()->user()->can('update','projects',Modules\Project::find($flow->project->id))) return;
 
         } else {
 

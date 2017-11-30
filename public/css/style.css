@@ -339,6 +339,45 @@ h1 {
 	text-align: center;
 }
 
+.actions-td {
+	min-width: 130px;
+}
+
+.action-button {
+	width: 30px;
+	height: 30px;
+	border-radius: 5px;
+	background-color: #13151e;
+	display: block;
+	float: left;
+	margin-right: 5px;
+}
+
+.show-button {
+	background-image: url('/images/buttons/show.png');
+	background-repeat: no-repeat;
+	background-size: 20px auto;
+	background-position: center;
+}
+.edit-button {
+	background-image: url('/images/buttons/edit.png');
+	background-repeat: no-repeat;
+	background-size: 15px auto;
+	background-position: center;
+}
+.delete-button {
+	background-image: url('/images/buttons/delete.png');
+	background-repeat: no-repeat;
+	background-size: 12px auto;
+	background-position: center;
+}
+.complete-button {
+	background-image: url('/images/buttons/complete.png');
+	background-repeat: no-repeat;
+	background-size: 12px auto;
+	background-position: center;
+}
+
 .sort-button{
 	cursor: pointer;
 }

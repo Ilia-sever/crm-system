@@ -22,8 +22,8 @@
                 </td>
                 @endforeach
                 <td>
-                    <a class="complete-button" title="{{trans('strings.operations.done')}}" name="{{$object->id}}">✓</a>
-                    <a href="/tasks/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="show-button">👁</a>
+                    <a class="action-button complete-button" title="{{trans('strings.operations.done')}}" name="{{$object->id}}"></a>
+                    <a href="/tasks/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="action-button show-button"></a>
                 </td>
             </tr>
             @endforeach

@@ -7,8 +7,6 @@ use App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
 
-use Carbon\Carbon;
-
 class MainModel extends Model
 {
     public $timestamps = false;
@@ -72,10 +70,6 @@ class MainModel extends Model
 
     }
 
-    public static function getNew() {
-		return static::latest('id')->value('id');
-	}
-
 	public static function isExist($id) {
 		return (static::where('id',$id)->count()>0) ? true : false;
 	}
@@ -88,22 +82,11 @@ class MainModel extends Model
 		return Schema::hasColumn(with(new static)->getTable(), $str);
 	}
 
-	public static function getSorted($sort_field,$sort_order) {
-		return static::orderBy($sort_field,$sort_order)->get();
-	}
-
-	protected static function getTime ($str) {
-        // convert from '**:**:**'
-		return array(
-			'hours' => substr($str,0,2),
-			'minutes' => substr($str,3,2),
-			'seconds' => substr($str,6,2)
-		);
+    public static function getNew() {
+        return static::latest('id')->value('id');
     }
 
-    protected static function formatDate($str) {
-
-    	return Carbon::parse($str)->format('d.m.Y');
+    public static function getSorted($sort_field,$sort_order) {
+        return static::orderBy($sort_field,$sort_order)->get();
     }
-
 }

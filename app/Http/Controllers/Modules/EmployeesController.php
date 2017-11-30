@@ -9,10 +9,8 @@ use Validator;
 
 use App\Special\OldRequest;
 
-use App\Models\Modules\Project;
-use App\Models\Modules\Task;
-use App\Models\Modules\Employee;
-
+use App\Models\Modules;
+use App\Models\Modules\Internal\Notification;
 use App\Models\Role;
 
 class EmployeesController extends ModuleController
@@ -42,7 +40,7 @@ class EmployeesController extends ModuleController
 
     protected function formRecords($params) {
 
-        $employees = Employee::getObjects($params);
+        $employees = Modules\Employee::getObjects($params);
 
         $records = array();
 
@@ -57,7 +55,7 @@ class EmployeesController extends ModuleController
 
         $data = array();
 
-        $object = Employee::find($id);
+        $object = Modules\Employee::find($id);
 
         abort_if(!$object,404);
         abort_if(!auth()->user()->can('watch','employees',$object),403);
@@ -86,7 +84,7 @@ class EmployeesController extends ModuleController
 
         $data = array();
 
-        $object = Employee::find($id);
+        $object = Modules\Employee::find($id);
 
         abort_if(!$object,404);
         abort_if(!auth()->user()->can('update','employees',$object),403);
@@ -107,7 +105,7 @@ class EmployeesController extends ModuleController
 
         $errors=$validator->errors();
         
-        if (Employee::isEmailExist(request('email'))) {
+        if (Modules\Employee::isEmailExist(request('email'))) {
             $errors->add('email',trans('strings.messages.email-dublicate'));
         }
         
@@ -115,7 +113,7 @@ class EmployeesController extends ModuleController
             return redirect('/employees/add/')->withErrors($validator)->withInput();
         }
 
-        $new_employee = Employee::createObject(request()->all());
+        $new_employee = Modules\Employee::createObject(request()->all());
 
         return $new_employee ? redirect('/employees?success='.date('U')) : redirect('/employees/add/');
   
@@ -131,7 +129,7 @@ class EmployeesController extends ModuleController
             return redirect('/employees/edit/'.request('id'))->withErrors($validator)->withInput();
         }
 
-        $employee = Employee::find(request('id'));
+        $employee = Modules\Employee::find(request('id'));
 
         abort_if(!auth()->user()->can('update','employees',$employee),403);
 

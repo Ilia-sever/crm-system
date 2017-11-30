@@ -9,11 +9,9 @@ use Validator;
 
 use App\Special\OldRequest;
 
-use App\Models\Modules\Project;
-use App\Models\Modules\Task;
-use App\Models\Modules\Employee;
-
+use App\Models\Modules;
 use App\Models\Modules\Internal\Notification;
+use App\Models\Role;
 use Illuminate\Support\Facades\View;
 
 
@@ -64,7 +62,7 @@ class HomeController extends Controller
 
     protected function getTasksRecords ($data) {
 
-        $tasks = Task::getForExecutor(auth()->user()->id);
+        $tasks = Modules\Task::getForExecutor(auth()->user()->id);
 
         $data['tasks-common-fields'] = array('name','formated_deadline','assignment');
 
@@ -82,7 +80,7 @@ class HomeController extends Controller
 
     protected function getProjectsRecords ($data) {
 
-        $projects = Project::getMy(auth()->user()->id);
+        $projects = Modules\Project::getForManager(auth()->user()->id);
 
         $data['projects-common-fields'] = array('name','client');
 
@@ -100,7 +98,7 @@ class HomeController extends Controller
 
     public function completingTask() {
 
-        $task = Task::find(request('task_id'));
+        $task = Modules\Task::find(request('task_id'));
 
         if ($task->executor_id == auth()->user()->id) {
 

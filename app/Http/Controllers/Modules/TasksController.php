@@ -9,10 +9,7 @@ use Validator;
 
 use App\Special\OldRequest;
 
-use App\Models\Modules\Project;
-use App\Models\Modules\Task;
-use App\Models\Modules\Employee;
-
+use App\Models\Modules;
 use App\Models\Modules\Internal\Notification;
 
 class TasksController extends ModuleController
@@ -39,7 +36,7 @@ class TasksController extends ModuleController
 
     protected function formRecords($params) {
 
-        $tasks = Task::getObjects($params);
+        $tasks = Modules\Task::getObjects($params);
 
         $records = array();
 
@@ -54,7 +51,7 @@ class TasksController extends ModuleController
 
         $data = array();
 
-        $object = Task::find($id);
+        $object = Modules\Task::find($id);
 
         abort_if(!$object,404);
         abort_if(!auth()->user()->can('watch','tasks',$object),403);
@@ -74,7 +71,7 @@ class TasksController extends ModuleController
 
         $data['object'] = new OldRequest();
 
-        $data['employees'] = Employee::getActive();
+        $data['employees'] = Modules\Employee::getActive();
 
         return view('module-objects.tasks.control',compact('data'));
     }
@@ -83,7 +80,7 @@ class TasksController extends ModuleController
 
         $data = array();
 
-        $object = Task::find($id);
+        $object = Modules\Task::find($id);
 
         abort_if(!$object,404);
         abort_if(!auth()->user()->can('update','tasks',$object),403);
@@ -91,7 +88,7 @@ class TasksController extends ModuleController
 
         $data['object'] = $object;
 
-        $data['employees'] = Employee::getActive();
+        $data['employees'] = Modules\Employee::getActive();
 
         return view('module-objects.tasks.control',compact('data'));
     }
@@ -109,7 +106,7 @@ class TasksController extends ModuleController
             return redirect('/tasks/add/')->withErrors($validator)->withInput();
         }
 
-        $newtask = Task::createObject(request()->all());
+        $newtask = Modules\Task::createObject(request()->all());
 
         if (($newtask->status == 'began')) {
 
@@ -133,7 +130,7 @@ class TasksController extends ModuleController
   
         }
         
-        $task = Task::find(request('id'));
+        $task = Modules\Task::find(request('id'));
 
         abort_if(!auth()->user()->can('update','tasks',$task),403);
 

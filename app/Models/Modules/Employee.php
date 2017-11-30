@@ -2,11 +2,14 @@
 
 namespace App\Models\Modules;
 
+use Illuminate\Database\Eloquent\Model;
+
 use App\Models;
 use App\Models\Role;
+use App\Models\Modules;
 use App\Models\Modules\Internal\Notification;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Special\Tools\DateTimeConverter;
 use Illuminate\Support\Facades\Hash;
 
 class Employee extends ModuleObjectModel
@@ -28,6 +31,10 @@ class Employee extends ModuleObjectModel
         return $data;
     }
 
+    public function __toString() {
+        return $this->fullname;
+    }
+
     public static function isEmailExist($email) {
         return (static::where('email',$email)->count()>0) ? true : false;
     }
@@ -46,7 +53,7 @@ class Employee extends ModuleObjectModel
     }
 
     public function getFormatedDob() {
-        return static::formatDate($this->dob);
+        return DateTimeConverter::formatDate($this->dob);
     }
 
     public function getSexName() {

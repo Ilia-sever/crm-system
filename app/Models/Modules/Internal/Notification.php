@@ -5,11 +5,9 @@ namespace App\Models\Modules\Internal;
 use App;
 use App\Models;
 use App\Models\MainModel;
-use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Modules\Employee;
-use App\Models\Modules\Task;
-use App\Models\Modules\Project;
+use App\Models\Role;
+use App\Models\Modules;
 
 class Notification extends MainModel
 {
@@ -36,7 +34,7 @@ class Notification extends MainModel
 
 	}
 
-	public static function notifyAboutTask($type, Task $task, $employee_id) {
+	public static function notifyAboutTask($type, Modules\Task $task, $employee_id) {
 
 		$notify_data = array();
 
@@ -60,7 +58,7 @@ class Notification extends MainModel
 
 	}
 
-	public static function notifyAboutProject($type, Project $project, $employee_id) {
+	public static function notifyAboutProject($type, Modules\Project $project, $employee_id) {
 
 		$notify_data = array();
 
