@@ -2,9 +2,11 @@
 @include('layouts.delete-confirmation')
 <meta id="module-code" value="{{$module_code}}">
 <h1>{{trans_choice('strings.modules.' . $module_code,2)}}</h1>
+@if (auth()->user()->can('create',"$module_code"))
 <a href="/{{$module_code}}/add/">
     <button type="button" class="add-button btn btn-success">{{trans('strings.operations.add')}}</button>
 </a>
+@endif
 <div class="search">
     <div class="input-group search-input">
         <input type="text" class="form-control" id="exampleInputAmount" value="@if(isset($data['search-value'])){{$data['search-value']}}@endif">
@@ -42,7 +44,9 @@
         </tr>
     </tbody>
 </table>
+@if (auth()->user()->can('delete',"$module_code"))
 <button type="button" class="btn delete-all-button btn-danger">
     {{trans('strings.operations.delete-selected')}}
 </button>
+@endif
 @endsection

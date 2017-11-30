@@ -3,19 +3,23 @@
 namespace App\Http\Controllers\Modules;
 
 use Illuminate\Http\Request;
-
 use Illuminate\Http\RedirectResponse;
-
-use App\Models\Modules\Employee;
-use App\Models\Modules\Task;
-use App\Models\Modules\Internal\Notification;
-
-use Validator;
 use Illuminate\Support\Facades\Input;
+use Validator;
+
+use App\Special\OldRequest;
+
+use App\Models\Modules\Project;
+use App\Models\Modules\Task;
+use App\Models\Modules\Employee;
+
+use App\Models\Modules\Internal\Notification;
 
 class TasksController extends ModuleController
 {
     protected $model = "\App\Models\Modules\Task";
+
+    protected $module_code = 'tasks';
 
     protected $validation_arr = array(
         'name' => 'min:5|max:100|required',
@@ -28,11 +32,10 @@ class TasksController extends ModuleController
         'description' => 'min:5|max:10000|nullable'
     );
 
-    protected $common_fields = array('name','status','deadline','plaintime','assignment','director','executor');
+    protected $common_fields = array('name','formated_status','formated_deadline','formated_plaintime','assignment','director','executor');
 
-    protected $default_sort_field = 'status';
+    protected $default_sort_field = 'formated_status';
 
-    protected $editable_fields = array('name','status','deadline','plaintime','workarea_id','stage_id','executor_id','description');
 
     protected function formRecords($params) {
 
@@ -41,17 +44,7 @@ class TasksController extends ModuleController
         $records = array();
 
         foreach ($tasks as $num => $task) {
-
-            $records[$num] = array(
-                'id' => $task->id,
-                'name' => $task->name,
-                'status' => trans('strings.fields-name.statuses.'.$task->status),
-                'deadline' => $task->formatDeadline(),
-                'plaintime' => $task->getPlaintime(),
-                'assignment' => $task->getAssignment(),
-                'director' => $task->getDirector(),
-                'executor' => $task->getExecutor(),
-            );
+            $records[$num] = $task;
         }
 
         return $records;
@@ -63,29 +56,11 @@ class TasksController extends ModuleController
 
         $object = Task::find($id);
 
-        if (!$object) {
+        abort_if(!$object,404);
+        abort_if(!auth()->user()->can('watch','tasks',$object),403);
+        abort_if(!$object->isActive(),410);
 
-            $data['message']='not-found';
-            return view('layouts.error',compact('data'));
-        }
-
-        if (!$object->isActive()) {
-
-            $data['message']='deleted-object';
-            return view('layouts.error',compact('data'));
-        }
-
-        $data['object'] = array(
-            'id' => $object->id,
-            'name' => $object->name,
-            'status' =>  trans('strings.fields-name.statuses.'.$object->status),
-            'deadline' => $object->formatDeadline(),
-            'plaintime' => $object->getPlaintime(),
-            'assignment' => $object->getAssignment(),
-            'director' => $object->getDirector(),
-            'executor' => $object->getExecutor(),
-            'description' => $object->description,
-        ) ;
+        $data['object'] = $object;
 
         return view('module-objects.tasks.show',compact('data'));
     }
@@ -93,13 +68,11 @@ class TasksController extends ModuleController
 
     public function add() {
 
+        abort_if(!auth()->user()->can('create','tasks'),403);
+
         $data = array();
 
-        foreach ($this->editable_fields as $field) {
-            $data['object'][$field] = (request()->old($field)) ? request()->old($field) : '';
-        }
-
-        $data['object']['id'] = '';
+        $data['object'] = new OldRequest();
 
         $data['employees'] = Employee::getActive();
 
@@ -112,23 +85,11 @@ class TasksController extends ModuleController
 
         $object = Task::find($id);
 
-        if (!$object) {
+        abort_if(!$object,404);
+        abort_if(!auth()->user()->can('update','tasks',$object),403);
+        abort_if(!$object->isActive(),410);
 
-            $data['message']='not-found';
-            return view('layouts.error',compact('data'));
-        }
-
-        if (!$object->isActive()) {
-
-            $data['message']='deleted-object';
-            return view('layouts.error',compact('data'));
-        }
-
-        foreach ($this->editable_fields as $field) {
-            $data['object'][$field] = $object[$field];
-        }
-
-        $data['object']['id'] = $object['id'];
+        $data['object'] = $object;
 
         $data['employees'] = Employee::getActive();
 
@@ -136,6 +97,8 @@ class TasksController extends ModuleController
     }
 
     public function create() {
+
+        abort_if(!auth()->user()->can('create','tasks'),403);
 
         $validator = Validator::make(request()->all(), $this->validation_arr);
 
@@ -172,11 +135,7 @@ class TasksController extends ModuleController
         
         $task = Task::find(request('id'));
 
-        if (!$task) {
-
-            $data['message']='not-found';
-            return view('layouts.error',compact('data'));
-        }
+        abort_if(!auth()->user()->can('update','tasks',$task),403);
 
         if ((request('executor_id') != $task->executor_id) && (request('status')=='began')) {
             Notification::notifyAboutTask('assign-to-task', $task, request('executor_id'));

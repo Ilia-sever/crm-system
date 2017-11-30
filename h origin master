@@ -1,0 +1,60 @@
+[33mcommit 36e822c68f9ac715dd1392d5963a6f96152e9045[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Ilia Terebenin <terebenin_il@mail.ru>
+Date:   Mon Nov 27 01:28:55 2017 +0300
+
+    modules list and module_code automatization
+
+[33mcommit 2cbd2e46ca615f2a2fd74d36aaa294c233cb8ba7[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: Ilia Terebenin <terebenin_il@mail.ru>
+Date:   Sun Nov 26 23:53:36 2017 +0300
+
+    ModuleController abstractisation
+
+[33mcommit 177814afca19daca865f5c725f015f4d4666831d[m
+Author: Ilia Terebenin <terebenin_il@mail.ru>
+Date:   Thu Nov 23 18:55:32 2017 +0300
+
+    pagination
+
+[33mcommit a23d99ecda40c2b5dff32469b223741aad408051[m[33m ([m[1;33mtag: v1.1.0[m[33m)[m
+Author: Ilia Terebenin <terebenin_il@mail.ru>
+Date:   Wed Nov 22 18:21:54 2017 +0300
+
+    authorization system
+
+[33mcommit a1881991f8a55714f476e9bc65a351391ccb0ef6[m[33m ([m[1;33mtag: v1.0.2[m[33m)[m
+Author: Ilia Terebenin <terebenin_il@mail.ru>
+Date:   Mon Nov 20 19:18:55 2017 +0300
+
+    modules get, search, sort requests and methods collaboration
+
+[33mcommit a3050720edf1ea244a8ece10553e22c8f8fd22e8[m
+Author: Ilia Terebenin <terebenin_il@mail.ru>
+Date:   Mon Nov 20 15:30:34 2017 +0300
+
+    ...
+
+[33mcommit d195cbe696e17300c3b7e121a36dc4f303b87ad7[m
+Merge: 2bd966e bb7993b
+Author: Ilia Terebenin <terebenin_il@mail.ru>
+Date:   Mon Nov 20 15:27:00 2017 +0300
+
+    Merge branch 'master' of https://github.com/Ilia-sever/crm-system
+
+[33mcommit 2bd966e3928859aa1abd2911b2cdf0d5b8032cef[m[33m ([m[1;33mtag: v1.0.1[m[33m)[m
+Author: Ilia Terebenin <terebenin_il@mail.ru>
+Date:   Mon Nov 20 15:24:28 2017 +0300
+
+    create/update model methods + main model
+
+[33mcommit bb7993b52fb0cd2ccd0a13f849d1bdf567d259ee[m
+Author: Ilia-sever <terebenin_il@mail.ru>
+Date:   Sat Nov 18 22:27:28 2017 +0300
+
+    Set theme jekyll-theme-midnight
+
+[33mcommit 3c0e5bde675c801437475208270c9a1ed4691d9b[m[33m ([m[1;33mtag: v1.0.0[m[33m)[m
+Author: Ilia Terebenin <terebenin_il@mail.ru>
+Date:   Sat Nov 18 22:19:04 2017 +0300
+
+    first

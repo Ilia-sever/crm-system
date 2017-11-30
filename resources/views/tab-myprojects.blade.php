@@ -16,13 +16,13 @@
             <tr class="records-table__row">
                 @foreach ($data['projects-common-fields'] as $field)
                 <td>
-                @if (isset($object[$field]))
-                    {{$object[$field]}}
+                @if (isset($object->$field))
+                    {{$object->$field}}
                 @endif
                 </td>
                 @endforeach
                 <td>
-                    <a href="/projects/show/{{$object['id']}}" title="{{trans('strings.operations.detail')}}" class="show-button">👁</a>
+                    <a href="/projects/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="show-button">👁</a>
                 </td>
             </tr>
             @endforeach

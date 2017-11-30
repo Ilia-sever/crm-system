@@ -60,6 +60,14 @@ button {
     cursor: pointer;
 }
 
+button:active,
+button:focus,
+input:active,
+input:focus {
+    outline: 0;
+    outline-offset: 0;
+}
+
 .auth-wrapper {
 	width: 100%;
 	height: 100%;

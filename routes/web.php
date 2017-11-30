@@ -19,7 +19,7 @@ Route::get('/', 'HomeController@index');
 
 Route::post('/complete', 'HomeController@completingTask');
 
-$modules = config('settings.including-modules');
+$modules = \App\Models\Module::getModulesList();
 
 foreach ($modules as $key => $module) {
 

@@ -9,11 +9,12 @@
 
         @foreach ($modules as $module)
 
-        
+        @if (auth()->user()->can('watch',$module))        
         <li class="modules-list__item @if($module_code == $module) modules-list__item_selected @endif modules-list__item_{{$module}}">
             <img src="{{URL::asset('images/module-icons/'.$module.'.png')}}">
             <a href="/{{$module}}">{{trans_choice('strings.modules.'.$module,2)}}</a>
         </li>
+        @endif
 
         @endforeach
 

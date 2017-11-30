@@ -6,7 +6,7 @@
     <span class="auth-form__title">{{trans('strings.modules.auth')}}</span>
     <span class="auth-form__caption">{{trans('strings.messages.auth')}}</span>
 
-    @include ('layouts.errors')
+    @include ('layouts.form-errors')
 
     <div class="form-group">
         <label for="email">{{trans('strings.fields-name.email')}}</label>

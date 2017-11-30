@@ -7,27 +7,36 @@ use App\Models\MainModel;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 use Carbon\Carbon;
 
-class ModuleModel extends MainModel
+class ModuleObjectModel extends MainModel
 {
-	public static function createObject($data) {
+    public function isRelatedEmployee($employee_id) {
+        return false;
+    }
+
+    public function isControlledEmployee($employee_id) {
+        return false;
+    }
+
+    public static function createObject($data) {
 
         if (!$data) return;
 
-        $data = static::filterRequest($data);
-
         $data['enable'] = 1;
 
-        return static::create($data);
+        $data = static::convertRequest($data);
 
+        $data = static::filterRequest($data);
+
+        return static::create($data);
     }
 
-    public static function disable($id) {
+    public function disable() {
 
-    	$obj = static::find($id);
-    	if ($obj) $obj->update(['enable' => '0']);
+    	$this->update(['enable' => '0']);
     }
 
     public static function getObjects($params) {

@@ -16,14 +16,14 @@
             <tr class="records-table__row">
                 @foreach ($data['tasks-common-fields'] as $field)
                 <td>
-                @if (isset($object[$field]))
-                    {{$object[$field]}}
+                @if (isset($object->$field))
+                    {{$object->$field}}
                 @endif
                 </td>
                 @endforeach
                 <td>
-                    <a class="complete-button" title="{{trans('strings.operations.done')}}" name="{{$object['id']}}">✓</a>
-                    <a href="/tasks/show/{{$object['id']}}" title="{{trans('strings.operations.detail')}}" class="show-button">👁</a>
+                    <a class="complete-button" title="{{trans('strings.operations.done')}}" name="{{$object->id}}">✓</a>
+                    <a href="/tasks/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="show-button">👁</a>
                 </td>
             </tr>
             @endforeach
@@ -34,5 +34,5 @@
             @endif
         </tbody>
     </table>
-    <a href="/tasks?search-field=executor&&search-value={{$data['me']->getFullname()}}">{{trans('strings.operations.watch-other')}}</a>
+    <a href="/tasks?search-field=executor&&search-value={{auth()->user()->employee()->fullname}}">{{trans('strings.operations.watch-other')}}</a>
 </div>

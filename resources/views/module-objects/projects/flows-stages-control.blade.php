@@ -11,7 +11,7 @@
         <div class="stages-panel">
             <label>{{trans('strings.fields-name.stages')}}:</label>
             <ul class="stages-list">
-                @foreach ($flow->getStages() as $stage)
+                @foreach ($flow->stages as $stage)
                 <li class="stage-item">
                     <span class="stage-item__title">{{$stage->name}}</span>
                     <button value="{{$stage->id}}" class="stage-item__edit">✎</button>

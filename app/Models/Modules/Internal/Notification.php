@@ -13,10 +13,15 @@ use App\Models\Modules\Project;
 
 class Notification extends MainModel
 {
-	public function getDatetimeof() {
-		$date = new \DateTime($this->datetimeof);
-		return $date->format('H:i   d.m.Y');
-	}
+
+	public static function showForEmployee($employee_id,$limit) {
+
+    	$nots = Notification::where('employee_id',$employee_id)->orderBy('datetimeof','desc')->limit($limit)->get();
+
+    	Notification::where('employee_id',$employee_id)->where('viewed',0)->update(['viewed' => 1]);
+
+    	return $nots;
+    }
 
 	protected static function notify($notify_data) {
 
@@ -31,26 +36,31 @@ class Notification extends MainModel
 
 	}
 
-	public static function notifyAboutTask($type, Task $task, $e_id) {
+	public static function notifyAboutTask($type, Task $task, $employee_id) {
 
 		$notify_data = array();
 
 		$notify_data['title'] = trans("strings.notifications.$type");
 
-		$notify_data['text'] = $task->name . ', ' . 
-		trans('strings.fields-name.deadline') . ' ' . $task->formatDeadline() . ', ' .
-		trans('strings.fields-name.plaintime') . ' ' . $task->getPlaintime() . ', ' .
-		$task->getAssignment();
+		$text = $task->name;
+
+		$text .= ($task->formated_deadline) ? ', ' . trans('strings.fields-name.deadline') . ' ' . $task->formated_deadline : '';
+
+		$text .= ($task->formated_plaintime) ? ', ' . trans('strings.fields-name.plaintime') . ' ' . $task->formated_plaintime : '';
+
+		$text .= ($task->assignment) ? ', ' . $task->assignment : '';
+
+		$notify_data['text'] = $text;
 
 		$notify_data['link'] = '/tasks/show/' . $task->id;  
 
-		$notify_data['employee_id'] = $e_id;
+		$notify_data['employee_id'] = $employee_id;
 
 		static::notify($notify_data);
 
 	}
 
-	public static function notifyAboutProject($type, Project $project, $e_id) {
+	public static function notifyAboutProject($type, Project $project, $employee_id) {
 
 		$notify_data = array();
 
@@ -60,12 +70,15 @@ class Notification extends MainModel
 
 		$notify_data['link'] = '/projects/show/' . $project->id;  
 
-		$notify_data['employee_id'] = $e_id;
+		$notify_data['employee_id'] = $employee_id;
 
 		static::notify($notify_data);
 
 	}
 
-	
+	public function getFormatedDatetimeof() {
+		$date = new \DateTime($this->datetimeof);
+		return $date->format('H:i  d.m.Y');
+	}
 
 }

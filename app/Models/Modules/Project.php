@@ -9,14 +9,22 @@ use App\Models\Modules\Internal\Stage;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends ModuleModel
+class Project extends ModuleObjectModel
 {
+	public function isRelatedEmployee($employee_id) {
+		return ($employee_id == $this->manager_id) ? true : false;
+	}
 
     public function assignNewFlows($flows_id) {
 
     	foreach ($flows_id as $flow_id) {
             if ($flow_id) {
-                Flow::find($flow_id)->update(['project_id' => $this->id]);
+
+                $flow = Flow::find($flow_id);
+                
+                if ($flow) { 
+                	$flow->update(['project_id' => $this->id]);
+                }
             }    
         }
     }

@@ -6,39 +6,41 @@ use App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Illuminate\Support\Facades\Auth;
-
-class Task extends ModuleModel
+class Task extends ModuleObjectModel
 {
-
-	public static function createObject($data) {
-
-        if (!$data) return;
-
-        $data = static::filterRequest($data);
-
-        $data['enable'] = 1;
-        $data['director_id'] = Auth::user()->id;
-        $data['plaintime'] = static::formPlaintime($data['plaintime']);
-
-        return static::create($data);
-
+    public static function formPlaintime ($str) {
+        // from '** h ** m' to '**:**:**'
+        $hours = (is_numeric(substr($str,0,2))) ? substr($str,0,2) : '';
+        $minutes = (is_numeric(substr($str,6,2))) ? substr($str,6,2) : '';
+        if (!$hours || !$minutes) return '00:00:00';
+        if (intval($minutes) > 59) return '00:00:00';
+        return $hours.':'.$minutes.':00';
     }
 
-    public function updateObject($data) {
-
-    	if (!$data) return;
-
-    	$data = static::filterRequest($data);
-
-    	$data['plaintime'] = static::formPlaintime($data['plaintime']);
-
-    	$this->update($data);
-
+    public function isRelatedEmployee($employee_id) {
+        if ($employee_id == $this->director_id || $employee_id == $this->executor_id) return true;
+        return false;
     }
 
+    public function isControlledEmployee($employee_id) {
+        if ($employee_id == $this->director_id) return true;
+        return false;
+    }
 
-	public static function getMy ($executor_id) {
+    protected static function convertRequest($data) {
+
+
+        if (!$data['id']) {
+
+            $data['director_id'] = auth()->user()->id;
+        }
+
+        if (isset($data['plaintime'])) $data['plaintime'] = static::formPlaintime($data['plaintime']);
+        
+        return $data;
+    }
+
+	public static function getForExecutor($executor_id) {
 		return static::where('enable','1')->where('executor_id',$executor_id)->where('status','began')->orderBy('deadline')->get();
 	}
 
@@ -69,16 +71,11 @@ class Task extends ModuleModel
 		return Employee::find($this->executor_id)->getFullname();
 	}
 
-	public static function formPlaintime ($str) {
-        // from '** h ** m' to '**:**:**'
-        $hours = (is_numeric(substr($str,0,2))) ? substr($str,0,2) : '';
-        $minutes = (is_numeric(substr($str,6,2))) ? substr($str,6,2) : '';
-        if (!$hours || !$minutes) return '00:00:00';
-        if (intval($minutes) > 59) return '00:00:00';
-        return $hours.':'.$minutes.':00';
-    }
+    public function getFormatedStatus () {
+        return trans('strings.fields-name.statuses.'.$this->status);
+    }	
 
-    public function getPlaintime () {
+    public function getFormatedPlaintime () {
     	// from '**:**:**' to '** h ** m'
     	$time = static::getTime($this->plaintime);
     	$formated = '';
@@ -87,14 +84,12 @@ class Task extends ModuleModel
     	return $formated;
     }
 
-    public function formatDeadline() {
+    public function getFormatedDeadline() {
     	if ($this->deadline) {
     		return static::formatDate($this->deadline); 
     	}
     	return '';
 
     }
-
-
 
 }

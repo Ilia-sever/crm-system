@@ -14,19 +14,57 @@ class MainModel extends Model
     public $timestamps = false;
 	protected $guarded = [];
 
+	public function __get($property) {
+
+        $prop = Model::__get($property);
+
+        if ($prop) return $prop;
+
+        //finding getter-method for property
+
+        $getter = camel_case('get_'.$property);
+
+        if (method_exists($this, $getter)) {
+            return $this->$getter();
+        }
+
+        return '';
+    }
+
+    protected static function convertRequest($data) {
+
+        return $data;
+    }
+
+    protected static function filterRequest($data) {
+
+        $table = with(new static)->getTable();
+
+        foreach ($data as $column => $value) {
+            if (!Schema::hasColumn($table, $column) || $column=='id') unset($data[$column]);
+        }
+
+        return $data;
+    }
+
 	public static function createObject($data) {
 
         if (!$data) return;
 
+        $data = static::convertRequest($data);
+
         $data = static::filterRequest($data);
 
         return static::create($data);
-
     }
 
     public function updateObject($data) {
 
     	if (!$data) return;
+
+        $data['id'] = $this->id;
+
+        $data = static::convertRequest($data);
 
     	$data = static::filterRequest($data);
 
@@ -66,18 +104,6 @@ class MainModel extends Model
     protected static function formatDate($str) {
 
     	return Carbon::parse($str)->format('d.m.Y');
-    }
-
-    protected static function filterRequest($data) {
-
-    	$table = with(new static)->getTable();
-
-    	foreach ($data as $column => $value) {
-    		if (!Schema::hasColumn($table, $column)) unset($data[$column]);
-    	}
-
-    	return $data;
-
     }
 
 }

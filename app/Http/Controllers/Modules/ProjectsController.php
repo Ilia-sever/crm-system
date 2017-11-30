@@ -3,20 +3,25 @@
 namespace App\Http\Controllers\Modules;
 
 use Illuminate\Http\Request;
-
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Input;
+use Validator;
+
+use App\Special\OldRequest;
 
 use App\Models\Modules\Project;
-use App\Models\Modules\Employee;
 use App\Models\Modules\Task;
-use App\Models\Modules\Internal\Flow;
-use App\Models\Modules\Internal\Notification;
+use App\Models\Modules\Employee;
 
-use Validator;
+use App\Models\Modules\Internal\Flow;
+use App\Models\Modules\Internal\Stage;
+use App\Models\Modules\Internal\Notification;
 
 class ProjectsController extends ModuleController
 {
     protected $model = "\App\Models\Modules\Project";
+
+    protected $module_code = 'projects';
     
     protected $validation_arr = array(
         'name' => 'min:3|max:100|required',
@@ -28,8 +33,6 @@ class ProjectsController extends ModuleController
 
     protected $default_sort_field = 'name';
 
-    protected $editable_fields = array('name','client_id','manager_id');
-
     protected function formRecords($params) {
 
         $projects = Project::getObjects($params);
@@ -38,26 +41,10 @@ class ProjectsController extends ModuleController
 
         foreach ($projects as $num => $project) {
 
-            $records[$num] = array(
-                'id' => $project->id,
-                'name' => $project->name,
-                'client' => $project->getClient(),
-                'manager' => $project->getManager(),
-            );
+            $records[$num] = $project;
         }
 
         return $records;
-    }
-
-    public function sort($sort_field,$sort_order) {
-
-        if (Project::isFieldExist($sort_field)) {
-            $data = $this->getRecords(Project::getSorted($sort_field,$sort_order));
-        } else {
-            $data = $this->sortRecords($this->getRecords(),$sort_field,$sort_order);
-        }
-
-        return view('module-objects.table-rows',compact('data'));
     }
 
     public function show($id) {
@@ -66,25 +53,11 @@ class ProjectsController extends ModuleController
 
         $object = Project::find($id);
 
-        if (!$object) {
+        abort_if(!$object,404);
+        abort_if(!auth()->user()->can('watch','projects',$object),403);
+        abort_if(!$object->isActive(),410);
 
-            $data['message']='not-found';
-            return view('layouts.error',compact('data'));
-        }
-
-        if (!$object->isActive()) {
-
-            $data['message']='deleted-object';
-            return view('layouts.error',compact('data'));
-        }
-
-        $data['object'] = array(
-            'id' => $object->id,
-            'name' => $object->name,
-            'client' => $object->getClient(),
-            'manager_id' => $object->manager_id,
-            'flows' => $object->getFlows(),
-        ) ;
+        $data['object'] = $object;
 
         return view('module-objects.projects.show',compact('data'));
     }
@@ -92,15 +65,11 @@ class ProjectsController extends ModuleController
 
     public function add() {
 
+        abort_if(!auth()->user()->can('create','projects'),403);
+
         $data = array();
 
-        foreach ($this->editable_fields as $field) {
-            $data['object'][$field] = (request()->old($field)) ? request()->old($field) : '';
-        }
-
-        $data['object']['id'] = '';
-
-        $data['flows'] = request()->old('flows') ? request()->old('flows') : '';
+        $data['object'] = new OldRequest();
 
         $data['employees'] = Employee::getActive();
 
@@ -113,25 +82,11 @@ class ProjectsController extends ModuleController
 
         $object = Project::find($id);
 
-        if (!$object) {
+        abort_if(!$object,404);
+        abort_if(!auth()->user()->can('update','projects',$object),403);
+        abort_if(!$object->isActive(),410);
 
-            $data['message']='not-found';
-            return view('layouts.error',compact('data'));
-        }
-
-        if (!$object->isActive()) {
-
-            $data['message']='deleted-object';
-            return view('layouts.error',compact('data'));
-        }
-
-        foreach ($this->editable_fields as $field) {
-            $data['object'][$field] = $object[$field];
-        }
-
-        $data['object']['id'] = $object['id'];
-
-        $data['flows'] = $object->getFlowsList();
+        $data['object'] = $object;
 
         $data['employees'] = Employee::getActive();
 
@@ -139,6 +94,8 @@ class ProjectsController extends ModuleController
     }
 
     public function create() {
+
+        abort_if(!auth()->user()->can('create','projects'),403);
 
         $validator =  Validator::make(request()->all(), $this->validation_arr);
 
@@ -150,7 +107,7 @@ class ProjectsController extends ModuleController
         }
 
         $newproject = Project::createObject(request()->all());
-        $newproject->assignNewFlows(explode(';', request('flows')));
+        $newproject->assignNewFlows(explode(';', request('flows_list')));
 
         Notification::notifyAboutProject('assign-to-project', $newproject, $newproject->manager_id);
 
@@ -171,25 +128,30 @@ class ProjectsController extends ModuleController
             
         $project = Project::find(request('id'));
 
-        if (!$project) {
-
-            $data['message']='not-found';
-            return view('layouts.error',compact('data'));
-        }
+        abort_if(!auth()->user()->can('update','projects',$project),403);
 
         if ((request('manager_id') != $project->manager_id)) {
             Notification::notifyAboutProject('assign-to-project', $project, request('manager_id'));
         }
 
         $project->updateObject(request()->all());
-        $project->assignNewFlows(explode(';', request('flows')));
+        $project->assignNewFlows(explode(';', request('flows_list')));
 
         return redirect('/projects?success='.date('U'));
     }
 
     public function getFlowsPanel () {
 
-        $flows_id = explode(';', request('flows'));
+        if (request('id')) {
+
+            abort_if(!auth()->user()->can('update','projects',Project::find(request('id'))),403);
+
+        } else {
+
+            abort_if(!auth()->user()->can('create','projects'),403);
+        }
+
+        $flows_id = explode(';', request('flows_list'));
         $data['flows'] = array();
         $sort_arr = array();
 

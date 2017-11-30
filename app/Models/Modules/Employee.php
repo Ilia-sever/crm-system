@@ -3,54 +3,58 @@
 namespace App\Models\Modules;
 
 use App\Models;
+use App\Models\Role;
+use App\Models\Modules\Internal\Notification;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Modules\Internal\Notification;
 use Illuminate\Support\Facades\Hash;
 
-class Employee extends ModuleModel
+class Employee extends ModuleObjectModel
 {
-
-    public static function createObject($data) {
-
-        if (!$data) return;
-
-        $data = static::filterRequest($data);
-
-        $data['enable'] = 1;
-        $data['password'] = static::formPassword($data['email']);
-
-        return static::create($data);
-
+    public function isRelatedEmployee($employee_id) {
+        return ($employee_id == $this->id) ? true : false;
     }
 
-    protected static function formPassword($value) {
+    protected static function convertRequest($data) {
 
-        return Hash::make($request->newPassword);
+        if (isset($data['new_password'])) {
 
+            if ($data['new_password']) {
+
+                $data['password'] = Hash::make($data['new_password']);
+            }
+        }
+
+        return $data;
     }
 
     public static function isEmailExist($email) {
         return (static::where('email',$email)->count()>0) ? true : false;
     }
 
-
-	public function getFullname() {
-		return $this->surname . ' ' . $this->firstname . ' ' . $this->lastname;
-	}
-
-	public function formatDOB() {
-    	return static::formatDate($this->dob);
-    }
-
-    public function getNotifications($limit) {
-    	$nots = Notification::where('employee_id',$this->id)->orderBy('datetimeof','desc')->limit($limit)->get();
-    	Notification::where('employee_id',$this->id)->where('viewed',0)->limit($limit)->update(['viewed' => 1]);
-    	return $nots;
-
-    }
-
     public function countNewNotifications() {
-    	return Notification::where('employee_id',$this->id)->where('viewed','0')->count();
+        return Notification::where('employee_id',$this->id)->where('viewed','0')->count();
     }
+
+    public function getFullname() {
+
+        $fullname = '';
+        $fullname .= ($this->surname) ? $this->surname . ' ' : '';
+        $fullname .= ($this->firstname) ? $this->firstname . ' ' : '';
+        $fullname .= ($this->lastname) ? $this->lastname . ' ' : '';
+        return $fullname;
+    }
+
+    public function getFormatedDob() {
+        return static::formatDate($this->dob);
+    }
+
+    public function getSexName() {
+        return ($this->sex) ? trans('strings.fields-name.sexes.'.$this->sex) : ''; 
+    }
+
+    public function getRole() {
+        return Role::find($this->role_id);;
+    }
+
 }

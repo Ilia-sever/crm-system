@@ -19,9 +19,9 @@ function refreshRecords(records) {
     $(".checkbox-table").prop('checked', false);
     $(".checkbox-main").change(function() {
         if ($(this).is(':checked')) {
-            $(".checkbox-table").prop('checked', true);
+            $(".checkbox-table:enabled").prop('checked', true);
         } else {
-            $(".checkbox-table").prop('checked', false);
+            $(".checkbox-table:enabled").prop('checked', false);
         }
     });
     $(".checkbox-table").change(function() {
@@ -216,7 +216,7 @@ function modalWindowFunctional() {
                     if (content == '') {
                         $(".flows-stages__control").click();
                     } else if (content.match(/^\d+$/)) {
-                        $("input[name='flows']").val($("input[name='flows']").val()+content+';');
+                        $("input[name='flows_list']").val($("input[name='flows_list']").val()+content+';');
                         $(".flows-stages__control").click();
                     } else {
                         viewModalWindow(content);

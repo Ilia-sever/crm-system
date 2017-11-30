@@ -1,7 +1,7 @@
 <form class="flow-form">
 	<h2>{{$data['title']}}</h2>
 	{{csrf_field()}}
-	@include('layouts.errors')
+	@include('layouts.form-errors')
 	<input type="hidden" name="id" value="{{$data['id']}}"/>
 	<input type="hidden" name="project_id" value="{{$data['project_id']}}"/>
 	<div class="form-group ">

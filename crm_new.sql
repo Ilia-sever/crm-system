@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Ноя 11 2017 г., 02:20
+-- Время создания: Ноя 30 2017 г., 19:48
 -- Версия сервера: 5.7.17-log
 -- Версия PHP: 5.6.30
 
@@ -23,13 +23,42 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `actions`
+--
+
+CREATE TABLE `actions` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `child_id` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `actions`
+--
+
+INSERT INTO `actions` (`id`, `name`, `child_id`) VALUES
+(1, 'watch', 5),
+(2, 'create', NULL),
+(3, 'update', 6),
+(4, 'delete', 7),
+(5, 'watch_related', 8),
+(6, 'update_related', 9),
+(7, 'delete_related', 10),
+(8, 'watch_controlled', NULL),
+(9, 'update_controlled', NULL),
+(10, 'delete_controlled', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `employees`
 --
 
 CREATE TABLE `employees` (
   `id` int(10) UNSIGNED NOT NULL,
   `enable` tinyint(1) DEFAULT NULL,
-  `role_id` int(10) UNSIGNED NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `role_id` int(10) UNSIGNED NOT NULL DEFAULT '1',
   `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `surname` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -46,15 +75,14 @@ CREATE TABLE `employees` (
 -- Дамп данных таблицы `employees`
 --
 
-INSERT INTO `employees` (`id`, `enable`, `role_id`, `email`, `password`, `surname`, `firstname`, `lastname`, `sex`, `dob`, `post`, `tel`, `skype`) VALUES
-(1, 0, 1, 'aaa@aa.aaaa', '$2y$11$p3fUjHMD8ruB8T.xvyeKneDdGCGCnSbIGeFh/zgWaTWnjIovMhe02', 'Главный', 'Директор', '', 'male', '2017-10-20', 'маньяк', '+7(666) 666-6666', 'aa.aaaa'),
-(5, 0, 1, 'oasasas@asaa.as', '$2y$11$8mKkD2t57lix34mSSJy2cOjsKXV6KGSFrhq5QVDOrxiGIA2FZeVNK', 'Простой', 'Человек', NULL, NULL, NULL, NULL, NULL, NULL),
-(9, 0, 1, 'ccocc@cc.ccc', '$2y$11$KFccytdxgv1GdRnw6VHmIelaF/9Rw7bvZdLHN3ME7cK4IhuiwNXoC', 'Что', 'Это', 'Такое', NULL, NULL, NULL, '+7(664) 534-5345', NULL),
-(10, 1, 1, 'ivanov@mail.ru', '$2y$11$avt0wODydUdKPHuNI5V5uOA7VsB.zHDbTZGYcQSRX6p8KiCq6MHcm', 'Иванов', 'Иван', 'Сотрудникович', 'male', '1997-10-02', 'Маньяк', '+7(655) 656-5656', 'ivanovva'),
-(11, 1, 1, 'ipettttr@gmail.com', '$2y$11$MDOuMQL9sBZyZTVeXElONuiGs/TVIOUMK3UaL67pymECiYzT55P7i', 'Петров', 'Директор', 'Вениаминович', 'male', '1977-10-30', 'Начальник', '+7(868) 786-8678', NULL),
-(12, 1, 1, 'sadsa@yandex.ru', '$2y$11$t4RcSFhbrmSg0QLS6CV0H.bGT1xjADQVHC9G6ibRBibUvmiHW0b/6', 'Простой', 'Менеджер', NULL, 'female', '2017-10-11', NULL, '+7(444) 334-4425', NULL),
-(13, 1, 3, 'anonim@mail.ru', '$2y$11$qpVTzKrP87fKOC4nYPopgef4gG42UzKJpnJrG8EbUSSfIiI0Jzbt2', 'Аноним', NULL, NULL, NULL, NULL, NULL, '+7(343) 424-3432', NULL),
-(14, 1, 1, 'grenme@gmail.com', '$2y$11$ORJ34c4cVPWEr6PQiAOMCuY98qfGDe5gGUrAcl71TA8zcOMzAihL6', 'Браун', 'Грин', NULL, NULL, NULL, NULL, '+7(243) 423-4243', NULL);
+INSERT INTO `employees` (`id`, `enable`, `remember_token`, `role_id`, `email`, `password`, `surname`, `firstname`, `lastname`, `sex`, `dob`, `post`, `tel`, `skype`) VALUES
+(1, 1, 'VmmnCnbCTpG5Q1KsSmZYVoJCPT9B4SN4ssPD6wYwXZ57xfyUX3u0aWem0xgm', 1, 'director@mail.ru', '$2y$10$VsPIqJ4LvvqelB0PLIYSZu.0M2wn4Z1a3hKhZBD5d3zm5PKF.1vpO', 'Директоров', 'Вячеслав', 'Ильич', 'male', '2017-11-30', 'Главный директор', '+7(111) 111-1111', NULL),
+(2, 1, '52uISEZxZMPu8UlCWG5s27Q64Me8zu4kwyPxnU71M7PaMN5GKyzpg9rcBP90', 2, 'manager@mail.ru', '$2y$10$cEI7FYRh05bRSTv.W5zl5.v6J64h2R0KnaDsavgyX9LuoI.1f4L46', 'Менеджеров', 'Игорь', 'Вениаминович', 'male', '2017-11-30', 'Project-manager', '+7(222) 222-2222', NULL),
+(3, 1, 'RfNe99UGNjO3S3blizg3wd1A3iL550io51VmEagnQBztTkOqsMx0r4dPL1Rl', 3, 'executor@mail.ru', '$2y$10$yatsBwh9OtsDjuORS1tWkOeNM9wYODjhcxDKqyzZ9dlB9dBUEd27C', 'Исполнителев', 'Иван', 'Иванович', 'male', '2017-11-30', 'Веб-программист', '+7(333) 333-3333', NULL),
+(4, 1, NULL, 3, 'sssre34@gmail.ru', '$2y$10$Eq/Cw2FUz77WDBew2BwWnelIVgvMvksrIaX9vPZoU9k8t.Zo7vs86', NULL, 'Исполнитель №1', NULL, 'male', '2017-11-23', 'Дизайнер', NULL, NULL),
+(5, 1, NULL, 3, 'miss@ya.ru', '$2y$10$w6XQxarUHfYBDQ7nWFPeQO.FMNpMO.7uvbuknzPP1BpejpAchSLZm', NULL, 'Исполнитель №2', NULL, 'female', NULL, 'Дизайнер', NULL, NULL),
+(6, 1, NULL, 3, 'superman@gmail.com', '$2y$10$UAcoRDzUhHeRKRNPwg3CTOE3.UvTxjiw83xhbmMsOgOR/wClFA0he', NULL, 'Исполнитель №3', NULL, NULL, NULL, 'Верстальщик', NULL, NULL),
+(7, 0, NULL, 3, 'bbb@bbb.ru', '$2y$10$zDuxE44oXBSja0nFh4Szw.TZ6Y.eUBrB/qEaYUawKi2TihH7zgGSK', 'dfgdfg', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -74,14 +102,8 @@ CREATE TABLE `flows` (
 --
 
 INSERT INTO `flows` (`id`, `name`, `sort_order`, `project_id`) VALUES
-(27, 'Поток \"XXX\"', 1, NULL),
-(28, 'Поток \"YYY\"', 2, NULL),
-(29, 'Поток \"XXX\"', 1, 5),
-(30, 'Поток \"YYY\"', 0, 5),
-(31, 'Потоккк', 100, NULL),
-(32, 'Потоккк', 2, 6),
-(33, 'ПОТОКККК', 1, 6),
-(34, 'Эй Хоп', 2, NULL);
+(1, 'Разработка', 1, 1),
+(2, 'SEO', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -105,7 +127,37 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (7, '2017_10_30_052103_create_projects_table', 3),
 (8, '2017_10_30_052715_create_flows_table', 3),
 (10, '2017_10_30_052735_create_stages_table', 4),
-(11, '2017_11_07_085909_create_notifications_table', 5);
+(11, '2017_11_07_085909_create_notifications_table', 5),
+(12, '2017_11_27_183359_create_actions_table', 6),
+(13, '2017_11_27_183359_create_modules_table', 6),
+(14, '2017_11_27_183359_create_roles_table', 6),
+(15, '2017_11_27_183359_create_permissions_table', 7),
+(16, '2017_11_28_183359_create_actions_table', 8);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modules`
+--
+
+CREATE TABLE `modules` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `modules`
+--
+
+INSERT INTO `modules` (`id`, `name`) VALUES
+(1, 'Projects'),
+(2, 'Tasks'),
+(3, 'Employees'),
+(4, 'Clients'),
+(5, 'Contacts'),
+(6, 'Workareas'),
+(7, 'Transactions'),
+(8, 'Files');
 
 -- --------------------------------------------------------
 
@@ -128,32 +180,74 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id`, `viewed`, `datetimeof`, `title`, `text`, `link`, `employee_id`) VALUES
-(1, 1, '2017-11-08 00:00:00', 'УВЕДОМЛЕЕЕЕНИЕ', 'что что что что что что что что что что что что что что что что что чточто что что что что что что что что что что что что что что что что что что что что что что что что что что что что что что что что что что что', '/tasks/', 10),
-(2, 1, '2017-11-07 00:00:00', 'Произошло', 'ПроизошлоПроизошлоПроизошлоПроизошлоПроизошлоПроизошлоПроизошлоПроизошлоПроизошлоПроизошлоПроизошлоПроизошлоПроизошлоПроизошлоооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооо', '/tasks/show/5', 10),
-(3, 1, '2017-11-02 00:00:00', 'Лишнее', 'рррррррррррррррррррррр ррррррррррррррррр ррррррррррр р р р рррррррррррр р р р рр ррррррррррррррррр р ррррррр', '/', 11),
-(4, 1, '2017-11-07 11:27:32', 'Назначение на новую задачу', 'Срочно пора приступать, бегом', '/tasks/show10', 10),
-(5, 1, '2017-11-07 11:31:15', 'Назначение на новую задачу', 'Срочно пора приступать, бегом', '/tasks/show/11', 10),
-(6, 1, '2017-11-07 11:41:32', 'Назначение на новую задачу', 'Беги далеко далеко, ', '/tasks/show/15', 10),
-(7, 0, '2017-11-08 07:37:21', 'Назначение на новую задачу', 'что же делать, Крайний срок08.11.2017, Планируемое время11 ч 11 мин, ', '/tasks/show/18', NULL),
-(8, 0, '2017-11-08 10:53:38', 'Назначение на новую задачу', 'Чтозанах, Крайний срок 08.11.2017, Планируемое время 12 ч 21 мин, ', '/tasks/show/19', NULL),
-(9, 1, '2017-11-08 10:54:39', 'Назначение на новую задачу', 'Чтотытакое, Крайний срок 08.11.2017, Планируемое время 11 ч 11 мин, ', '/tasks/show/20', 10),
-(10, 1, '2017-11-08 11:00:07', 'Назначение на новую задачу', 'Разработать диаграмму, Крайний срок 04.10.2017, Планируемое время 3 ч 20 мин, РАБОБЛАСТЬ5', '/tasks/show/8', 10),
-(11, 0, '2017-11-08 11:00:07', 'Снятие с задачи', 'Разработать диаграмму, Крайний срок 04.10.2017, Планируемое время 3 ч 20 мин, РАБОБЛАСТЬ5', '/tasks/show/8', 13),
-(12, 0, '2017-11-08 11:00:46', 'Назначение на новую задачу', 'Разработать диаграмму, Крайний срок 04.10.2017, Планируемое время 3 ч 20 мин, РАБОБЛАСТЬ5', '/tasks/show/8', 13),
-(13, 1, '2017-11-08 11:00:46', 'Снятие с задачи', 'Разработать диаграмму, Крайний срок 04.10.2017, Планируемое время 3 ч 20 мин, РАБОБЛАСТЬ5', '/tasks/show/8', 10),
-(14, 0, '2017-11-08 11:09:51', 'Назначение на задачу', 'xnjjjjjjj, Крайний срок 08.11.2017, Планируемое время 34 ч 24 мин, ', '/tasks/show/21', 12),
-(15, 1, '2017-11-08 11:10:10', 'Выполнение поставленной задачи', 'xnjjjjjjj, Крайний срок 08.11.2017, Планируемое время 34 ч 24 мин, ', '/tasks/show/21', 10),
-(16, 1, '2017-11-08 14:13:37', 'Назначение на задачу', 'делать что-то, Крайний срок 01.11.2017, Планируемое время 22 ч 22 мин, ', '/tasks/show/22', 10),
-(17, 1, '2017-11-08 14:22:48', 'Назначение на задачу', 'ааааааа, Крайний срок 24.11.2017, Планируемое время 22 ч 22 мин, ', '/tasks/show/23', 10),
-(18, 0, '2017-11-09 10:42:20', 'Назначение на проект', 'ПРОЕКТ2', '/projects/show/6', 11),
-(19, 1, '2017-11-09 10:45:17', 'Назначение на проект', 'ПроектNew', '/projects/show/2', 10),
-(20, 0, '2017-11-09 10:48:31', 'Назначение на задачу', 'ааааааа, Крайний срок 24.11.2017, Планируемое время 22 ч 22 мин, ', '/tasks/show/23', 11),
-(21, 1, '2017-11-09 10:48:31', 'Снятие с задачи', 'ааааааа, Крайний срок 24.11.2017, Планируемое время 22 ч 22 мин, ', '/tasks/show/23', 10),
-(22, 1, '2017-11-09 10:48:39', 'Назначение на задачу', 'ааааааа, Крайний срок 24.11.2017, Планируемое время 22 ч 22 мин, ', '/tasks/show/23', 10),
-(23, 0, '2017-11-09 10:48:39', 'Снятие с задачи', 'ааааааа, Крайний срок 24.11.2017, Планируемое время 22 ч 22 мин, ', '/tasks/show/23', 11),
-(24, 1, '2017-11-09 12:51:13', 'Назначение на задачу', 'Просто задача обычная, Крайний срок 18.11.2017, Планируемое время 22 ч , ', '/tasks/show/24', 10),
-(25, 0, '2017-11-09 13:34:50', 'Назначение на проект', 'ПРОЕКТ2', '/projects/show/6', 12),
-(26, 1, '2017-11-09 13:35:48', 'Назначение на проект', 'ПРОЕКТ2', '/projects/show/6', 10);
+(1, 1, '2017-11-30 18:18:45', 'Назначение на проект', 'Разработка интернет-магазина', '/projects/show/1', 2),
+(2, 1, '2017-11-30 18:21:11', 'Назначение на проект', 'Разработка корпортала', '/projects/show/2', 1),
+(3, 1, '2017-11-30 18:22:19', 'Назначение на задачу', 'Закодить контроллер корзины, Крайний срок 30.12.2017, Планируемое время 5 ч ', '/tasks/show/1', 3),
+(4, 1, '2017-11-30 18:28:51', 'Назначение на задачу', 'впапк, Планируемое время 32 ч 42 мин', '/tasks/show/2', 1),
+(5, 1, '2017-11-30 18:32:16', 'Назначение на задачу', 'апрапр, Планируемое время 43 ч 53 мин', '/tasks/show/3', 1),
+(6, 1, '2017-11-30 18:32:55', 'Назначение на задачу', 'авпвапав, Планируемое время 35 ч 34 мин', '/tasks/show/4', 1),
+(7, 1, '2017-11-30 18:33:41', 'Назначение на задачу', 'парапрап, Планируемое время 34 ч 53 мин', '/tasks/show/5', 1),
+(8, 1, '2017-11-30 18:36:02', 'Назначение на задачу', 'Закодить контроллеры корзины, Планируемое время 4 ч ', '/tasks/show/6', 3),
+(9, 1, '2017-11-30 18:36:49', 'Назначение на задачу', 'Обсудить ТЗ с заказчиком, Крайний срок 29.11.2017, Планируемое время 2 ч ', '/tasks/show/7', 2),
+(10, 1, '2017-11-30 18:37:12', 'Выполнение поставленной задачи', 'Обсудить ТЗ с заказчиком, Крайний срок 29.11.2017, Планируемое время 2 ч ', '/tasks/show/7', 1),
+(11, 0, '2017-11-30 18:37:36', 'Назначение на задачу', 'Нарисовать логотипы, Крайний срок 18.11.2017, Планируемое время 30 мин', '/tasks/show/8', 5),
+(12, 1, '2017-11-30 18:38:16', 'Назначение на задачу', 'Продумать архитектуру, Крайний срок 25.11.2017, Планируемое время 8 ч 30 мин', '/tasks/show/9', 3),
+(13, 0, '2017-11-30 18:42:33', 'Назначение на задачу', 'Помочь менеджеру, Планируемое время 5 мин', '/tasks/show/10', 6);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `permissions`
+--
+
+CREATE TABLE `permissions` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `role_id` int(10) UNSIGNED DEFAULT NULL,
+  `module_id` int(10) UNSIGNED DEFAULT NULL,
+  `action_id` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `permissions`
+--
+
+INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES
+(1, 1, 1, 1),
+(2, 1, 1, 2),
+(3, 1, 1, 3),
+(4, 1, 1, 4),
+(5, 2, 1, 5),
+(6, 2, 1, 0),
+(7, 2, 1, 6),
+(8, 2, 1, 0),
+(9, 3, 1, 5),
+(10, 3, 1, 0),
+(11, 3, 1, 0),
+(12, 3, 1, 0),
+(13, 1, 2, 1),
+(14, 1, 2, 2),
+(15, 1, 2, 3),
+(16, 1, 2, 4),
+(17, 2, 2, 5),
+(18, 2, 2, 2),
+(19, 2, 2, 9),
+(20, 2, 2, 10),
+(21, 3, 2, 5),
+(22, 3, 2, 2),
+(23, 3, 2, 9),
+(24, 3, 2, 10),
+(25, 1, 3, 1),
+(26, 1, 3, 2),
+(27, 1, 3, 3),
+(28, 1, 3, 4),
+(29, 2, 3, 1),
+(30, 2, 3, 0),
+(31, 2, 3, 6),
+(32, 2, 3, 0),
+(33, 3, 3, 1),
+(34, 3, 3, 0),
+(35, 3, 3, 6),
+(36, 3, 3, 0);
 
 -- --------------------------------------------------------
 
@@ -174,12 +268,28 @@ CREATE TABLE `projects` (
 --
 
 INSERT INTO `projects` (`id`, `enable`, `name`, `client_id`, `manager_id`) VALUES
-(1, 1, 'Проект111', 13, 10),
-(2, 1, 'ПроектNew', 13, 10),
-(3, 0, 'ЭТООО', 13, 10),
-(4, 0, 'ЭТООО', 13, 10),
-(5, 1, 'Простой проект', 10, 10),
-(6, 1, 'ПРОЕКТ2', 13, 10);
+(1, 1, 'Разработка интернет-магазина', 1, 2),
+(2, 1, 'Разработка корпортала', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `roles`
+--
+
+CREATE TABLE `roles` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `roles`
+--
+
+INSERT INTO `roles` (`id`, `name`) VALUES
+(1, 'director'),
+(2, 'manager'),
+(3, 'executor');
 
 -- --------------------------------------------------------
 
@@ -200,13 +310,8 @@ CREATE TABLE `stages` (
 --
 
 INSERT INTO `stages` (`id`, `status`, `name`, `sort_order`, `flow_id`) VALUES
-(8, 'began', 'ЭтапФёрст', 3, 27),
-(9, 'began', 'ЭтапСеконд', 1, 27),
-(10, 'complete', 'ааааааа', NULL, 31),
-(11, 'began', 'Этап Y1', NULL, 30),
-(12, 'began', 'Этап Y2', NULL, 30),
-(15, 'began', 'Хоп хей', NULL, 33),
-(16, 'began', 'Лалалей', NULL, 33);
+(1, 'complete', 'Сбор требований', 1, 1),
+(2, 'began', 'Бэкенд', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -233,34 +338,27 @@ CREATE TABLE `tasks` (
 --
 
 INSERT INTO `tasks` (`id`, `enable`, `status`, `name`, `deadline`, `plaintime`, `workarea_id`, `stage_id`, `director_id`, `executor_id`, `description`) VALUES
-(1, 1, 'complete', 'Убить Билла', '2017-10-18', '20:01:00', NULL, 23, 1, 10, 'крякни Билла и возвращайся'),
-(2, 0, 'failed', 'Уйти', '2017-10-15', '00:07:13', 2, NULL, 5, 1, 'выйти уйти прийти зайти подойти'),
-(3, 0, 'began', 'Сделать что-то', NULL, '08:00:30', NULL, NULL, 1, NULL, NULL),
-(4, 0, 'began', 'что делать то', NULL, '02:00:00', NULL, NULL, 1, NULL, NULL),
-(5, 0, 'complete', 'Куда идти', '2017-11-25', '20:00:00', NULL, NULL, 1, NULL, 'ааааа'),
-(6, 1, 'began', 'Оформить заявку', '2017-11-09', '02:00:00', NULL, 23, 1, 12, 'Взять и сделать просто, не медлительность'),
-(7, 1, 'began', 'Взять документы', '2017-10-31', '00:01:00', 2, NULL, 1, 14, 'Возьми их и неси просто'),
-(8, 1, 'failed', 'Разработать диаграмму', '2017-10-04', '03:20:00', 5, NULL, 1, 13, 'уже сделали, неважно'),
-(9, 0, 'began', 'hmmmmm', '2017-10-11', '21:32:00', NULL, NULL, 1, 10, NULL),
-(10, 0, 'complete', 'Задачазадаччччааа', NULL, '22:22:00', NULL, NULL, 1, 10, NULL),
-(11, 1, 'complete', 'Выполнитьвыполнить', NULL, '22:22:00', NULL, NULL, 1, 10, NULL),
-(12, 0, 'began', 'Беги далеко далеко', NULL, '22:22:00', NULL, NULL, 1, 10, NULL),
-(13, 0, 'began', 'Беги далеко далеко', NULL, '22:22:00', NULL, NULL, 1, 10, NULL),
-(14, 0, 'began', 'Беги далеко далеко', NULL, '22:22:00', NULL, NULL, 1, 10, NULL),
-(15, 0, 'began', 'Беги далеко далеко', NULL, '22:22:00', NULL, NULL, 1, 10, NULL),
-(16, 0, 'began', 'что же делать', NULL, '11:11:00', NULL, NULL, 1, 10, NULL),
-(17, 0, 'began', 'что же делать', NULL, '11:11:00', NULL, NULL, 1, 10, NULL),
-(18, 0, 'began', 'что же делать', NULL, '11:11:00', NULL, NULL, 1, 10, NULL),
-(19, 0, 'began', 'Чтозанах', '2017-11-24', '12:21:00', NULL, NULL, 1, 10, NULL),
-(20, 0, 'complete', 'Чтотытакое', NULL, '11:11:00', NULL, NULL, 1, 10, NULL),
-(21, 0, 'complete', 'xnjjjjjjj', NULL, '34:24:00', NULL, NULL, 10, 12, NULL),
-(22, 0, 'complete', 'делать что-то', '2017-11-01', '22:22:00', NULL, NULL, 10, 10, NULL),
-(23, 0, 'began', 'ааааааа', '2017-11-24', '22:22:00', NULL, NULL, 10, 10, NULL),
-(24, 1, 'began', 'Просто задача обычная', '2017-11-18', '22:00:00', NULL, NULL, 10, 10, 'эт ну ппрост');
+(1, 0, 'began', 'Закодить контроллер корзины', '2017-12-30', '05:00:00', NULL, NULL, NULL, 3, 'Конкретные указания, пока что их нет'),
+(2, 0, 'began', 'впапк', NULL, '32:42:00', NULL, NULL, NULL, 1, NULL),
+(3, 0, 'began', 'апрапр', NULL, '43:53:00', NULL, NULL, NULL, 1, NULL),
+(4, 0, 'began', 'авпвапав', NULL, '35:34:00', NULL, NULL, NULL, 1, NULL),
+(5, 0, 'began', 'парапрап', NULL, '34:53:00', NULL, NULL, 1, 1, NULL),
+(6, 1, 'began', 'Закодить контроллеры корзины', '2017-12-31', '04:00:00', NULL, NULL, 1, 3, 'ТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗ'),
+(7, 1, 'complete', 'Обсудить ТЗ с заказчиком', '2017-11-29', '02:00:00', NULL, NULL, 1, 2, 'ТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗ'),
+(8, 1, 'began', 'Нарисовать логотипы', '2017-11-18', '00:30:00', NULL, NULL, 1, 5, 'ТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗ'),
+(9, 1, 'began', 'Продумать архитектуру', '2017-11-25', '08:30:00', NULL, NULL, 1, 3, 'ТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗТЗ'),
+(10, 1, 'began', 'Помочь менеджеру', NULL, '00:05:00', NULL, NULL, 2, 6, 'Переложи пожалуйста вон те бумаги вон туда, спасибо'),
+(11, 1, 'failed', 'Разобрать документы', NULL, '01:10:00', NULL, NULL, 3, 4, NULL);
 
 --
 -- Индексы сохранённых таблиц
 --
+
+--
+-- Индексы таблицы `actions`
+--
+ALTER TABLE `actions`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `employees`
@@ -281,15 +379,33 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `modules`
+--
+ALTER TABLE `modules`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `notifications`
 --
 ALTER TABLE `notifications`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `projects`
 --
 ALTER TABLE `projects`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `roles`
+--
+ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -309,40 +425,60 @@ ALTER TABLE `tasks`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `actions`
+--
+ALTER TABLE `actions`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+--
 -- AUTO_INCREMENT для таблицы `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT для таблицы `flows`
 --
 ALTER TABLE `flows`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+--
+-- AUTO_INCREMENT для таблицы `modules`
+--
+ALTER TABLE `modules`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT для таблицы `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+--
+-- AUTO_INCREMENT для таблицы `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 --
 -- AUTO_INCREMENT для таблицы `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблицы `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `stages`
 --
 ALTER TABLE `stages`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

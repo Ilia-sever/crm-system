@@ -18,7 +18,7 @@
                 <li class="acount-container">
                     <a class="navigation__link navigation__link_acount"></a>
                     <div class="acount-panel">
-                        <p class="acount-panel__title">{{ Auth::user()->firstname }}</p>
+                        <p class="acount-panel__title">{{ Auth::user()->employee()->firstname }}</p>
                         <a class="acount-panel__link" href="/employees/show/{{ Auth::user()->id }}">{{trans('strings.operations.acount')}}</a>
                         <a class="acount-panel__link acount-panel__link_logout">{{trans('strings.operations.logout')}}</a>
                         <form class="acount-panel__form" method="POST" action="{{ route('logout') }}">{{ csrf_field() }}</form>

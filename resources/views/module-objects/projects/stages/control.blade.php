@@ -1,7 +1,7 @@
 <form class="stage-form">
 	<h2>{{$data['title']}}</h2>
 	{{csrf_field()}}
-	@include('layouts.errors')
+	@include('layouts.form-errors')
 	<input type="hidden" name="id" value="{{$data['id']}}"/>
 	<input type="hidden" name="flow_id" value="{{$data['flow_id']}}"/>
 	<div class="form-group ">

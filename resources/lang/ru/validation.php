@@ -132,9 +132,14 @@ return [
     */
 
     'attributes'           => [
-        'fullname'               => 'ФИО',
+       'all'               => 'Все поля',
+        'actions'           => 'Действия',
+        'fullname'          => 'ФИО',
         'email'             => 'Email',
         'password'          => 'Пароль',
+        'new_password'      => 'Новый пароль',
+        'password_confirmation' => 'Подтверждение пароля',
+        'remember-me'       => 'Запомнить меня',
         'tel'               => 'Телефон',
         'role'              => 'Роль',
         'surname'           => 'Фамилия',
@@ -152,9 +157,13 @@ return [
         'name'              => 'Название',
         'status'            => 'Статус',
         'statuses'          => [
-            'began'         => 'Открыта',
+            'began'         => 'В процессе',
             'complete'      => 'Выполнена',
-            'failed'        => 'Не выполнена'
+            'failed'        => 'Провалена'
+        ],
+        'stage-statuses'    => [
+            'began'         => 'Не закончен',
+            'complete'      => 'Закончен',
         ],
         'deadline'          => 'Крайний срок',
         'plaintime'         => 'Планируемое время',
@@ -167,7 +176,12 @@ return [
         'client'            => 'Заказчик',
         'manager'           => 'Менеджер',
         'flows-stages'      => 'Потоки и этапы',
-        'sort_order'        => 'Номер сортировки'
+        'flows'             => 'Потоки',
+        'stages'            => 'Этапы',
+        'sort_order'        => 'Номер сортировки',
+        'notifications'     => 'Уведомления',
+        'my-tasks'          => 'Мои текущие задачи',
+        'my-projects'       => 'Проекты под моим управлением'
     ],
 
 ];

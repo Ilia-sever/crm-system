@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Modules\Internal;
 
 use Illuminate\Http\Request;
+use App\Models\Modules\Project;
 use App\Models\Modules\Internal\Flow;
 use App\Models\Modules\Internal\Stage;
 
@@ -19,14 +20,18 @@ class StagesController extends \App\Http\Controllers\Controller
 
     public function control($flow_id,$id) {
 
-    	if ($id) {
+        $stage = ($id) ? Stage::find($id) : null;
 
-    		$stage = Stage::find($id);
+        $flow = ($flow_id) ? Flow::find($flow_id) : Flow::find($stage->flow->id);
+
+        if (!$this->checkAccess($flow)) return;
+
+    	if ($id) {
 
             if (!$stage) return;
 
     		$data = array(
-    			'title' => trans('strings.operations.edit-stage').' ('.$stage->getFlow()->name.') ',
+    			'title' => trans('strings.operations.edit-stage').' ('.$flow->name.') ',
     			'id' => $stage->id,
     			'flow_id' => $stage->flow_id,
     			'name' => $stage->name,
@@ -35,10 +40,6 @@ class StagesController extends \App\Http\Controllers\Controller
     		);
 
     	} else {
-
-            if (!$flow_id) return;
-
-            $flow = Flow::find($flow_id);
 
     		$data = array(
     			'title' => trans('strings.operations.add-stage').' ('.$flow->name.') ',
@@ -55,6 +56,10 @@ class StagesController extends \App\Http\Controllers\Controller
 
     public function save() {
 
+        $flow = Flow::find(request('flow_id'));
+
+        if (!$this->checkAccess($flow)) return;
+
     	$validator =  Validator::make(request()->all(), $this->validation_arr);
 
         $errors=$validator->errors();
@@ -62,7 +67,7 @@ class StagesController extends \App\Http\Controllers\Controller
         if ($errors->all()) {
 
             $data = array(
-                'title' => trans('strings.operations.add-stage'),
+                'title' => (request('id')) ? trans('strings.operations.edit-stage') : trans('strings.operations.add-stage'),
                 'id' => request('id'),
                 'flow_id' => request('flow_id'),
                 'name' => request('name'),
@@ -92,8 +97,29 @@ class StagesController extends \App\Http\Controllers\Controller
     public function delete() {
 
     	$stage = Stage::find(request('deleting'));
+
+        $flow = Flow::find($stage->flow_id);
+
+        if (!$this->checkAccess($flow)) return;
+
         $stage->delete();
 
+    }
+
+    public function checkAccess($flow) {
+
+        if (!$flow) return false;
+
+        if ($flow->project) {
+
+            if (!auth()->user()->can('update','projects',Project::find($flow->project->id))) return false;
+
+        } else {
+
+            if (!auth()->user()->can('create','projects')) return false;
+        }
+
+        return true;
     }
 
 }

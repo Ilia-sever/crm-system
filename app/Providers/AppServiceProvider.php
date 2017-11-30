@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use App\Models\Module;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $path = explode('/', request()->path());
 
-        $modules = config('settings.including-modules');
+        $modules = Module::getModulesList();
 
         foreach ($modules as $num => $module) {
             $modules[$num] = strtolower($module);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Modules\Internal;
 
 use App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\Models\Modules\Project;
 use App\Models\Modules\Internal\Flow;
 use App\Models\Modules\Internal\Stage;
 
@@ -18,6 +19,16 @@ class FlowsController extends \App\Http\Controllers\Controller
     );
 
     public function control($project_id,$id) {
+
+        if ($project_id) {
+
+            if (!auth()->user()->can('update','projects',Project::find($project_id))) return;
+
+        } else {
+
+            if (!auth()->user()->can('create','projects')) return;
+
+        }
 
         if ($id) {
 
@@ -57,7 +68,7 @@ class FlowsController extends \App\Http\Controllers\Controller
         if ($errors->all()) {
 
             $data = array(
-                'title' => trans('strings.operations.add-flow'),
+                'title' => (request('id')) ? trans('strings.operations.edit-flow') : trans('strings.operations.add-flow'),
                 'id' => request('id'),
                 'project_id' => request('project_id'),
                 'name' => request('name'),
@@ -66,6 +77,16 @@ class FlowsController extends \App\Http\Controllers\Controller
 
 
             return view('module-objects.projects.flows.control',compact('data'))->withErrors($validator);
+        }
+
+        if (request('project_id')) {
+
+            if (!auth()->user()->can('update','projects',Project::find(request('project_id')))) return;
+
+        } else {
+
+            if (!auth()->user()->can('create','projects')) return;
+
         }
 
         if (!request('id')) {
@@ -88,6 +109,19 @@ class FlowsController extends \App\Http\Controllers\Controller
     public function delete() {
 
         $flow = Flow::find(request('deleting'));
+
+        if (!$flow) return;
+
+        if ($flow->project) {
+
+            if (!auth()->user()->can('update','projects',Project::find($flow->project->id))) return;
+
+        } else {
+
+            if (!auth()->user()->can('create','projects')) return;
+
+        }
+
         $flow->deleteStages();
         $flow->delete();
     }

@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\Modules\Task;
+use Illuminate\Support\Str;
 
 abstract class ModuleController extends \App\Http\Controllers\Controller
 {
     protected $model = '';
+    protected $module_code = '';
     protected $common_fields = '';
     protected $default_sort_field = '';
     protected $default_sort_order = '';
@@ -26,6 +27,8 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
     abstract public function update();
 
 	public function index() {
+
+        abort_if(!auth()->user()->can('watch',$this->module_code),403);
 
         $data['common-fields'] = $this->common_fields;
 
@@ -46,6 +49,10 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
 
     public function getRecords() {
 
+        if (!$this->model) return;
+
+        $model = $this->model;
+
         $data['common-fields'] = $this->common_fields;
 
         $params = array(
@@ -58,14 +65,19 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
 
         $params['db_sort_possible'] = true;
 
-        if ($this->model && $params['sort_by']) {
-
-            $model = $this->model;
+        if ($params['sort_by']) {
 
             $params['db_sort_possible'] = $model::isFieldExist($params['sort_by']);
         }
 
         $data['records'] = $this->formRecords($params);
+
+        foreach ($data['records'] as $num => $object) {
+
+            if (!auth()->user()->can('watch',$this->module_code,$object)) {
+                unset($data['records'][$num]);
+            }
+        }
 
         if ($data['records'] && $params['sort_by'] && !$params['db_sort_possible']) {
 
@@ -135,8 +147,16 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
         $model = $this->model;
         
         if (request('deleting')) {
+
             foreach (request('deleting') as $deleting_id) {
-                $model::disable($deleting_id);
+
+                $object = $model::find($deleting_id);
+
+                if (!$object) continue;
+
+                if (!auth()->user()->can('delete',$this->module_code,$object)) continue;
+
+                $object->disable();
             }
         }
 

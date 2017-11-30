@@ -3,40 +3,45 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Input;
+use Validator;
 
-use Illuminate\Support\Facades\View;
+use App\Special\OldRequest;
 
 use App\Models\Modules\Project;
 use App\Models\Modules\Task;
 use App\Models\Modules\Employee;
-use Illuminate\Support\Facades\Auth;
+
+use App\Models\Modules\Internal\Notification;
+use Illuminate\Support\Facades\View;
+
 
 class HomeController extends Controller
 {
-    protected $me;
 
     public function index() {
 
-        $this->initializeMe();
+        $new_ntf = auth()->user()->employee()->countNewNotifications();
 
-        $new_ntf = $this->me->countNewNotifications();
-
-        $ntf_string = trans('strings.fields-name.notifications');
+        $ntf_title = trans('strings.fields-name.notifications');
         if ($new_ntf) {
-            $ntf_string .= " (+$new_ntf)";
+            $ntf_title .= " (+$new_ntf)";
         }
 
         $data = array();
 
-        $data['notifications'] = $this->me->getNotifications(config('settings.page-limit'));
+        $data['notifications'] = Notification::showForEmployee(auth()->user()->id,config('settings.page-limit'));
 
         $data = $this->getTasksRecords($data);
 
         $data = $this->getProjectsRecords($data);
 
         $data['tabs'] = array();
+
+
         $data['tabs'][] = array (
-            'name' => $ntf_string,
+            'name' => $ntf_title,
             'content' => View::make('tab-notifications')->with('data',$data)->render()
         );
 
@@ -45,39 +50,29 @@ class HomeController extends Controller
             'content' => View::make('tab-mytasks')->with('data',$data)->render()
         );
 
-        $data['tabs'][] = array (
-            'name' => trans('strings.fields-name.my-projects'),
-            'content' => View::make('tab-myprojects')->with('data',$data)->render()
-        );
+        if ($data['projects-records']) {
+
+            $data['tabs'][] = array (
+                'name' => trans('strings.fields-name.my-projects'),
+                'content' => View::make('tab-myprojects')->with('data',$data)->render()
+            );
+        }
 
         return view('home',compact('data'));
 
     }
 
-    public function initializeMe() {
-
-        $this->me = Employee::find(Auth::user()->id);
-
-    }
-
     protected function getTasksRecords ($data) {
 
-        $tasks = Task::getMy($this->me->id);
+        $tasks = Task::getForExecutor(auth()->user()->id);
 
-        $data['me'] = $this->me;
-
-        $data['tasks-common-fields'] = array('name','deadline','assignment');
+        $data['tasks-common-fields'] = array('name','formated_deadline','assignment');
 
         $data['tasks-records'] = array();
 
         foreach ($tasks as $num => $task) {
 
-            $data['tasks-records'][$num] = array(
-                'id' => $task->id,
-                'name' => $task->name,
-                'deadline' => $task->formatDeadline(),
-                'assignment' => $task->getAssignment(),
-            );
+            $data['tasks-records'][$num] = $task;
         }
 
         $data['tasks-records'] = array_slice($data['tasks-records'], 0, config('settings.page-limit'));
@@ -85,23 +80,9 @@ class HomeController extends Controller
         return $data;
     }
 
-    public function completingTask() {
+    protected function getProjectsRecords ($data) {
 
-        $this->initializeMe();
-
-        $task = Task::find(request('task_id'));
-
-        $task->update(['status'=>'complete']);
-
-        $data = $this->getTasksRecords(array());
-
-        return view('tab-mytasks',compact('data'));
-
-    }
-
-     protected function getProjectsRecords ($data) {
-
-        $projects = Project::getMy($this->me->id);
+        $projects = Project::getMy(auth()->user()->id);
 
         $data['projects-common-fields'] = array('name','client');
 
@@ -109,15 +90,28 @@ class HomeController extends Controller
 
         foreach ($projects as $num => $project) {
 
-            $data['projects-records'][$num] = array(
-                'id' => $project->id,
-                'name' => $project->name,
-                'client' => $project->getClient(),
-            );
+            $data['projects-records'][$num] = $project;
         }
 
         $data['projects-records'] = array_slice($data['projects-records'], 0, config('settings.page-limit'));
 
         return $data;
+    }
+
+    public function completingTask() {
+
+        $task = Task::find(request('task_id'));
+
+        if ($task->executor_id == auth()->user()->id) {
+
+            Notification::notifyAboutTask('complete-task', $task, $task->director_id);
+
+            $task->updateObject(['status'=>'complete']);
+        }
+
+        $data = $this->getTasksRecords(array());
+
+        return view('tab-mytasks',compact('data'));
+
     }
 }
