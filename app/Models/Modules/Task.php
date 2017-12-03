@@ -25,11 +25,6 @@ class Task extends ModuleObjectModel
 
     protected static function convertRequest($data) {
 
-        if (!$data['id']) {
-
-            $data['director_id'] = auth()->user()->id;
-        }
-
         if (isset($data['plaintime'])) $data['plaintime'] = DateTimeConverter::convertTime($data['plaintime']);
         
         return $data;

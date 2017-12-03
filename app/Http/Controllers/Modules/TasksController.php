@@ -97,7 +97,9 @@ class TasksController extends ModuleController
 
         abort_if(!auth()->user()->can('create','tasks'),403);
 
-        $validator = Validator::make(request()->all(), $this->validation_arr);
+        $request_data = request()->all();
+
+        $validator = Validator::make($request_data, $this->validation_arr);
 
         $errors=$validator->errors();
         
@@ -106,46 +108,49 @@ class TasksController extends ModuleController
             return redirect('/tasks/add/')->withErrors($validator)->withInput();
         }
 
-        $newtask = Modules\Task::createObject(request()->all());
+        $request_data['director_id'] = auth()->user()->id;
+
+        $newtask = Modules\Task::createObject($request_data);
 
         if (($newtask->status == 'began')) {
 
             Notification::notifyAboutTask('assign-to-task', $newtask, $newtask->executor_id);
-
         }
 
-        return redirect('/tasks?success='.date('U'));
+        return redirect('/tasks');
   
     }
 
     public function update() {
+
+        $task = Modules\Task::find(request('id'));
+
+        abort_if(!auth()->user()->can('update','tasks',$task),403);
+
+        $request_data = request()->all();
         
-        $validator =  Validator::make(request()->all(), $this->validation_arr);
+        $validator =  Validator::make($request_data, $this->validation_arr);
 
         $errors=$validator->errors();
 
         if ($errors->all()) {
 
-        return redirect('/tasks/edit/'.request('id'))->withErrors($validator)->withInput();
+        return redirect('/tasks/edit/'.$request_data['id'])->withErrors($validator)->withInput();
   
         }
-        
-        $task = Modules\Task::find(request('id'));
 
-        abort_if(!auth()->user()->can('update','tasks',$task),403);
-
-        if ((request('executor_id') != $task->executor_id) && (request('status')=='began')) {
-            Notification::notifyAboutTask('assign-to-task', $task, request('executor_id'));
+        if (($request_data['executor_id'] != $task->executor_id) && ($request_data['status']=='began')) {
+            Notification::notifyAboutTask('assign-to-task', $task, $request_data['executor_id']);
             Notification::notifyAboutTask('remove-from-task', $task, $task->executor_id);
         }
 
-        if ((request('status') != $task->status) && (request('status')=='complete')) {
+        if (($request_data['status'] != $task->status) && ($request_data['status']=='complete')) {
             Notification::notifyAboutTask('complete-task', $task, $task->director_id);
         }
 
-        $task->updateObject(request()->all());
+        $task->updateObject($request_data);
 
-        return redirect('/tasks?success='.date('U'));
+        return redirect('/tasks');
 
     }    
 

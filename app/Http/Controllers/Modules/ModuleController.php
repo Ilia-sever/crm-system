@@ -26,27 +26,6 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
     
     abstract public function update();
 
-	public function index() {
-
-        abort_if(!auth()->user()->can('watch',$this->module_code),403);
-
-        $data['common-fields'] = $this->common_fields;
-
-        if (request('search-field')) {
-            $data['search-field'] = request('search-field');
-        }
-        if (request('search-value')) {
-            $data['search-value'] = request('search-value'); 
-        }
-        if (request('success')) {
-        	if (request('success') + 3 > date('U')) {
-            	$data['success'] = trans ('strings.messages.success'); 
-        	}
-        }
-
-        return view('module-objects.table',compact('data'));
-    }
-
     public function getRecords() {
 
         if (!$this->model) return;
@@ -140,6 +119,27 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
         return view('module-objects.table-rows',compact('data'));
     }
 
+    public function index() {
+
+        abort_if(!auth()->user()->can('watch',$this->module_code),403);
+
+        $data['common-fields'] = $this->common_fields;
+
+        if (request('search-field')) {
+            $data['search-field'] = request('search-field');
+        }
+        if (request('search-value')) {
+            $data['search-value'] = request('search-value'); 
+        }
+        if (request('success')) {
+            if (request('success') + 3 > date('U')) {
+                $data['success'] = trans ('strings.messages.success'); 
+            }
+        }
+
+        return view('module-objects.table',compact('data'));
+    }
+
     public function delete() {
 
         if (!$this->model) return;
@@ -161,6 +161,21 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
         }
 
         return $this->getRecords();  
+    }
+
+    public function protectFields($protected_fields, $data) {
+
+        foreach ($protected_fields as $key => $protected_field) {
+
+            if (!isset($data[$protected_field])) continue;
+
+            if (auth()->user()->can('set_'.$protected_field,$this->module_code)) continue;
+
+            unset($data[$protected_field]);
+        }
+
+        return $data;
+
     }
 
 }

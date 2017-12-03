@@ -26,6 +26,7 @@
         <label>{{trans('strings.fields-name.dob')}}</label>
         <input type="text" class="modal-calendar form-control" name="dob" value="{{$data['object']->dob}}" readonly>
     </div>
+    @if (auth()->user()->can('set_role_id','employees'))
     <div class="form-group">
         <label>{{trans('strings.fields-name.role')}}</label>
         <select class="form-control" name="role_id">
@@ -34,10 +35,13 @@
         @endforeach
         </select>
     </div>
+    @endif
+    @if (auth()->user()->can('set_post','employees'))
     <div class="form-group">
         <label>{{trans('strings.fields-name.post')}}</label>
         <input type="text" class="form-control" name="post" value="{{$data['object']->post}}">
     </div>
+    @endif
     <div class="form-group">
         <label>{{trans('strings.fields-name.email')}}</label>
         <input type="text" class="form-control" name="email" value="{{$data['object']->email}}">

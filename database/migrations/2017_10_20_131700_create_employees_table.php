@@ -17,7 +17,7 @@ class CreateEmployeesTable extends Migration
             $table->increments('id');
             $table->boolean('enable')->nullable();
             $table->rememberToken();
-            $table->integer('role_id')->unsigned();
+            $table->integer('role_id')->unsigned()->default(0);
             $table->string('email', 100);
             $table->string('password', 256)->nullable();
             $table->string('surname', 100)->nullable();

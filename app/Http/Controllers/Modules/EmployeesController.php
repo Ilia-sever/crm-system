@@ -26,7 +26,7 @@ class EmployeesController extends ModuleController
             'lastname' => 'min:2|max:100|nullable',
             'sex' => 'alpha|max:100|nullable',
             'dob' => 'date_format:"Y-m-d"|nullable',
-            'role_id' => 'numeric|required|max:100',
+            'role_id' => 'numeric|max:100',
             'post' => 'min:3|max:100|nullable',
             'email' => 'email|required',
             'new_password' => 'min:6|max:100|nullable|confirmed',
@@ -113,28 +113,32 @@ class EmployeesController extends ModuleController
             return redirect('/employees/add/')->withErrors($validator)->withInput();
         }
 
-        $new_employee = Modules\Employee::createObject(request()->all());
+        $request_data = request()->all();
 
-        return $new_employee ? redirect('/employees?success='.date('U')) : redirect('/employees/add/');
+        $new_employee = Modules\Employee::createObject($request_data);
+
+        return $new_employee ? redirect('/employees') : redirect('/employees/add/');
   
     }
 
     public function update() {
-    	
-    	$validator =  Validator::make(request()->all(), $this->validation_arr);
-
-    	$errors=$validator->errors();
-
-        if ($errors->all()) {
-            return redirect('/employees/edit/'.request('id'))->withErrors($validator)->withInput();
-        }
 
         $employee = Modules\Employee::find(request('id'));
 
         abort_if(!auth()->user()->can('update','employees',$employee),403);
 
-        $employee->updateObject(request()->all());
+        $request_data = $this->protectFields(['role_id','post'],request()->all());
+    	
+    	$validator =  Validator::make($request_data, $this->validation_arr);
 
-        return redirect('/employees?success='.date('U'));
+    	$errors=$validator->errors();
+
+        if ($errors->all()) {
+            return redirect('/employees/edit/'.$request_data['id'])->withErrors($validator)->withInput();
+        }
+
+        $employee->updateObject($request_data);
+
+        return redirect('/employees');
     }
 }

@@ -92,7 +92,9 @@ class ProjectsController extends ModuleController
 
         abort_if(!auth()->user()->can('create','projects'),403);
 
-        $validator =  Validator::make(request()->all(), $this->validation_arr);
+        $request_data = request()->all();
+
+        $validator =  Validator::make($request_data, $this->validation_arr);
 
         $errors=$validator->errors();
 
@@ -102,37 +104,39 @@ class ProjectsController extends ModuleController
         }
 
         $newproject = Modules\Project::createObject(request()->all());
-        $newproject->assignNewFlows(explode(';', request('flows_list')));
+        $newproject->assignNewFlows(explode(';', $request_data['flows_list']));
 
         Notification::notifyAboutProject('assign-to-project', $newproject, $newproject->manager_id);
 
-        return redirect('/projects?success='.date('U'));
+        return redirect('/projects');
   
     }
 
     public function update() {
+
+        $project = Modules\Project::find(request('id'));
+
+        abort_if(!auth()->user()->can('update','projects',$project),403);
+
+        $request_data = request()->all();
         
-        $validator =  Validator::make(request()->all(), $this->validation_arr);
+        $validator =  Validator::make($request_data, $this->validation_arr);
 
         $errors=$validator->errors();
 
         if ($errors->all()) {
 
-            return redirect('/projects/edit/'.request('id'))->withErrors($validator)->withInput();
-        }
-            
-        $project = Modules\Project::find(request('id'));
-
-        abort_if(!auth()->user()->can('update','projects',$project),403);
-
-        if ((request('manager_id') != $project->manager_id)) {
-            Notification::notifyAboutProject('assign-to-project', $project, request('manager_id'));
+            return redirect('/projects/edit/'.$request_data['id'])->withErrors($validator)->withInput();
         }
 
-        $project->updateObject(request()->all());
+        if (($request_data['manager_id'] != $project->manager_id)) {
+            Notification::notifyAboutProject('assign-to-project', $project, $request_data['manager_id']);
+        }
+
+        $project->updateObject($request_data);
         $project->assignNewFlows(explode(';', request('flows_list')));
 
-        return redirect('/projects?success='.date('U'));
+        return redirect('/projects');
     }
 
     public function getFlowsPanel () {
