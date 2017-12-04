@@ -47,6 +47,7 @@ return [
         'loading'           => 'Загрузка...',
         'empty'             => 'Нет данных',
         'undefined'         => 'Не указано',
+        'select'            => ' -- Выберите вариант из списка --',
         'forbidden'         => 'Отказано в доступе',
         'not-found'         => 'Объект не найден',
         'deleted-object'    => 'Объект был удален. Информация недоступна',
@@ -81,6 +82,9 @@ return [
     'fields-name'           => [
         'all'               => 'Все поля',
         'actions'           => 'Действия',
+        'notifications'     => 'Уведомления',
+        'my-tasks'          => 'Мои текущие задачи',
+        'my-projects'       => 'Проекты под моим управлением',
         'fullname'          => 'ФИО',
         'email'             => 'Email',
         'password'          => 'Пароль',
@@ -115,8 +119,9 @@ return [
         'deadline'          => 'Крайний срок',
         'plaintime'         => 'Планируемое время',
         'assignment'        => 'Приписка',
-        'workarea'          => 'Рабочая область',
-        'stage'             => 'Этап проекта',
+        'assignment-none'   => 'Без приписки',
+        'assignment-workarea'=> 'Приписать к рабочей области',
+        'assignment-stage'  => 'Приписать к этапу проекта',
         'director'          => 'Постановщик',
         'executor'          => 'Исполнитель',
         'description'       => 'ТЗ',
@@ -126,9 +131,8 @@ return [
         'flows'             => 'Потоки',
         'stages'            => 'Этапы',
         'sort_order'        => 'Номер сортировки',
-        'notifications'     => 'Уведомления',
-        'my-tasks'          => 'Мои текущие задачи',
-        'my-projects'       => 'Проекты под моим управлением'
+        'count_of_tasks'    => 'Число задач',
+        'tasks'             => 'Приписанные задачи',
 
     ]
 

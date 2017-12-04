@@ -19,19 +19,41 @@
     <label>{{trans('strings.fields-name.plaintime')}}</label>
     <input type="text" class="modal-clock form-control" name="plaintime" value="{{$data['object']->plaintime}}">
 </div>
-<div class="form-group">
+<div class="form-group assignment">
     <label>{{trans('strings.fields-name.assignment')}}</label>
     <div class="radio">
         <label>
-            <input type="radio" name="workarea_id" class="assignment__radio assignment__radio_workarea" @if ($data['object']->workarea_id) checked @endif/>{{trans('strings.fields-name.workarea')}}</label>
+            <input type="radio" name="assignment" class="assignment__radio" checked/>{{trans('strings.fields-name.assignment-none')}}
+        </label>
     </div>
     <div class="radio">
         <label>
-            <input type="radio" name="stage_id" class="assignment__radio assignment__radio_stage" @if ($data['object']->stage_id) checked @endif/>{{trans('strings.fields-name.stage')}}</label>
+            <input type="radio" name="assignment" class="assignment__radio assignment__radio_stage" @if ($data['object']->stage_id) checked @endif/>{{trans('strings.fields-name.assignment-stage')}}
+        </label>
     </div>
-    <input type="text" class="assignment__input @if ($data['object']->stage_id) hidden @endif form-control" name="workarea_id" value="{{$data['object']->workarea_id}}">
-    <input type="text" class="assignment__input @if ($data['object']->workarea_id) hidden @endif form-control" name="stage_id" value="{{$data['object']->stage_id}}">
+    <div class="radio">
+        <label>
+            <input type="radio" name="assignment" class="assignment__radio assignment__radio_workarea" @if ($data['object']->workarea_id) checked @endif/>{{trans('strings.fields-name.assignment-workarea')}}
+        </label>
+    </div>
+    <select class="form-control assignment__select assignment__select_stage @if ($data['object']->stage_id) assignment__select_active @endif" name="stage_id">
+        <option value="">{{trans('strings.messages.select')}}</option>
+        @foreach($data['projects'] as $project)
+        @foreach($project['flows'] as $flow)
+        @foreach($flow['stages'] as $stage)
+        <option value="{{$stage->id}}" @if ($data['object']->stage_id==$stage->id) selected @endif>{{$project->name}} - {{$flow->name}} - {{$stage->name}}</option>
+        @endforeach
+        @endforeach
+        @endforeach
+    </select>
+    <select class="form-control assignment__select assignment__select_workarea @if ($data['object']->workarea_id) assignment__select_active @endif" name="workarea_id">
+        <option value="">{{trans('strings.messages.select')}}</option>
+        @foreach($data['workareas'] as $workarea)
+        <option value="{{$workarea->id}}" @if ($data['object']->workarea_id==$workarea->id) selected @endif>{{$workarea->name}}</option>
+        @endforeach
+    </select>
 </div>
+
 <div class="form-group">
     <label>{{trans('strings.fields-name.executor')}}</label>
     <select class="form-control" name="executor_id">

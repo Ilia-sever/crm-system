@@ -29,7 +29,7 @@ class TasksController extends ModuleController
         'description' => 'min:5|max:10000|nullable'
     );
 
-    protected $common_fields = array('name','formated_status','formated_deadline','formated_plaintime','assignment','director','executor');
+    protected $common_fields = array('name','status','deadline','plaintime','assignment','director','executor');
 
     protected $default_sort_field = 'formated_status';
 
@@ -71,7 +71,9 @@ class TasksController extends ModuleController
 
         $data['object'] = new OldRequest();
 
-        $data['employees'] = Modules\Employee::getActive();
+        $data['employees'] = $this->filterObjects('watch','employees',Modules\Employee::getActive());
+        $data['projects'] = $this->filterObjects('watch','projects',Modules\Project::getActive());;
+        $data['workareas'] = $this->filterObjects('watch','workareas',Modules\Workarea::getActive());;
 
         return view('module-objects.tasks.control',compact('data'));
     }
@@ -88,7 +90,9 @@ class TasksController extends ModuleController
 
         $data['object'] = $object;
 
-        $data['employees'] = Modules\Employee::getActive();
+        $data['employees'] = $this->filterObjects('watch','employees',Modules\Employee::getActive());
+        $data['projects'] = $this->filterObjects('watch','projects',Modules\Project::getActive());;
+        $data['workareas'] = $this->filterObjects('watch','workareas',Modules\Workarea::getActive());;
 
         return view('module-objects.tasks.control',compact('data'));
     }

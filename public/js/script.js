@@ -397,7 +397,28 @@ $(document).ready(function() {
             });
     });
 
-     $( "#tabs" ).tabs();
+    //запуск вкладок
+    $( "#tabs" ).tabs();
+
+    function arert() {alert('хуйчики')}
+    //функционал поля приписки задачи
+    if ($(".assignment").length > 0) {
+
+        $('.assignment__radio').change(function() {
+
+            $('.assignment__select').removeClass('assignment__select_active');
+            $('.assignment__select [value=""').attr("selected", "selected");
+
+            if ($(this).hasClass('assignment__radio_stage')) {
+                $('.assignment__select_stage').addClass('assignment__select_active');
+            }
+
+            if ($(this).hasClass('assignment__radio_workarea')) {
+                $('.assignment__select_workarea').addClass('assignment__select_active');
+            }
+        }) 
+    }
+
 
      //8
 

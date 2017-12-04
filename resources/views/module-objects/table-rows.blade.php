@@ -10,7 +10,12 @@
     </td>
     @foreach ($data['common-fields'] as $field)
     <td>
-    {{$object->$field}}
+        @php $formated_field = 'formated_'.$field; @endphp 
+        @if ($object->$formated_field)
+        {{$object->$formated_field}}
+        @else
+        {{$object->$field}}
+        @endif
     </td>
     @endforeach
     <td class="actions-td">

@@ -34,13 +34,31 @@ class Task extends ModuleObjectModel
 		return static::where('enable','1')->where('executor_id',$executor_id)->where('status','began')->orderBy('deadline')->get();
 	}
 
+    public function getStage() {
+        return Modules\Internal\Stage::find($this->stage_id);
+        
+    }
+
+    public function getWorkarea() {
+        return Modules\Workarea::find($this->workarea_id);
+    }
+
 	public function getAssignment() {
+
+        if ($this->stage_id) {
+
+            if (!$this->stage) return;
+
+            return $this->stage->project->name . ' - ' . $this->stage->flow->name . ' - ' . $this->stage->name;
+        }
+
 		if ($this->workarea_id) {
-			return 'РАБОБЛАСТЬ' . $this->workarea_id;
+
+            if (!$this->workarea) return;
+
+            return $this->workarea->name;
 		}
-		if ($this->stage_id) {
-			return 'ПРОЕКТ? - ПОТОК? - ЭТАП' . $this->stage_id;
-		}
+		
 		return '';
 	}
 

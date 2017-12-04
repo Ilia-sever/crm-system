@@ -17,4 +17,8 @@ class Stage extends MainModel
 		return Modules\Internal\Flow::find($this->flow_id);
 	}
 
+	public function getProject() {
+		return Modules\Project::find($this->flow->project_id);
+	}
+
 }

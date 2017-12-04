@@ -49,14 +49,9 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
             $params['db_sort_possible'] = $model::isFieldExist($params['sort_by']);
         }
 
-        $data['records'] = $this->formRecords($params);
+        $data['records'] = $this->filterObjects('watch',$this->module_code,$this->formRecords($params));
 
-        foreach ($data['records'] as $num => $object) {
-
-            if (!auth()->user()->can('watch',$this->module_code,$object)) {
-                unset($data['records'][$num]);
-            }
-        }
+        
 
         if ($data['records'] && $params['sort_by'] && !$params['db_sort_possible']) {
 
@@ -163,7 +158,19 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
         return $this->getRecords();  
     }
 
-    public function protectFields($protected_fields, $data) {
+    protected function filterObjects($action,$module,$objects) {
+
+        foreach ($objects as $num => $object) {
+
+            if (!auth()->user()->can($action,$module,$object)) {
+                unset($objects[$num]);
+            }
+        }
+
+        return $objects;
+    }
+
+    protected function protectFields($protected_fields, $data) {
 
         foreach ($protected_fields as $key => $protected_field) {
 
