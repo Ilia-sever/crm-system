@@ -36,7 +36,7 @@ class Project extends ModuleObjectModel
 	}
 
 	public function getClient() {
-		return Modules\Employee::find($this->client_id);
+		return Modules\Client::find($this->client_id);
 	}
 
 	public function getManager() {

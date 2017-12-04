@@ -58,7 +58,7 @@
     <label>{{trans('strings.fields-name.executor')}}</label>
     <select class="form-control" name="executor_id">
         @foreach($data['employees'] as $employee)
-        <option value="{{$employee->id}}" @if ($data['object']->executor_id==$employee->id) selected @endif>{{$employee->getFullname()}}</option>
+        <option value="{{$employee->id}}" @if ($data['object']->executor_id==$employee->id) selected @endif>{{$employee}}</option>
         @endforeach
     </select>
 </div>

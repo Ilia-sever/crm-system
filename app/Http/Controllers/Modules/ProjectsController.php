@@ -66,7 +66,9 @@ class ProjectsController extends ModuleController
 
         $data['object'] = new OldRequest();
 
-        $data['employees'] = Modules\Employee::getActive();
+        $data['clients'] = $this->filterObjects('watch','clients',Modules\Client::getActive());
+
+        $data['employees'] = $this->filterObjects('watch','employees',Modules\Employee::getManagers());
 
         return view('module-objects.projects.control',compact('data'));
     }
@@ -83,7 +85,9 @@ class ProjectsController extends ModuleController
 
         $data['object'] = $object;
 
-        $data['employees'] = Modules\Employee::getActive();
+        $data['clients'] = $this->filterObjects('watch','clients',Modules\Client::getActive());
+
+        $data['employees'] = $this->filterObjects('watch','employees',Modules\Employee::getManagers());
 
         return view('module-objects.projects.control',compact('data'));
     }

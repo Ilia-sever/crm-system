@@ -16,8 +16,11 @@
             <tr class="records-table__row">
                 @foreach ($data['tasks-common-fields'] as $field)
                 <td>
-                @if (isset($object->$field))
-                    {{$object->$field}}
+                @php $formated_field = 'formated_'.$field; @endphp 
+                @if ($object->$formated_field)
+                {{$object->$formated_field}}
+                @else
+                {{$object->$field}}
                 @endif
                 </td>
                 @endforeach

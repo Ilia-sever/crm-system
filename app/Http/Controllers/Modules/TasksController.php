@@ -31,7 +31,7 @@ class TasksController extends ModuleController
 
     protected $common_fields = array('name','status','deadline','plaintime','assignment','director','executor');
 
-    protected $default_sort_field = 'formated_status';
+    protected $default_sort_field = 'status';
 
 
     protected function formRecords($params) {

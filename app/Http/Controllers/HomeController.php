@@ -64,7 +64,7 @@ class HomeController extends Controller
 
         $tasks = Modules\Task::getForExecutor(auth()->user()->id);
 
-        $data['tasks-common-fields'] = array('name','formated_deadline','assignment');
+        $data['tasks-common-fields'] = array('name','deadline','assignment');
 
         $data['tasks-records'] = array();
 

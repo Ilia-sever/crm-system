@@ -7,9 +7,13 @@
     </div>
     <div class="object-field">
         <label>{{trans('strings.fields-name.tasks')}}</label>
+        <ul class="text-info text-info_full">
         @foreach($data['object']->tasks as $task)
-        <a href="/tasks/show/{{$task->id}}">{{$task->name}}</a>
+        <li>
+            <a href="/tasks/show/{{$task->id}}">{{$task->name}}</a>
+        </li>
         @endforeach
+        </ul>
     </div>
     
    

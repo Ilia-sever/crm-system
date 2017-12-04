@@ -1,7 +1,7 @@
 @if ($data['records'])
 @foreach ($data['records'] as $object)
 <tr class="records-table__row">
-    <td>
+    <td class="checkbox-cell">
         @if (auth()->user()->can('delete',"$module_code",$object))
         <input type="checkbox" class="checkbox-table" value="{{$object['id']}}">
         @else
@@ -18,7 +18,7 @@
         @endif
     </td>
     @endforeach
-    <td class="actions-td">
+    <td class="actions-cell">
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <a href="/{{$module_code}}/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="action-button show-button"></a>
         @if (auth()->user()->can('update',"$module_code",$object))

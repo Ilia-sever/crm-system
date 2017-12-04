@@ -26,7 +26,7 @@
 <table class="records-table table table-bordered">
     <thead>
         <tr>
-            <th>
+            <th class="checkbox-cell">
                 <input type="checkbox" class="checkbox-main">
             </th>
             @foreach ($data['common-fields'] as $field)
@@ -35,7 +35,7 @@
                 <a class="sort-button" id="{{$field}}" value="desc"></a>
             </th>
             @endforeach
-            <th>{{trans('strings.fields-name.actions')}}</th>
+            <th class="actions-cell">{{trans('strings.fields-name.actions')}}</th>
         </tr>
     </thead>
     <tbody>

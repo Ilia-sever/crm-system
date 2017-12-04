@@ -8,8 +8,8 @@
 <div class="form-group">
     <label>{{trans('strings.fields-name.client')}}</label>
     <select class="form-control" name="client_id">
-        @foreach($data['employees'] as $employee)
-        <option value="{{$employee->id}}" @if ($data['object']->client_id==$employee->id) selected @endif>{{$employee->getFullname()}}</option>
+        @foreach($data['clients'] as $client)
+        <option value="{{$client->id}}" @if ($data['object']->client_id==$client->id) selected @endif>{{$client}}</option>
         @endforeach
     </select>
 </div>
@@ -18,7 +18,7 @@
     <label>{{trans('strings.fields-name.manager')}}</label>
     <select class="form-control" name="manager_id">
         @foreach($data['employees'] as $employee)
-        <option value="{{$employee->id}}" @if ($data['object']->manager_id==$employee->id) selected @endif>{{$employee->getFullname()}}</option>
+        <option value="{{$employee->id}}" @if ($data['object']->manager_id==$employee->id) selected @endif>{{$employee}}</option>
         @endforeach
     </select>
 </div>

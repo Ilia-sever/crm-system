@@ -31,9 +31,17 @@ class Employee extends ModuleObjectModel
         return $data;
     }
 
-    public function __toString() {
-        return $this->fullname;
-    }
+    protected static function getManagers() {
+
+        $available_roles = array('director','manager');
+        $available_roles_id = array();
+
+        foreach(Role::whereIn('name',$available_roles)->pluck('id') as $role_id) {
+            $available_roles_id[] = $role_id;
+        }
+
+        return static::where('enable','1')->whereIn('role_id',$available_roles_id)->get();
+    }    
 
     public static function isEmailExist($email) {
         return (static::where('email',$email)->count()>0) ? true : false;
@@ -41,6 +49,10 @@ class Employee extends ModuleObjectModel
 
     public function countNewNotifications() {
         return Notification::where('employee_id',$this->id)->where('viewed','0')->count();
+    }
+
+    public function __toString() {
+        return $this->fullname;
     }
 
     public function getFullname() {

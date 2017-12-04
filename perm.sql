@@ -142,6 +142,40 @@ Available actions:
 	/*Set fields*/
 
 
+/* 4.Clients*/
+
+	/*Directors*/
+
+	/*Watch*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '4', '1');
+	/*Create*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '4', '2');
+	/*Update*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '4', '3');
+	/*Delete*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '4', '4');
+	/*Set fields*/
+
+
+	/*Managers*/
+
+	/*Watch*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '4', '1');
+	/*Create*/
+	/*Update*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '4', '6');
+	/*Delete*/
+	/*Set fields*/
+
+
+	/*Executors*/
+	
+	/*Watch*/
+	/*Create*/
+	/*Update*/
+	/*Delete*/
+	/*Set fields*/
+
 
 /* 6.Workareas*/
 
