@@ -114,14 +114,14 @@ class TasksController extends ModuleController
 
         $request_data['director_id'] = auth()->user()->id;
 
-        $newtask = Modules\Task::createObject($request_data);
+        $task = Modules\Task::createObject($request_data);
 
-        if (($newtask->status == 'began')) {
+        if (($task->status == 'began')) {
 
-            Notification::notifyAboutTask('assign-to-task', $newtask, $newtask->executor_id);
+            Notification::notifyAboutTask('assign-to-task', $task, $task->executor_id);
         }
 
-        return redirect('/tasks');
+        return redirect('/tasks/show/'.$task->id);
   
     }
 
@@ -154,7 +154,7 @@ class TasksController extends ModuleController
 
         $task->updateObject($request_data);
 
-        return redirect('/tasks');
+        return redirect('/tasks/show/'.$task->id);
 
     }    
 

@@ -106,15 +106,15 @@ class ContactsController extends ModuleController
 
         $request_data = request()->all();
 
-        $new_contact = Modules\Contact::createObject($request_data);
+        $contact = Modules\Contact::createObject($request_data);
 
         foreach ($request_data['companies'] as $num => $company_id) {
             if (!$company_id) unset($request_data['companies'][$num]);
         }
 
-        $new_contact->setCompanies($request_data['companies']);
+        $contact->setCompanies($request_data['companies']);
 
-        return $new_contact ? redirect('/contacts') : redirect('/contacts/add/');
+        return $contact ? redirect('/contacts/show/'.$contact->id) : redirect('/contacts/add/');
   
     }
 
@@ -142,6 +142,6 @@ class ContactsController extends ModuleController
 
         $contact->setCompanies($request_data['companies']);
 
-        return redirect('/contacts');
+        return redirect('/contacts/show/'.$contact->id);
     }
 }

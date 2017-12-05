@@ -107,12 +107,12 @@ class ProjectsController extends ModuleController
             return redirect('/projects/add/')->withErrors($validator)->withInput();
         }
 
-        $newproject = Modules\Project::createObject(request()->all());
-        $newproject->assignNewFlows(explode(';', $request_data['flows_list']));
+        $project = Modules\Project::createObject(request()->all());
+        $project->assignNewFlows(explode(';', $request_data['flows_list']));
 
-        Notification::notifyAboutProject('assign-to-project', $newproject, $newproject->manager_id);
+        Notification::notifyAboutProject('assign-to-project', $project, $project->manager_id);
 
-        return redirect('/projects');
+        return redirect('/projects/show/'.$project->id);
   
     }
 
@@ -140,7 +140,7 @@ class ProjectsController extends ModuleController
         $project->updateObject($request_data);
         $project->assignNewFlows(explode(';', request('flows_list')));
 
-        return redirect('/projects');
+        return redirect('/projects/show/'.$project->id);
     }
 
     public function getFlowsPanel () {

@@ -87,14 +87,23 @@ function deleteConfirmation(delete_val) {
 
 function deleteRecords(delete_arr) {
     //ajax на удаление выбранных записей с последующим обновлением записей таблицы
+    // либо на удаление текущего объекта c последующей перезагрузкой
     let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    let is_table = false;
+    if ($('.records-table').length > 0) {
+        is_table = true;
+    }
     $.ajax({
         type: "POST",
         url: "/" + getModuleName() + "/delete",
-        data: { '_token': CSRF_TOKEN, 'deleting': delete_arr },
-        success: function(records) {
-            refreshRecords(records);
-            resetSortButtons();
+        data: { '_token': CSRF_TOKEN, 'deleting': delete_arr},
+        success: function(data) {
+            if (is_table) {
+                getRecords();
+                resetSortButtons();
+            } else {
+                location.reload();
+            }
         }
     });
 }
@@ -441,6 +450,11 @@ $(document).ready(function() {
 
 
     //8 функционал страниц детального просмотра
+
+    $(".module-button_delete").click(function(event) {
+        event.preventDefault();
+        deleteConfirmation($(this).attr('name'));
+    })
 
     if ($(".stages-strip").length > 0) {
 

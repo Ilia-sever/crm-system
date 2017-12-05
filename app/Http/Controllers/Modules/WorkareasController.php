@@ -97,9 +97,9 @@ class WorkareasController extends ModuleController
 
         $request_data = request()->all();
 
-        $new_workarea = Modules\Workarea::createObject($request_data);
+        $workarea = Modules\Workarea::createObject($request_data);
 
-        return $new_workarea ? redirect('/workareas') : redirect('/workareas/add/');
+        return redirect('/workareas/show/'.$workarea->id);
   
     }
 
@@ -119,6 +119,6 @@ class WorkareasController extends ModuleController
 
         $workarea->updateObject($request_data);
 
-        return redirect('/workareas');
+        return redirect('/workareas/show/'.$workarea->id);
     }
 }

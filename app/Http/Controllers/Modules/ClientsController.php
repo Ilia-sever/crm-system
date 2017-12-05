@@ -102,9 +102,9 @@ class ClientsController extends ModuleController
             return redirect('/clients/add/')->withErrors($validator)->withInput();
         }
 
-        $newclient = Modules\Client::createObject($request_data);
+        $client = Modules\Client::createObject($request_data);
 
-        return redirect('/clients');
+        return redirect('/clients/show/'.$client->id);
   
     }
 
@@ -127,7 +127,7 @@ class ClientsController extends ModuleController
 
         $client->updateObject($request_data);
 
-        return redirect('/clients');
+        return redirect('/clients/show/'.$client->id);
 
     }    
 

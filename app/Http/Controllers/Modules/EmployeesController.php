@@ -29,7 +29,7 @@ class EmployeesController extends ModuleController
             'role_id' => 'numeric|max:100',
             'post' => 'min:3|max:100|nullable',
             'email' => 'email|required',
-            'new_password' => 'min:6|max:100|nullable|confirmed',
+            'password' => 'min:6|max:100|nullable|confirmed',
             'tel' => 'min:5|max:100|nullable',
             'skype' => 'min:3|max:100|nullable'
     );
@@ -115,9 +115,9 @@ class EmployeesController extends ModuleController
 
         $request_data = request()->all();
 
-        $new_employee = Modules\Employee::createObject($request_data);
+        $employee = Modules\Employee::createObject($request_data);
 
-        return $new_employee ? redirect('/employees') : redirect('/employees/add/');
+        return $employee ? redirect('/employees/show/'.$employee->id) : redirect('/employees/add/');
   
     }
 
@@ -139,6 +139,6 @@ class EmployeesController extends ModuleController
 
         $employee->updateObject($request_data);
 
-        return redirect('/employees');
+        return redirect('/employees/show/'.$employee->id);
     }
 }

@@ -155,7 +155,7 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
             }
         }
 
-        return $this->getRecords();  
+        return 'success';  
     }
 
     protected function filterObjects($action,$module,$objects) {
