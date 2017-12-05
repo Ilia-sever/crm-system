@@ -30,4 +30,22 @@ class Client extends ModuleObjectModel
     	return Modules\Project::where('client_id',$this->id)->get();
     }
 
+    public function getContacts() {
+
+        $contacts = array();
+
+        $contacts_id =  Modules\Internal\Agent::where('client_id',$this->id)->pluck('contact_id');
+
+        foreach ($contacts_id as $contact_id) {
+
+            $contact = Modules\Contact::find($contact_id);
+
+            if (!$contact) continue;
+
+            $contacts[] = $contact;
+        }
+        
+        return $contacts;
+    }
+
 }

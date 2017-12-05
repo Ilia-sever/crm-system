@@ -15,6 +15,18 @@
         <p class="text-info" name="tel"><a href="/employees/show/{{$data['object']->manager->id}}">{{$data['object']->manager}}</a></p>
     </div>
     <div class="object-field">
+        <label>{{trans('strings.fields-name.client-contacts')}}</label>
+        <ul class="text-info text-info_full">
+        @foreach($data['object']->contacts as $contact)
+        <li>
+            <a href="/contacts/show/{{$contact->id}}">{{$contact}}</a>
+            @if ($contact->tel) ({{$contact->tel}}) @endif
+            
+        </li>
+        @endforeach
+        </ul>
+    </div>
+    <div class="object-field">
         <label>{{trans('strings.fields-name.client-projects')}}</label>
         <ul class="text-info text-info_full">
         @foreach($data['object']->projects as $project)

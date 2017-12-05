@@ -18,15 +18,17 @@
         @endif
     </td>
     @endforeach
-    <td class="actions-cell">
-        <meta name="csrf-token" content="{{ csrf_token() }}" />
-        <a href="/{{$module_code}}/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="action-button show-button"></a>
-        @if (auth()->user()->can('update',"$module_code",$object))
-        <a href="/{{$module_code}}/edit/{{$object->id}}" title="{{trans('strings.operations.edit')}}" class="action-button edit-button"></a>
-        @endif
-        @if (auth()->user()->can('delete',"$module_code",$object))
-        <a class="action-button delete-button" title="{{trans('strings.operations.delete')}}" name="{{$object->id}}"></a>
-        @endif
+    <td class="actions-cell unindent">
+        <div class="actions-group">
+            <meta name="csrf-token" content="{{ csrf_token() }}" />
+            <a href="/{{$module_code}}/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="action-button show-button"></a>
+            @if (auth()->user()->can('update',"$module_code",$object))
+            <a href="/{{$module_code}}/edit/{{$object->id}}" title="{{trans('strings.operations.edit')}}" class="action-button edit-button"></a>
+            @endif
+            @if (auth()->user()->can('delete',"$module_code",$object))
+            <a class="action-button delete-button" title="{{trans('strings.operations.delete')}}" name="{{$object->id}}"></a>
+            @endif
+        </div>
     </td>
 </tr>
 @endforeach

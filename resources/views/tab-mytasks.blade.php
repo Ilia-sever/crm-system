@@ -24,9 +24,11 @@
                 @endif
                 </td>
                 @endforeach
-                <td>
-                    <a class="action-button complete-button" title="{{trans('strings.operations.done')}}" name="{{$object->id}}"></a>
-                    <a href="/tasks/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="action-button show-button"></a>
+                <td class="actions-cell unindent">
+                    <div class="actions-group">
+                        <a class="action-button complete-button" title="{{trans('strings.operations.done')}}" name="{{$object->id}}"></a>
+                        <a href="/tasks/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="action-button show-button"></a>
+                    </div>
                 </td>
             </tr>
             @endforeach

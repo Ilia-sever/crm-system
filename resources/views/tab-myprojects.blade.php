@@ -24,8 +24,10 @@
                 @endif
                 </td>
                 @endforeach
-                <td>
+                <td class="actions-cell unindent">
+                    <div class="actions-group">
                     <a href="/projects/show/{{$object->id}}" title="{{trans('strings.operations.detail')}}" class="action-button show-button"></a>
+                    </div>
                 </td>
             </tr>
             @endforeach

@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Models\Modules;
+
+use Illuminate\Database\Eloquent\Model;
+
+use App\Models;
+use App\Models\Role;
+use App\Models\Modules;
+use App\Models\Modules\Internal\Notification;
+
+use App\Special\Tools\DateTimeConverter;
+use Illuminate\Support\Facades\Hash;
+
+class Contact extends ModuleObjectModel
+{
+    public function isRelatedEmployee($employee_id) {
+        foreach ($this->companies as $company) {
+            if ($company->manager_id == $employee_id) return true;
+        }
+        return false;
+    }
+
+    public function setCompanies($companies_id) {
+
+        Modules\Internal\Agent::where('contact_id',$this->id)->whereNotIn('client_id',$companies_id)->delete();
+
+        foreach ($companies_id as $company_id) {
+
+            if (Modules\Internal\Agent::where('contact_id',$this->id)->where('client_id',$company_id)->count()) continue;
+            
+            Modules\Internal\Agent::createObject(['contact_id'=>$this->id,'client_id'=>$company_id]);
+        }
+
+    }
+
+    public function __toString() {
+        return $this->fullname;
+    }
+
+    public function getFullname() {
+
+        $fullname = '';
+        $fullname .= ($this->surname) ? $this->surname . ' ' : '';
+        $fullname .= ($this->firstname) ? $this->firstname . ' ' : '';
+        $fullname .= ($this->lastname) ? $this->lastname . ' ' : '';
+        return $fullname;
+    }
+
+    public function getCompanies() {
+
+        $companies = array();
+
+        $companies_id =  Modules\Internal\Agent::where('contact_id',$this->id)->pluck('client_id');
+
+        foreach ($companies_id as $company_id) {
+
+            $company = Modules\Client::find($company_id);
+
+            if (!$company) continue;
+
+            $companies[] = $company;
+        }
+
+        return $companies;
+    }
+}

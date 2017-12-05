@@ -11,6 +11,7 @@
 <div class="form-group">
     <label>{{trans('strings.fields-name.manager')}}</label>
     <select class="form-control" name="manager_id">
+        <option value="">{{trans('strings.messages.select')}}</option>
         @foreach($data['managers'] as $manager)
         <option value="{{$manager->id}}" @if ($data['object']->manager_id==$manager->id) selected @endif>{{$manager}}</option>
         @endforeach

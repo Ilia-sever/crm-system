@@ -4,7 +4,7 @@
 <h1>{{trans_choice('strings.modules.' . $module_code,2)}}</h1>
 @if (auth()->user()->can('create',"$module_code"))
 <a href="/{{$module_code}}/add/">
-    <button type="button" class="add-button btn btn-success">{{trans('strings.operations.add')}}</button>
+    <button type="button" class="create-button btn btn-success">{{trans('strings.operations.add')}}</button>
 </a>
 @endif
 <div class="search">

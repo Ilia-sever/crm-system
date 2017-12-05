@@ -400,7 +400,6 @@ $(document).ready(function() {
     //запуск вкладок
     $( "#tabs" ).tabs();
 
-    function arert() {alert('хуйчики')}
     //функционал поля приписки задачи
     if ($(".assignment").length > 0) {
 
@@ -417,6 +416,23 @@ $(document).ready(function() {
                 $('.assignment__select_workarea').addClass('assignment__select_active');
             }
         }) 
+    }
+
+    //функционал поля множественного select
+    if ($(".multiselect").length > 0) {
+
+        $('.multiselect__add').click(function() {
+            event.preventDefault();
+            $('.multiselect__example').clone().removeClass('multiselect__example').insertBefore('.multiselect__add');
+            $('.multiselect__delete').click(function() {
+                event.preventDefault();
+                $(this).parent().remove();
+            })            
+        }) 
+        $('.multiselect__delete').click(function() {
+            event.preventDefault();
+            $(this).parent().remove();
+        })
     }
 
 

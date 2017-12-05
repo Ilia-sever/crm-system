@@ -68,6 +68,11 @@ input:focus {
     outline-offset: 0;
 }
 
+.unindent {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
 .auth-wrapper {
 	width: 100%;
 	height: 100%;
@@ -276,7 +281,7 @@ h1 {
 	display: none;
 }
 
-.add-button {
+.create-button {
 	margin: 20px 0 10px 0;
 }
 .search {
@@ -349,14 +354,33 @@ h1 {
 	width: 130px;
 }
 
+.actions-cell div {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.actions-group {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+}
+
 .action-button {
 	width: 30px;
 	height: 30px;
 	border-radius: 5px;
 	background-color: #13151e;
 	display: block;
-	float: left;
-	margin-right: 5px;
+	margin: 0 5px;
+	border: 0;
+}
+
+.add-button {
+	background-image: url('/images/buttons/add.png');
+	background-repeat: no-repeat;
+	background-size: 15px auto;
+	background-position: center;
 }
 
 .show-button {
@@ -594,6 +618,16 @@ h1 {
 }
 .assignment__select_active {
 	display: block;
+}
+.multiselect__item {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	margin: 5px 0;
+}
+.multiselect__example {
+	display: none;
 }
 
 

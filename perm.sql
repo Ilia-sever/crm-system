@@ -177,6 +177,49 @@ Available actions:
 	/*Set fields*/
 
 
+/* 5.Contacts*/
+
+	/*Directors*/
+
+	/*Watch*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '5', '1');
+	/*Create*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '5', '2');
+	/*Update*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '5', '3');
+	/*Delete*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '5', '4');
+	/*Set fields*/
+
+
+	/*Managers*/
+
+	/*Watch*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '5', '1');
+	/*Create*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '5', '0');
+	/*Update*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '5', '6');
+	/*Delete*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '5', '0');
+	/*Set fields*/
+
+
+	/*Executors*/
+	
+	/*Watch*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '3', '5', '0');
+	/*Create*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '3', '5', '0');
+	/*Update*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '3', '5', '0');
+	/*Delete*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '3', '5', '0');
+	/*Set fields*/
+
+
+
+
 /* 6.Workareas*/
 
 	/*Directors*/
