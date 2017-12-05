@@ -17,7 +17,7 @@ class StagesController extends \App\Http\Controllers\Controller
 	protected $validation_arr = array(
         'name' => 'min:3|max:100|required',
         'status' => 'min:3|max:100|required',
-        'sort_order' => 'numeric|nullable|max:100'
+        'sort_order' => 'integer|min:0|nullable|max:100'
     );
 
     public function control($flow_id,$id) {

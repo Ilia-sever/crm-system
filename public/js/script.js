@@ -157,7 +157,11 @@ function modalWindowFunctional() {
         при нажатии соответствующих кнопок
     */
 
-    $(".flows-list").accordion();   
+    $(".flows-list").accordion({
+        active: false,
+        collapsible: true,
+        heightStyle: "content"
+    });   
 
     $(".flows-stages-back").click(function() {
         event.preventDefault();
@@ -418,25 +422,42 @@ $(document).ready(function() {
         }) 
     }
 
-    //функционал поля множественного select
-    if ($(".multiselect").length > 0) {
+    //функционал поля множественных полей
+    if ($(".multifield").length > 0) {
 
-        $('.multiselect__add').click(function() {
+        $('.multifield__add').click(function() {
             event.preventDefault();
-            $('.multiselect__example').clone().removeClass('multiselect__example').insertBefore('.multiselect__add');
-            $('.multiselect__delete').click(function() {
+            $('.multifield__example').clone().removeClass('multifield__example').insertBefore('.multifield__add');
+            $('.multifield__delete').click(function(event) {
                 event.preventDefault();
                 $(this).parent().remove();
             })            
         }) 
-        $('.multiselect__delete').click(function() {
+        $('.multifield__delete').click(function(event) {
             event.preventDefault();
             $(this).parent().remove();
         })
     }
 
 
-     //8
+    //8 функционал страниц детального просмотра
+
+    if ($(".stages-strip").length > 0) {
+
+        $('.stage-block__btn').click(function() {
+
+            if ($(this).parent().find('.stage-tasks').css('display')=='none') {
+                $('.stage-tasks').hide();
+                $(this).parent().find('.stage-tasks').show();
+            } else {
+                $('.stage-tasks').hide();
+
+            }
+        })
+    }
+
+
+    //9
 
      $('.navigation__link_acount').click(function() {
         if ($('.acount-panel').css('display') =='none') {

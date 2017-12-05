@@ -21,4 +21,10 @@ class Stage extends MainModel
 		return Modules\Project::find($this->flow->project_id);
 	}
 
+	public function getTasks() {
+		if (!Modules\Task::where('stage_id',$this->id)->count()) return;
+			
+		return Modules\Task::where('stage_id',$this->id)->get();
+	}
+
 }

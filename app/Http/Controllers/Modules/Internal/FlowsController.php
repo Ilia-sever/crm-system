@@ -16,7 +16,7 @@ class FlowsController extends \App\Http\Controllers\Controller
 
     protected $validation_arr = array(
         'name' => 'min:3|max:100|required',
-        'sort_order' => 'numeric|nullable|max:100'
+        'sort_order' => 'integer|min:0|nullable|max:100'
     );
 
     public function control($project_id,$id) {

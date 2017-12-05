@@ -30,31 +30,31 @@
         <input type="text" class="form-control" name="skype" value="{{$data['object']->skype}}">
     </div>
 
-    <div class="form-group multiselect">
+    <div class="form-group multifield">
         <label>{{trans('strings.fields-name.companies')}}</label>
         @if ($data['object']->companies)
         @foreach($data['object']->companies as $company)
-        <div class="multiselect__item">
+        <div class="multifield__item">
             <select class="form-control" name="companies[]">
                 <option value="">{{trans('strings.messages.select')}}</option>
                 @foreach($data['clients'] as $client)
                 <option value="{{$client->id}}" @if ($company->id==$client->id) selected @endif>{{$client->name}}</option>
                 @endforeach
             </select>
-            <button class="multiselect__delete action-button delete-button" value="$company->id"></button>
+            <button class="multifield__delete action-button delete-button" value="$company->id"></button>
         </div>
         @endforeach
         @endif
-        <div class="multiselect__item multiselect__example">
+        <div class="multifield__item multifield__example">
             <select class="form-control" name="companies[]">
                 <option value="">{{trans('strings.messages.select')}}</option>
                 @foreach($data['clients'] as $client)
                 <option value="{{$client->id}}">{{$client->name}}</option>
                 @endforeach
             </select>
-            <button class="multiselect__delete action-button delete-button" value="$company->id"></button>   
+            <button class="multifield__delete action-button delete-button" value="$company->id"></button>   
         </div>
-        <button class="multiselect__add action-button add-button"></button>
+        <button class="multifield__add action-button add-button"></button>
     </div>
     
 @endsection
