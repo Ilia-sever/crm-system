@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Modules;
 use App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Models\Permission;
 
 abstract class ModuleController extends \App\Http\Controllers\Controller
 {
@@ -34,6 +35,16 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
 
         $data['common-fields'] = $this->common_fields;
 
+        $common_real_fields = $this->common_fields;
+
+        foreach ($common_real_fields as $num => $common_real_field) {
+
+            if (method_exists($model, camel_case('get_formated_'.$common_real_field))) {
+
+                $common_real_fields[$num] = 'formated_' . $common_real_field;
+            }
+        }
+
         $params = array(
             'sort_by' => request('sort') ? request('sort') : $this->default_sort_field,
             'order_by' => request('order') ? request('order') : $this->default_sort_order,
@@ -42,18 +53,24 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
             'page' => request('page') ? intval(request('page')) : 1,
         );
 
-        $params['db_sort_possible'] = true;
+        if ($params['search_field']) {
 
-        if ($params['sort_by']) {
+            $formated_search_field = 'formated_'.$params['search_field'];
 
-            $params['db_sort_possible'] = $model::isFieldExist($params['sort_by']);
+            if (in_array($formated_search_field, $common_real_fields)) {
+
+                $params['search_field'] = $formated_search_field;
+            }
         }
+
+        $params['db_sort_possible'] = ($params['sort_by']) ? $model::isFieldExist($params['sort_by']) : true;
+
+        $params['db_search_possible'] = ($params['search_field']) ? $model::isFieldExist($params['search_field']) : true;
 
         $data['records'] = $this->filterObjects('watch',$this->module_code,$this->formRecords($params));
 
-        
-
-        if ($data['records'] && $params['sort_by'] && !$params['db_sort_possible']) {
+        //not-db sorting
+        if ($data['records'] && !$params['db_sort_possible']) {
 
             $sort_arr = array();
 
@@ -67,7 +84,8 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
 
         }
 
-        if ($data['records'] && $params['search_field'] && $params['search_value']) {
+        //not-db searching
+        if ($data['records'] && $params['search_value'] && !$params['db_search_possible']) {
 
             $suitable_records = array();
 
@@ -75,21 +93,25 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
             $text = $params['search_value'];
 
             foreach ($data['records'] as $num => $record) {
+
                 if ($field !== 'all') {
-                    if  (strpos($record[$field], $text)!==false) {
-                        $suitable_records[$num]=$record;
+                    if  (strpos($record->$field, $text)===false) {
+                        unset($data['records'][$num]);
                     }
                     continue;
                 }
-                foreach ($data['common-fields'] as $common_field) {
-                    if ((strpos($record[$common_field], $text)!==false)&&(!isset($suitable_records[$num]))) {
-                        $suitable_records[$num]=$record;
+
+                $is_concurrences = false;
+
+                foreach ($common_real_fields as $common_real_field) {
+                    if ((strpos($record->$common_real_field, $text)!==false)) {
+                        $is_concurrences = true;
+                        break;
                     }
                 }
-                var_dump($suitable_records);
-            }
 
-            $data['records'] = $suitable_records;
+                if (!$is_concurrences) unset($data['records'][$num]);
+            }
         }
 
         $page_limit = config('settings.page-limit');
@@ -159,6 +181,14 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
     }
 
     protected function filterObjects($action,$module,$objects) {
+
+        if (auth()->user()->can($action,$module,'',false)) {
+
+            if (Permission::isObjectCheckingRequired($action)) {
+
+                return $objects;
+            }
+        }
 
         foreach ($objects as $num => $object) {
 

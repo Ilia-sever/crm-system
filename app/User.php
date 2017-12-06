@@ -30,20 +30,16 @@ class User extends Authenticatable
         return Employee::find($this->id);
     }
 
-    public function can($action_name, $module_name = '', $object = null) {
 
-        $module = Module::where('name',$module_name)->first();
+    public function can($action_name, $module_name = '', $object = null, $hierarchically = true) {
 
-        if ($module_name && !$module) return false;
+    	$action = Action::where('name',$action_name)->first();
+    	$module = Module::where('name',$module_name)->first() ;
 
+        if (!$module && $module_name) return false;
         $module_id = ($module) ? $module->id : 0;
-
-        $action = Action::where('name',$action_name)->first();
-
-        if (!$action) return false;
-
+        
         //finding permission by RBAC hierarchy
-
         while ($action) {
 
             if (Permission::isGiven($this->role_id,$action->id,$module_id)) {
@@ -52,16 +48,13 @@ class User extends Authenticatable
 
                 //finding additional ckecking for this action if it's object to check
 
-                $object_checking_method = camel_case('check_' . $action->name);
+                if (!Permission::isObjectCheckingRequired($action->name)) return true;
 
-                if (method_exists(Permission::class, $object_checking_method)) {
-
-                    return Permission::$object_checking_method($object);
-                } 
-
-                return true;
+                return Permission::checkObject($action->name,$object);
 
             } else {
+
+            	if (!$hierarchically) break;
 
                 $action = Action::find($action->child_id);
             }
@@ -70,4 +63,5 @@ class User extends Authenticatable
 
         return false;
     }
+
 }

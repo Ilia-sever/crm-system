@@ -41,17 +41,21 @@ class ModuleObjectModel extends MainModel
 
     public static function getObjects($params) {
 
+        $objects = static::where('enable','1');
+
+        if ($params['search_field'] && $params['search_value'] && $params['db_search_possible']) {
+
+            $objects = $objects->where($params['search_field'],'like','%'.$params['search_value'].'%');
+        }
+
      	if ($params['sort_by'] && $params['db_sort_possible']) {
 
     		$sort = $params['sort_by'];
     		$order = ($params['order_by'] == 'desc') ? 'desc' : 'asc';
-
-    		return static::where('enable','1')->orderBy($sort,$order)->get();
-
-    	} else {
-
-    		return static::where('enable','1')->get();
+    		$objects = $objects->orderBy($sort,$order);
     	}
+
+        return $objects->get(); 
 		
 	}
 

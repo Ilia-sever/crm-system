@@ -12,6 +12,24 @@ class Permission extends MainModel
     	return (static::all()->where('role_id', $role_id)->where('action_id',$action_id)->where('module_id',$module_id)->count() > 0) ? true : false;
     }
 
+    public static function isObjectCheckingRequired($action_name) {
+
+        if (method_exists(static::class, camel_case('check_'.$action_name))) {
+
+            return true;
+        }
+        return false;
+    }
+
+    public static function checkObject($action_name,$object) {
+
+        $checking_method = camel_case('check_'.$action_name);
+
+        if (!method_exists(static::class, $checking_method)) return false;
+
+        return static::$checking_method($object);
+    }
+
     public static function checkWatchRelated($object) {
         return $object->isRelatedEmployee(auth()->user()->id);
     }
