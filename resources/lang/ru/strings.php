@@ -72,11 +72,13 @@ return [
     ],
 
     'notifications'         => [
-        'assign-to-task'    => 'Назначение на задачу',
-        'remove-from-task'  => 'Снятие с задачи',
-        'complete-task'     => 'Выполнение поставленной задачи',
-        'assign-to-project' => 'Назначение на проект',
-        'new-salary'        => 'Получение заработной платы'
+        'assign-to-task'    => 'Новая задача для вас',
+        'return-to-task'    => 'Вернитесь к выполнению задачи',
+        'remove-from-task'  => 'Вы сняты с выполнения задачи',
+        'complete-task'     => 'Ваша задача выполнена',
+        'assign-to-project' => 'Вы назначены на руководство проектом',
+        'assign-to-client'  => 'Вы назначены на работу с клиентом',
+        'new-salary'        => 'Вам начислены деньги',
     ],
 
     'fields-name'           => [

@@ -49,7 +49,7 @@ function refreshRecords(records) {
 }
 
 function getRecords(page) {
-    //ajax на получение новых записей в таблицу согласно парамертам запроса
+    //ajax на получение новых записей в таблицу модуля согласно парамертам запроса
 
     if (getModuleName()==undefined) return;
 
@@ -62,6 +62,11 @@ function getRecords(page) {
         'order' : $('.sort-button_active').attr('value'),
         'page' : page
     };
+
+    if (params['search_value']=='') {
+
+        params['search_field'] = '';
+    }
          
     $.ajax({
         type: "GET",
@@ -75,7 +80,7 @@ function getRecords(page) {
 
 
 function deleteConfirmation(delete_val) {
-
+    // функция для генерирации модального окна подтверждения удаления
     if (delete_val) {
         $('.confirmation__agree').val(delete_val)
     } else {
@@ -148,6 +153,7 @@ function setDatepicker(elem) {
             dateFormat: 'yy-mm-dd',
             changeYear: true,
             changeMonth: true,
+            yearRange: 'c-60:c+1',
         },
         $.datepicker.regional['ru']
     ));
@@ -172,7 +178,7 @@ function modalWindowFunctional() {
         heightStyle: "content"
     });   
 
-    $(".flows-stages-back").click(function() {
+    $(".flows-stages-back").click(function(event) {
         event.preventDefault();
         
         $(".flows-stages__control").click();
@@ -219,7 +225,7 @@ function modalWindowFunctional() {
         });   
     });
 
-    $(".flow-save").click(function() {
+    $(".flow-save").click(function(event) {
             event.preventDefault();
             $.ajax({
                 type: "POST",
@@ -238,8 +244,7 @@ function modalWindowFunctional() {
             });
     });
 
-
-    $(".stages-add").click(function() {
+    $(".stages-add").click(function(event) {
         event.preventDefault();
         $.ajax({
             type: "GET",
@@ -277,7 +282,7 @@ function modalWindowFunctional() {
         });   
     });
 
-    $(".stage-save").click(function() {
+    $(".stage-save").click(function(event) {
             event.preventDefault();
             $.ajax({
                 type: "POST",
@@ -292,6 +297,8 @@ function modalWindowFunctional() {
                 }
             });
     });
+
+
 
     //2. Функционал для модального окна "Подтверждение удаления"
 
@@ -333,37 +340,39 @@ $(document).ready(function() {
     //главный скрипт
 
 
+
+    //1. функционал кнопки акаунта
+     $('.navigation__link_acount').click(function() {
+        if ($('.acount-panel').css('display') =='none') {
+            $('.acount-panel').show();
+        } else {
+            $('.acount-panel').hide();
+        }
+     })
+
+     $('.acount-panel__link_logout').click(function() {
+        $('.acount-panel__form').submit();
+     })
+
+
     
-    //1. первичная загрузка данных в таблицу модулей
+    //2. первичная загрузка данных в таблицу модулей
     
     if ($(".records-table").length > 0) {
         getRecords();
     }
 
-
-
-    //2. запуск поиска новых записей при разных действиях
+    //3. запуск поиска новых записей при разных действиях
 
     if ($(".search-input input").length > 0) {
 
-        if ($(".search-input input").val()!='') getRecords();;
-        $(".search-input input").keyup(function() { getRecords(); });
+        //$(".search-input input").keyup(function() { getRecords(); });
         $(".search-input button").click(function() { getRecords(); });
         $(".search-select select").change(function() { getRecords(); });
 
     }
     
-
-
-    //4. запуск отправки мгновенного сообщения о выполнении задачи
-
-    $(".complete-button").click(function() {
-        let task_id = $(this).attr('name');
-        completeTask(task_id);
-    })
-
-
-    //5. запуск сортировки записей таблицы при нажатии на кнопку сортировки
+    //4. запуск сортировки записей таблицы при нажатии на кнопку сортировки
 
     $(".sort-button").click(function () {
         let sort = $(this).attr('id'); 
@@ -377,13 +386,21 @@ $(document).ready(function() {
     })
 
 
-    //6. обработка всплывающего уведомления
+    //5. обработка всплывающего уведомления
 
     if ($('.message').length > 0) {
         $('.message').show('fade',1000);
         setTimeout(function() {$('.message').hide('fade',1000)}, 2000)
         
     }
+
+
+    //6. запуск отправки мгновенного сообщения о выполнении задачи
+
+    $(".complete-button").click(function() {
+        let task_id = $(this).attr('name');
+        completeTask(task_id);
+    })
 
 
     //7. установка функционала полям в формах создания/редактирования объектов
@@ -434,7 +451,7 @@ $(document).ready(function() {
     //функционал поля множественных полей
     if ($(".multifield").length > 0) {
 
-        $('.multifield__add').click(function() {
+        $('.multifield__add').click(function(event) {
             event.preventDefault();
             $('.multifield__example').clone().removeClass('multifield__example').insertBefore('.multifield__add');
             $('.multifield__delete').click(function(event) {
@@ -451,11 +468,13 @@ $(document).ready(function() {
 
     //8 функционал страниц детального просмотра
 
+    //конпка удалить
     $(".module-button_delete").click(function(event) {
         event.preventDefault();
         deleteConfirmation($(this).attr('name'));
     })
 
+    //функционал ленты потоков-этапов в просмотре проекта
     if ($(".stages-strip").length > 0) {
 
         $('.stage-block__btn').click(function() {
@@ -470,19 +489,7 @@ $(document).ready(function() {
         })
     }
 
+    //9 другое
 
-    //9
-
-     $('.navigation__link_acount').click(function() {
-        if ($('.acount-panel').css('display') =='none') {
-            $('.acount-panel').show();
-        } else {
-            $('.acount-panel').hide();
-        }
-     })
-
-     $('.acount-panel__link_logout').click(function() {
-        $('.acount-panel__form').submit();
-     })
 
 });

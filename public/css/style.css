@@ -216,6 +216,18 @@ input:focus {
 
 }
 
+.acount-notifications {
+	position: absolute;
+	display: block;
+	right: 0;
+	top:5px;
+	color:#fff;
+	background-color: #AB4639;
+	padding: 0 5px;
+	font-size: 12px;
+	font-style: normal;
+	border-radius: 10px;
+}
 
 .acount-container {
 	position: relative;
@@ -226,6 +238,7 @@ input:focus {
 	position: absolute;
 	width: 200px;
 	background-color: #fff;
+	border: 1px solid #e6e6e6;
 	border-radius: 15px;
 	top: 60px;
 	right: 0;

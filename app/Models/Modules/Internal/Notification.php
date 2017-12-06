@@ -14,9 +14,14 @@ class Notification extends MainModel
 
 	public static function showForEmployee($employee_id,$limit) {
 
-    	$nots = Notification::where('employee_id',$employee_id)->orderBy('datetimeof','desc')->limit($limit)->get();
+    	$nots = Notification::where('employee_id',$employee_id)->orderBy('datetimeof','desc')->take($limit)->get();
+
+    	$last_not = end($nots);
+    	$last_not_id = end($last_not)->id;
 
     	Notification::where('employee_id',$employee_id)->where('viewed',0)->update(['viewed' => 1]);
+
+    	Notification::where('employee_id',$employee_id)->where('id','<',$last_not_id)->delete();
 
     	return $nots;
     }
@@ -73,6 +78,26 @@ class Notification extends MainModel
 		static::notify($notify_data);
 
 	}
+
+
+	public static function notifyAboutClient($type, Modules\Client $client, $employee_id) {
+
+		$notify_data = array();
+
+		$notify_data['title'] = trans("strings.notifications.$type");
+
+		$notify_data['text'] = $client->name;
+
+		if ($client->site) $notify_data['text'] .= ' ('.$client->site.')';
+
+		$notify_data['link'] = '/clients/show/' . $client->id;  
+
+		$notify_data['employee_id'] = $employee_id;
+
+		static::notify($notify_data);
+
+	}
+
 
 	public function getFormatedDatetimeof() {
 		$date = new \DateTime($this->datetimeof);

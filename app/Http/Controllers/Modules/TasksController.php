@@ -152,6 +152,10 @@ class TasksController extends ModuleController
             Notification::notifyAboutTask('complete-task', $task, $task->director_id);
         }
 
+        if (($request_data['status'] != $task->status) && ($request_data['status']=='began')) {
+            Notification::notifyAboutTask('return-to-task', $task, $task->director_id);
+        }
+
         $task->updateObject($request_data);
 
         return redirect('/tasks/show/'.$task->id);

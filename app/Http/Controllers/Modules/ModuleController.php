@@ -17,7 +17,7 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
 
     abstract protected function formRecords($params);
 
-    abstract public function show($params);
+    abstract public function show($id);
 
     abstract public function add();
 

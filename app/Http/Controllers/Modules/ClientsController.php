@@ -104,6 +104,8 @@ class ClientsController extends ModuleController
 
         $client = Modules\Client::createObject($request_data);
 
+        Notification::notifyAboutClient('assign-to-client', $client, $client->manager_id);
+
         return redirect('/clients/show/'.$client->id);
   
     }
@@ -123,6 +125,10 @@ class ClientsController extends ModuleController
         if ($errors->all()) {
 
             return redirect('/clients/edit/'.$request_data['id'])->withErrors($validator)->withInput();
+        }
+
+        if ($request_data['manager_id'] && $request_data['manager_id'] != $client->manager_id) {
+            Notification::notifyAboutClient('assign-to-client', $client, $request_data['manager_id']);
         }
 
         $client->updateObject($request_data);
