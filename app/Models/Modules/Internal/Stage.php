@@ -27,4 +27,9 @@ class Stage extends MainModel
 		return Modules\Task::where('stage_id',$this->id)->get();
 	}
 
+	public function unassignTasks() {
+
+		Modules\Task::where('stage_id',$this->id)->update(['stage_id'=>null]);
+	}
+
 }

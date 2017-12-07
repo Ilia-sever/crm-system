@@ -8,7 +8,9 @@
 
     <div class="object-field">
         <label>{{trans('strings.fields-name.client')}}</label>
+        @if ($data['object']->client)
         <p class="text-info"><a href="/clients/show/{{$data['object']->client->id}}">{{$data['object']->client}}</a></p>
+        @endif
     </div>
     <div class="object-field">
         <label>{{trans('strings.fields-name.manager')}}</label>

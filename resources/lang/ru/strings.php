@@ -38,7 +38,9 @@ return [
         'agree'             => 'Да',
         'disagree'          => 'Нет',
         'acount'            => 'Мой аккаунт',
-        'logout'            => 'Выйти'
+        'logout'            => 'Выйти',
+        'set-new-password'  => 'Установить новый пароль',
+        'generate'          => 'Сгенерировать',
 
     ],
 

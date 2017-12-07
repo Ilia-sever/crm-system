@@ -46,13 +46,26 @@
         <label>{{trans('strings.fields-name.email')}}</label>
         <input type="text" class="form-control" name="email" value="{{$data['object']->email}}">
     </div>
-    <div class="form-group">
-        <label>{{trans('strings.fields-name.new_password')}}</label>
-        <input type="password" class="form-control" name="new_password">
-    </div>
-    <div class="form-group">
-        <label>{{trans('strings.fields-name.password_confirmation')}}</label>
-        <input type="password" class="form-control" name="new_password_confirmation">
+    <div class="checkbox-tab">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" class="checkbox-tab__checkbox"> {{trans('strings.operations.set-new-password')}}
+            </label>
+        </div>
+        <div class="checkbox-tab__tab">
+        <div class="form-group">
+            <button class="password-generate__btn">{{trans('strings.operations.generate')}}</button>
+            <span class="password-generate__value"></span>
+        </div>
+        <div class="form-group">
+            <label>{{trans('strings.fields-name.new_password')}}</label>
+            <input type="password" class="form-control" name="new_password">
+        </div>
+        <div class="form-group">
+            <label>{{trans('strings.fields-name.password_confirmation')}}</label>
+            <input type="password" class="form-control" name="new_password_confirmation">
+        </div>
+        </div>
     </div>
     <div class="form-group">
         <label>{{trans('strings.fields-name.tel')}}</label>

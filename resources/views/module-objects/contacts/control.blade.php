@@ -35,7 +35,7 @@
         @if ($data['object']->companies)
         @foreach($data['object']->companies as $company)
         <div class="multifield__item">
-            <select class="form-control" name="companies[]">
+            <select class="form-control select-plus" name="companies[]">
                 <option value="">{{trans('strings.messages.select')}}</option>
                 @foreach($data['clients'] as $client)
                 <option value="{{$client->id}}" @if ($company->id==$client->id) selected @endif>{{$client->name}}</option>
@@ -46,7 +46,7 @@
         @endforeach
         @endif
         <div class="multifield__item multifield__example">
-            <select class="form-control" name="companies[]">
+            <select class="form-control select-plus-ready" name="companies[]">
                 <option value="">{{trans('strings.messages.select')}}</option>
                 @foreach($data['clients'] as $client)
                 <option value="{{$client->id}}">{{$client->name}}</option>

@@ -19,44 +19,49 @@
     <label>{{trans('strings.fields-name.plaintime')}}</label>
     <input type="text" class="modal-clock form-control" name="plaintime" value="{{$data['object']->plaintime}}">
 </div>
-<div class="form-group assignment">
+<div class="form-group radio-tabs">
     <label>{{trans('strings.fields-name.assignment')}}</label>
     <div class="radio">
         <label>
-            <input type="radio" name="assignment" class="assignment__radio" checked/>{{trans('strings.fields-name.assignment-none')}}
+            <input type="radio" name="tab_radio" class="radio-tabs__radio" checked/>{{trans('strings.fields-name.assignment-none')}}
         </label>
     </div>
     <div class="radio">
         <label>
-            <input type="radio" name="assignment" class="assignment__radio assignment__radio_stage" @if ($data['object']->stage_id) checked @endif/>{{trans('strings.fields-name.assignment-stage')}}
+            <input type="radio" for="assignment-stage" name="tab_radio" class="radio-tabs__radio" @if ($data['object']->stage_id) checked @endif/>{{trans('strings.fields-name.assignment-stage')}}
         </label>
     </div>
     <div class="radio">
         <label>
-            <input type="radio" name="assignment" class="assignment__radio assignment__radio_workarea" @if ($data['object']->workarea_id) checked @endif/>{{trans('strings.fields-name.assignment-workarea')}}
+            <input type="radio" for="assignment-workarea" name="tab_radio" class="radio-tabs__radio" @if ($data['object']->workarea_id) checked @endif/>{{trans('strings.fields-name.assignment-workarea')}}
         </label>
     </div>
-    <select class="form-control assignment__select assignment__select_stage @if ($data['object']->stage_id) assignment__select_active @endif" name="stage_id">
-        <option value="">{{trans('strings.messages.select')}}</option>
-        @foreach($data['projects'] as $project)
-        @foreach($project['flows'] as $flow)
-        @foreach($flow['stages'] as $stage)
-        <option value="{{$stage->id}}" @if ($data['object']->stage_id==$stage->id) selected @endif>{{$project->name}} - {{$flow->name}} - {{$stage->name}}</option>
-        @endforeach
-        @endforeach
-        @endforeach
-    </select>
-    <select class="form-control assignment__select assignment__select_workarea @if ($data['object']->workarea_id) assignment__select_active @endif" name="workarea_id">
-        <option value="">{{trans('strings.messages.select')}}</option>
-        @foreach($data['workareas'] as $workarea)
-        <option value="{{$workarea->id}}" @if ($data['object']->workarea_id==$workarea->id) selected @endif>{{$workarea->name}}</option>
-        @endforeach
-    </select>
+    <div class="radio-tabs__tab @if ($data['object']->stage_id) radio-tabs__tab_active @endif" id="assignment-stage">
+        <select class="form-control select-plus" name="stage_id">
+            <option value="">{{trans('strings.messages.select')}}</option>
+            @foreach($data['projects'] as $project)
+            @foreach($project['flows'] as $flow)
+            @foreach($flow['stages'] as $stage)
+            <option value="{{$stage->id}}" @if ($data['object']->stage_id==$stage->id) selected @endif>{{$project->name}} - {{$flow->name}} - {{$stage->name}}</option>
+            @endforeach
+            @endforeach
+            @endforeach
+        </select>
+    </div>
+
+    <div class="radio-tabs__tab @if ($data['object']->workarea_id) radio-tabs__tab_active @endif" id="assignment-workarea">
+        <select class="form-control select-plus" name="workarea_id">
+            <option value="">{{trans('strings.messages.select')}}</option>
+            @foreach($data['workareas'] as $workarea)
+            <option value="{{$workarea->id}}" @if ($data['object']->workarea_id==$workarea->id) selected @endif>{{$workarea->name}}</option>
+            @endforeach
+        </select>
+    </div>
 </div>
 
 <div class="form-group">
     <label>{{trans('strings.fields-name.executor')}}</label>
-    <select class="form-control" name="executor_id">
+    <select class="form-control select-plus" name="executor_id">
         @foreach($data['employees'] as $employee)
         <option value="{{$employee->id}}" @if ($data['object']->executor_id==$employee->id) selected @endif>{{$employee}}</option>
         @endforeach

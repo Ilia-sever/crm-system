@@ -160,6 +160,29 @@ function setDatepicker(elem) {
 
 }
 
+function upgradeSelects() {
+    //апгрейд селектов плагином select2
+    $('.select-plus').select2({
+        width: '100%',
+        placeholder: " -- Выберите вариант из списка --",
+        language: {
+             noResults: function(term) {
+                 return "Ничего не найдено";
+            }
+        }
+    });
+}
+
+function generatePassword() {
+    var chars = ['a', 'c', 'r', 't', 'i','s','H','W', 'X', 'Y', 'z','0', '1', '2', '3', '5', '8','_','€','¥','£','^','`'];
+    var out = '';
+    for (var i = 0; i < 9; i++) {
+        var index = Math.floor(Math.random() * (chars.length - 1)) + 1;
+        out += chars[index];
+    }
+    return out;
+}
+
 function modalWindowFunctional() {
     //скрипт, действующий внутри модальных окон
 
@@ -405,6 +428,11 @@ $(document).ready(function() {
 
     //7. установка функционала полям в формах создания/редактирования объектов
 
+    upgradeSelects();
+
+    //запуск вкладок
+    $( "#tabs" ).tabs();
+
     //запуск календаря в поле даты    
     setDatepicker($('.modal-calendar'));
 
@@ -413,6 +441,58 @@ $(document).ready(function() {
 
     //маска ввода для поля планируемого времени
     $('.modal-clock').mask("99 ч 99 мин");
+
+    //функционал поля с чекбоксом для разворота
+    if ($(".checkbox-tab").length > 0) {
+
+        $('.checkbox-tab__checkbox').change(function() {
+
+            let tab = $(this).parent().parent().parent().find('.checkbox-tab__tab');
+
+            if (!$(this).is(':checked')) {
+                tab.find('input').val('');
+                tab.find('.select-plus').val('').trigger("change");
+                tab.hide();
+            } else {
+                tab.show();
+            }
+        });
+        $('.checkbox-tab__checkbox').change();
+
+    }
+
+    //функционал поля с переключаемыми кнопками панелями
+    if ($(".radio-tabs").length > 0) {
+
+        $('.radio-tabs__radio').change(function() {
+
+            $('.radio-tabs__tab').removeClass('radio-tabs__tab_active');
+
+            $('.radio-tabs input').val('');
+            $('.radio-tabs .select-plus').val('').trigger("change");
+
+            let opening_tab_id = $(this).attr('for');
+            $('#' + opening_tab_id).addClass('radio-tabs__tab_active');
+        }) 
+    }
+
+    //функционал поля множественных полей
+    if ($(".multifield").length > 0) {
+
+        $('.multifield__add').click(function(event) {
+            event.preventDefault();
+            $('.multifield__example').clone().removeClass('multifield__example').insertBefore('.multifield__add').find('.select-plus-ready').addClass('select-plus');
+            upgradeSelects();
+            $('.multifield__delete').click(function(event) {
+                event.preventDefault();
+                $(this).parent().remove();
+            })            
+        }) 
+        $('.multifield__delete').click(function(event) {
+            event.preventDefault();
+            $(this).parent().remove();
+        })
+    }
 
     //функционал кнопки настройки поля потоков и этапов
     $(".flows-stages__control").click(function(event) {
@@ -427,43 +507,14 @@ $(document).ready(function() {
             });
     });
 
-    //запуск вкладок
-    $( "#tabs" ).tabs();
+    //генерация пароля 
+    $('.password-generate__btn').click(function(event) {
+        event.preventDefault();
+        $('.password-generate__value').text(generatePassword());
+    })
 
-    //функционал поля приписки задачи
-    if ($(".assignment").length > 0) {
-
-        $('.assignment__radio').change(function() {
-
-            $('.assignment__select').removeClass('assignment__select_active');
-            $('.assignment__select [value=""').attr("selected", "selected");
-
-            if ($(this).hasClass('assignment__radio_stage')) {
-                $('.assignment__select_stage').addClass('assignment__select_active');
-            }
-
-            if ($(this).hasClass('assignment__radio_workarea')) {
-                $('.assignment__select_workarea').addClass('assignment__select_active');
-            }
-        }) 
-    }
-
-    //функционал поля множественных полей
-    if ($(".multifield").length > 0) {
-
-        $('.multifield__add').click(function(event) {
-            event.preventDefault();
-            $('.multifield__example').clone().removeClass('multifield__example').insertBefore('.multifield__add');
-            $('.multifield__delete').click(function(event) {
-                event.preventDefault();
-                $(this).parent().remove();
-            })            
-        }) 
-        $('.multifield__delete').click(function(event) {
-            event.preventDefault();
-            $(this).parent().remove();
-        })
-    }
+    
+    
 
 
     //8 функционал страниц детального просмотра

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{URL::asset('css/lib/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{URL::asset('css/lib/jquery-ui.min.css')}}">
     <link rel="stylesheet" href="{{URL::asset('css/lib/jquery.fancybox.min.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('css/lib/select2.min.css')}}">
     <link rel="stylesheet" href="{{URL::asset('css/style.css')}}">
     <title>{{ config('app.name') }}</title>
 </head>

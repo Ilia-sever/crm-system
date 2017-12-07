@@ -25,9 +25,10 @@ th,
 input,
 textarea,
 button,
-label {
+label,
+select,
+.form-control {
     font-family: Century Gothic;
-    
     color: #000;
 }
 
@@ -42,7 +43,9 @@ td,
 input,
 textarea,
 button,
-label {
+label,
+select,
+.form-control {
 	font-size: 14px;
 }
 
@@ -51,8 +54,10 @@ label {
 }
 
 a:focus,
-a:hover {
-    color: unset;
+a:hover,
+a:visited,
+a:active {
+    color:'';
 }
 
 a,
@@ -627,11 +632,39 @@ h1 {
 	display: none;
 }
 
-.assignment__select {
+.select2-selection {
+	border: 1px solid #ced4da !important;
+	height: auto !important;
+}
+.select2-selection__rendered {
+	padding-top: 6px;
+	padding-bottom: 6px;
+	padding-left: 12px !important;
+	padding-right: 12px !important;
+	line-height: 1.5 !important;
+	color: #000 !important;
+}
+.select2-selection__arrow {
+	height: 100% !important;
+}
+.select2-selection__arrow b {
+	border-color: #000 transparent transparent transparent !important;
+}
+
+.checkbox-tab__tab {
+	padding-left: 20px;
+	border-left: 2px solid #e6e6e6;
+}
+
+.radio-tabs__tab {
 	display: none;
 }
-.assignment__select_active {
+.radio-tabs__tab_active {
 	display: block;
+}
+
+.password-generate__btn {
+	margin-right: 20px;
 }
 
 .flows-modal {

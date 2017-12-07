@@ -3,5 +3,6 @@
 	<script src="{{URL::asset('js/lib/jquery-ui.min.js')}}"></script>
 	<script src="{{URL::asset('js/lib/jquery.maskedinput.min.js')}}"></script>
 	<script src="{{URL::asset('js/lib/jquery.fancybox.min.js')}}"></script>
+	<script src="{{URL::asset('js/lib/select2.full.min.js')}}"></script>
 	<script src="{{URL::asset('js/script.js')}}"></script>
 </html>

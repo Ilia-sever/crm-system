@@ -7,7 +7,7 @@
 
 <div class="form-group">
     <label>{{trans('strings.fields-name.client')}}</label>
-    <select class="form-control" name="client_id">
+    <select class="form-control select-plus" name="client_id">
         <option value="">{{trans('strings.messages.select')}}</option>
         @foreach($data['clients'] as $client)
         <option value="{{$client->id}}" @if ($data['object']->client_id==$client->id) selected @endif>{{$client}}</option>
@@ -17,7 +17,7 @@
 
 <div class="form-group">
     <label>{{trans('strings.fields-name.manager')}}</label>
-    <select class="form-control" name="manager_id">
+    <select class="form-control select-plus" name="manager_id">
         @foreach($data['employees'] as $employee)
         <option value="{{$employee->id}}" @if ($data['object']->manager_id==$employee->id) selected @endif>{{$employee}}</option>
         @endforeach

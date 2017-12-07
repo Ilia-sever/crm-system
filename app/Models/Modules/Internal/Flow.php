@@ -22,6 +22,9 @@ class Flow extends MainModel
 	}
 
 	public function deleteStages() {
-		Modules\Internal\Stage::where('flow_id',$this->id)->delete();
+		foreach ($this->stages as $stage) {
+			$stage->unassignTasks();
+			$stage->delete();
+		}
 	}
 }

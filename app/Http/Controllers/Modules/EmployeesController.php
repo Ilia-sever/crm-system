@@ -29,7 +29,7 @@ class EmployeesController extends ModuleController
             'role_id' => 'numeric|max:100',
             'post' => 'min:3|max:100|nullable',
             'email' => 'email|required',
-            'password' => 'min:6|max:100|nullable|confirmed',
+            'new_password' => 'min:6|max:100|nullable|confirmed',
             'tel' => 'min:5|max:100|nullable',
             'skype' => 'min:3|max:100|nullable'
     );

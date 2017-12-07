@@ -14,6 +14,8 @@ class Notification extends MainModel
 
 	public static function showForEmployee($employee_id,$limit) {
 
+		if (Notification::where('employee_id',$employee_id)->count() == 0) return array();
+
     	$nots = Notification::where('employee_id',$employee_id)->orderBy('datetimeof','desc')->take($limit)->get();
 
     	$last_not = end($nots);

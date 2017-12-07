@@ -104,6 +104,7 @@ class StagesController extends \App\Http\Controllers\Controller
 
         if (!$this->checkAccess($flow)) return;
 
+        $stage->unassignTasks();
         $stage->delete();
 
     }
