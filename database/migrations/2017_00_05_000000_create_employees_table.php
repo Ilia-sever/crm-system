@@ -29,6 +29,10 @@ class CreateEmployeesTable extends Migration
             $table->string('tel',20)->nullable();
             $table->string('skype', 100)->nullable();
         });
+
+        Schema::table('employees', function (Blueprint $table) {
+            $table->foreign('role_id')->references('id')->on('roles');
+        });
     }
 
     /**

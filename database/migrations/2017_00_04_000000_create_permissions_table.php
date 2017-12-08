@@ -19,6 +19,12 @@ class CreatePermissionsTable extends Migration
             $table->integer('module_id')->unsigned()->default(0);
             $table->integer('action_id')->unsigned()->nullable();
         });
+
+        Schema::table('permissions', function (Blueprint $table) {
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('set null');
+            $table->foreign('module_id')->references('id')->on('modules');
+            $table->foreign('action_id')->references('id')->on('actions')->onDelete('set null');
+        });
     }
 
     /**
@@ -28,6 +34,6 @@ class CreatePermissionsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('permissions');
     }
 }

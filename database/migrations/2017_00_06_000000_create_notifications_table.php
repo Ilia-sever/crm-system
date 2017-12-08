@@ -18,9 +18,13 @@ class CreateNotificationsTable extends Migration
             $table->boolean('viewed')->nullable();
             $table->dateTime('datetimeof');
             $table->string('title',100);
-            $table->text('text', 1000)->nullable();
+            $table->string('text', 1000)->nullable();
             $table->string('link',250);
             $table->integer('employee_id')->unsigned()->nullable();
+        });
+
+        Schema::table('notifications', function (Blueprint $table) {
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('set null');
         });
     }
 

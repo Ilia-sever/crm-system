@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Дек 07 2017 г., 00:34
+-- Время создания: Дек 08 2017 г., 12:57
 -- Версия сервера: 5.7.17-log
 -- Версия PHP: 5.6.30
 
@@ -70,7 +70,8 @@ INSERT INTO `agents` (`id`, `client_id`, `contact_id`) VALUES
 (5, 1, 2),
 (6, 3, 2),
 (7, 2, 4),
-(8, 1, 3);
+(8, 1, 3),
+(10, 2, 6);
 
 -- --------------------------------------------------------
 
@@ -121,7 +122,8 @@ INSERT INTO `contacts` (`id`, `enable`, `surname`, `firstname`, `lastname`, `ema
 (2, 1, 'Агентов', 'Руслан', 'Русланович', 'rus@mail.ru', '+7(645) 645-6456', 'rss.rty'),
 (3, 1, 'Агентов', 'Всеволод', 'Всеволодович', 'ves@ya.ru', NULL, NULL),
 (4, 1, 'Агент', 'Миша', NULL, NULL, '+7(777) 777-7777', NULL),
-(5, 0, 'ываыв', 'ываыва', 'выаыва', NULL, NULL, NULL);
+(5, 0, 'ываыв', 'ываыва', 'выаыва', NULL, NULL, NULL),
+(6, 0, 'fgh', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -133,7 +135,7 @@ CREATE TABLE `employees` (
   `id` int(10) UNSIGNED NOT NULL,
   `enable` tinyint(1) DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `role_id` int(10) UNSIGNED NOT NULL DEFAULT '1',
+  `role_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `surname` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -151,13 +153,14 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`id`, `enable`, `remember_token`, `role_id`, `email`, `password`, `surname`, `firstname`, `lastname`, `sex`, `dob`, `post`, `tel`, `skype`) VALUES
-(1, 1, 'VmmnCnbCTpG5Q1KsSmZYVoJCPT9B4SN4ssPD6wYwXZ57xfyUX3u0aWem0xgm', 1, 'director@mail.ru', '$2y$10$VsPIqJ4LvvqelB0PLIYSZu.0M2wn4Z1a3hKhZBD5d3zm5PKF.1vpO', 'Директоров', 'Вячеслав', 'Ильич', 'male', '2017-11-30', 'Главный директор', '+7(111) 111-1111', NULL),
+(1, 1, 'lrK3vueB1RGYx7hKOGOcEnXR0tHcnvF2mxYha8WQHhXQDqsMDuBjLu9SwnQ4', 1, 'director@mail.ru', '$2y$10$VsPIqJ4LvvqelB0PLIYSZu.0M2wn4Z1a3hKhZBD5d3zm5PKF.1vpO', 'Директоров', 'Вячеслав', 'Ильич', 'male', '2017-11-30', 'Главный директор', '+7(111) 111-1111', NULL),
 (2, 1, 'J2QkaidTas807miXOy56V6RvSCtiVZVgKMRQHlpCApmGzvDIqGHMAdfGgKl5', 2, 'manager@mail.ru', '$2y$10$cEI7FYRh05bRSTv.W5zl5.v6J64h2R0KnaDsavgyX9LuoI.1f4L46', 'Менеджеров', 'Игорь', 'Вениаминович', 'male', '2017-11-30', 'Project-manager', '+7(222) 222-2223', NULL),
 (3, 1, 'E42tjbB5FZHfHKzQym1OrtJMjGBYT2xUaZPmQwZ6LX188rdr59miKAJOIvX3', 3, 'executor@mail.ru', '$2y$10$yatsBwh9OtsDjuORS1tWkOeNM9wYODjhcxDKqyzZ9dlB9dBUEd27C', 'Исполнителев', 'Иван', 'Иванович', 'male', '2017-11-30', 'Веб-программист', '+7(333) 333-3333', NULL),
 (4, 1, NULL, 3, 'sssre34@gmail.ru', '$2y$10$Eq/Cw2FUz77WDBew2BwWnelIVgvMvksrIaX9vPZoU9k8t.Zo7vs86', NULL, 'Исполнитель №1', NULL, 'male', '2017-11-23', 'Дизайнер', NULL, NULL),
 (5, 1, NULL, 3, 'miss@ya.ru', '$2y$10$w6XQxarUHfYBDQ7nWFPeQO.FMNpMO.7uvbuknzPP1BpejpAchSLZm', NULL, 'Исполнитель №2', NULL, 'female', NULL, 'Дизайнер', NULL, NULL),
 (6, 1, NULL, 3, 'superman@gmail.com', '$2y$10$UAcoRDzUhHeRKRNPwg3CTOE3.UvTxjiw83xhbmMsOgOR/wClFA0he', NULL, 'Исполнитель №3', NULL, NULL, NULL, 'Верстальщик', NULL, NULL),
-(7, 0, NULL, 3, 'bbb@bbb.ru', '$2y$10$zDuxE44oXBSja0nFh4Szw.TZ6Y.eUBrB/qEaYUawKi2TihH7zgGSK', 'dfgdfg', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(7, 0, NULL, 3, 'bbb@bbb.ru', '$2y$10$zDuxE44oXBSja0nFh4Szw.TZ6Y.eUBrB/qEaYUawKi2TihH7zgGSK', 'dfgdfg', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(8, 0, NULL, 1, 'rewr@werwe.rwer', '$2y$10$pTds.lcPJmddrHqkOD2zouhNz84SAJLROvskgY7ZxfHNfnpcR4Zbq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -198,22 +201,21 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(5, '2017_10_20_131700_create_employees_table', 1),
-(6, '2017_10_26_084550_create_tasks_table', 2),
-(7, '2017_10_30_052103_create_projects_table', 3),
-(8, '2017_10_30_052715_create_flows_table', 3),
-(10, '2017_10_30_052735_create_stages_table', 4),
-(11, '2017_11_07_085909_create_notifications_table', 5),
-(12, '2017_11_27_183359_create_actions_table', 6),
-(13, '2017_11_27_183359_create_modules_table', 6),
-(14, '2017_11_27_183359_create_roles_table', 6),
-(15, '2017_11_27_183359_create_permissions_table', 7),
-(16, '2017_11_28_183359_create_actions_table', 8),
-(17, '2017_12_04_001610_create_workareas_table', 9),
-(18, '2017_12_04_175112_create_clients_table', 10),
-(19, '2017_12_04_222009_create_contacts_table', 11),
-(20, '2017_12_04_223032_create_agents_table', 11),
-(21, '2017_12_04_224609_create_contacts_table', 12);
+(1, '2017_00_01_000000_create_modules_table', 1),
+(2, '2017_00_02_000000_create_roles_table', 1),
+(3, '2017_00_03_000000_create_actions_table', 1),
+(4, '2017_00_04_000000_create_permissions_table', 1),
+(5, '2017_00_05_000000_create_employees_table', 1),
+(6, '2017_00_06_000000_create_notifications_table', 1),
+(7, '2017_00_07_000000_create_clients_table', 1),
+(8, '2017_00_08_000000_create_contacts_table', 1),
+(9, '2017_00_09_000000_create_agents_table', 1),
+(10, '2017_00_10_000000_create_socnetworks_table', 1),
+(11, '2017_00_11_000000_create_projects_table', 1),
+(12, '2017_00_12_000000_create_flows_table', 1),
+(13, '2017_00_13_000000_create_stages_table', 1),
+(14, '2017_00_14_000000_create_workareas_table', 1),
+(15, '2017_00_15_000000_create_tasks_table', 1);
 
 -- --------------------------------------------------------
 
@@ -251,7 +253,7 @@ CREATE TABLE `notifications` (
   `viewed` tinyint(1) DEFAULT NULL,
   `datetimeof` datetime NOT NULL,
   `title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `text` text COLLATE utf8mb4_unicode_ci,
+  `text` varchar(1000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `link` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   `employee_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -263,7 +265,8 @@ CREATE TABLE `notifications` (
 INSERT INTO `notifications` (`id`, `viewed`, `datetimeof`, `title`, `text`, `link`, `employee_id`) VALUES
 (5, 1, '2017-12-06 19:57:53', 'Новая задача для вас', 'Нарисовать логотипы, Крайний срок 14.12.2017, Планируемое время 30 мин, Разработка интернет-магазина - Разработка - Оптимизация', '/tasks/show/8', 2),
 (8, 1, '2017-12-06 20:06:51', 'Вы сняты с выполнения задачи', 'Нарисовать логотипы, Крайний срок 14.12.2017, Планируемое время 30 мин, Разработка интернет-магазина - Разработка - Оптимизация', '/tasks/show/8', 2),
-(16, 1, '2017-12-06 20:49:54', 'Ваша задача выполнена', 'Нарисовать логотипы, Крайний срок 14.12.2017, Планируемое время 30 мин, Разработка интернет-магазина - Разработка - Оптимизация', '/tasks/show/8', 1);
+(16, 1, '2017-12-06 20:49:54', 'Ваша задача выполнена', 'Нарисовать логотипы, Крайний срок 14.12.2017, Планируемое время 30 мин, Разработка интернет-магазина - Разработка - Оптимизация', '/tasks/show/8', 1),
+(17, 1, '2017-12-07 16:02:05', 'Вы назначены на руководство проектом', 'jhh', '/projects/show/3', 1);
 
 -- --------------------------------------------------------
 
@@ -274,7 +277,7 @@ INSERT INTO `notifications` (`id`, `viewed`, `datetimeof`, `title`, `text`, `lin
 CREATE TABLE `permissions` (
   `id` int(10) UNSIGNED NOT NULL,
   `role_id` int(10) UNSIGNED DEFAULT NULL,
-  `module_id` int(10) UNSIGNED DEFAULT NULL,
+  `module_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `action_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -288,63 +291,48 @@ INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES
 (3, 1, 1, 3),
 (4, 1, 1, 4),
 (5, 2, 1, 5),
-(6, 2, 1, 0),
-(7, 2, 1, 6),
-(8, 2, 1, 0),
-(9, 3, 1, 5),
-(10, 3, 1, 0),
-(11, 3, 1, 0),
-(12, 3, 1, 0),
-(13, 1, 2, 1),
-(14, 1, 2, 2),
-(15, 1, 2, 3),
-(16, 1, 2, 4),
-(17, 2, 2, 5),
-(18, 2, 2, 2),
-(19, 2, 2, 9),
-(20, 2, 2, 10),
-(21, 3, 2, 5),
-(22, 3, 2, 2),
-(23, 3, 2, 9),
-(24, 3, 2, 10),
-(25, 1, 3, 1),
-(26, 1, 3, 2),
-(27, 1, 3, 3),
-(28, 1, 3, 4),
-(29, 1, 3, 11),
-(30, 1, 3, 12),
-(31, 2, 3, 1),
-(32, 2, 3, 0),
-(33, 2, 3, 6),
-(34, 2, 3, 0),
-(35, 3, 3, 1),
-(36, 3, 3, 0),
-(37, 3, 3, 6),
-(38, 3, 3, 0),
-(39, 1, 4, 1),
-(40, 1, 4, 2),
-(41, 1, 4, 3),
-(42, 1, 4, 4),
-(43, 2, 4, 1),
-(44, 2, 4, 6),
-(45, 1, 5, 1),
-(46, 1, 5, 2),
-(47, 1, 5, 3),
-(48, 1, 5, 4),
-(49, 2, 5, 1),
-(50, 2, 5, 0),
-(51, 2, 5, 6),
-(52, 2, 5, 0),
-(53, 3, 5, 0),
-(54, 3, 5, 0),
-(55, 3, 5, 0),
-(56, 3, 5, 0),
-(57, 1, 6, 1),
-(58, 1, 6, 2),
-(59, 1, 6, 3),
-(60, 1, 6, 4),
-(61, 2, 6, 1),
-(62, 3, 6, 1);
+(6, 2, 1, 6),
+(7, 3, 1, 5),
+(8, 1, 2, 1),
+(9, 1, 2, 2),
+(10, 1, 2, 3),
+(11, 1, 2, 4),
+(12, 2, 2, 5),
+(13, 2, 2, 2),
+(14, 2, 2, 9),
+(15, 2, 2, 10),
+(16, 3, 2, 5),
+(17, 3, 2, 2),
+(18, 3, 2, 9),
+(19, 3, 2, 10),
+(20, 1, 3, 1),
+(21, 1, 3, 2),
+(22, 1, 3, 3),
+(23, 1, 3, 4),
+(24, 1, 3, 11),
+(25, 1, 3, 12),
+(26, 2, 3, 1),
+(27, 2, 3, 6),
+(28, 3, 3, 1),
+(29, 3, 3, 6),
+(30, 1, 4, 1),
+(31, 1, 4, 2),
+(32, 1, 4, 3),
+(33, 1, 4, 4),
+(34, 2, 4, 1),
+(35, 2, 4, 6),
+(36, 1, 5, 1),
+(37, 1, 5, 2),
+(38, 1, 5, 3),
+(39, 1, 5, 4),
+(40, 2, 5, 1),
+(41, 2, 5, 6),
+(42, 1, 6, 1),
+(43, 1, 6, 2),
+(44, 1, 6, 3),
+(45, 1, 6, 4),
+(46, 2, 6, 1),
+(47, 3, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -366,7 +354,8 @@ CREATE TABLE `projects` (
 
 INSERT INTO `projects` (`id`, `enable`, `name`, `client_id`, `manager_id`) VALUES
 (1, 1, 'Разработка интернет-магазина', 1, 2),
-(2, 1, 'Разработка корпортала', 3, 1);
+(2, 1, 'Разработка корпортала', 3, 1),
+(3, 0, 'jhh', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -387,6 +376,20 @@ INSERT INTO `roles` (`id`, `name`) VALUES
 (1, 'director'),
 (2, 'manager'),
 (3, 'executor');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `socnetworks`
+--
+
+CREATE TABLE `socnetworks` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `resource` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `link` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `employee_id` int(10) UNSIGNED DEFAULT NULL,
+  `contact_id` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -425,7 +428,7 @@ CREATE TABLE `tasks` (
   `status` enum('began','complete','failed') COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deadline` date DEFAULT NULL,
-  `plaintime` time NOT NULL,
+  `plaintime` time DEFAULT NULL,
   `workarea_id` int(10) UNSIGNED DEFAULT NULL,
   `stage_id` int(10) UNSIGNED DEFAULT NULL,
   `director_id` int(10) UNSIGNED DEFAULT NULL,
@@ -484,19 +487,23 @@ INSERT INTO `workareas` (`id`, `enable`, `name`) VALUES
 -- Индексы таблицы `actions`
 --
 ALTER TABLE `actions`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `actions_child_id_foreign` (`child_id`);
 
 --
 -- Индексы таблицы `agents`
 --
 ALTER TABLE `agents`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `agents_client_id_foreign` (`client_id`),
+  ADD KEY `agents_contact_id_foreign` (`contact_id`);
 
 --
 -- Индексы таблицы `clients`
 --
 ALTER TABLE `clients`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `clients_manager_id_foreign` (`manager_id`);
 
 --
 -- Индексы таблицы `contacts`
@@ -508,13 +515,15 @@ ALTER TABLE `contacts`
 -- Индексы таблицы `employees`
 --
 ALTER TABLE `employees`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `employees_role_id_foreign` (`role_id`);
 
 --
 -- Индексы таблицы `flows`
 --
 ALTER TABLE `flows`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `flows_project_id_foreign` (`project_id`);
 
 --
 -- Индексы таблицы `migrations`
@@ -532,19 +541,25 @@ ALTER TABLE `modules`
 -- Индексы таблицы `notifications`
 --
 ALTER TABLE `notifications`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `notifications_employee_id_foreign` (`employee_id`);
 
 --
 -- Индексы таблицы `permissions`
 --
 ALTER TABLE `permissions`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `permissions_role_id_foreign` (`role_id`),
+  ADD KEY `permissions_module_id_foreign` (`module_id`),
+  ADD KEY `permissions_action_id_foreign` (`action_id`);
 
 --
 -- Индексы таблицы `projects`
 --
 ALTER TABLE `projects`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `projects_client_id_foreign` (`client_id`),
+  ADD KEY `projects_manager_id_foreign` (`manager_id`);
 
 --
 -- Индексы таблицы `roles`
@@ -553,16 +568,29 @@ ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `socnetworks`
+--
+ALTER TABLE `socnetworks`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `socnetworks_employee_id_foreign` (`employee_id`),
+  ADD KEY `socnetworks_contact_id_foreign` (`contact_id`);
+
+--
 -- Индексы таблицы `stages`
 --
 ALTER TABLE `stages`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `stages_flow_id_foreign` (`flow_id`);
 
 --
 -- Индексы таблицы `tasks`
 --
 ALTER TABLE `tasks`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `tasks_workarea_id_foreign` (`workarea_id`),
+  ADD KEY `tasks_stage_id_foreign` (`stage_id`),
+  ADD KEY `tasks_director_id_foreign` (`director_id`),
+  ADD KEY `tasks_executor_id_foreign` (`executor_id`);
 
 --
 -- Индексы таблицы `workareas`
@@ -583,7 +611,7 @@ ALTER TABLE `actions`
 -- AUTO_INCREMENT для таблицы `agents`
 --
 ALTER TABLE `agents`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT для таблицы `clients`
 --
@@ -593,12 +621,12 @@ ALTER TABLE `clients`
 -- AUTO_INCREMENT для таблицы `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT для таблицы `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT для таблицы `flows`
 --
@@ -608,7 +636,7 @@ ALTER TABLE `flows`
 -- AUTO_INCREMENT для таблицы `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT для таблицы `modules`
 --
@@ -618,22 +646,27 @@ ALTER TABLE `modules`
 -- AUTO_INCREMENT для таблицы `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT для таблицы `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 --
 -- AUTO_INCREMENT для таблицы `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `roles`
 --
 ALTER TABLE `roles`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT для таблицы `socnetworks`
+--
+ALTER TABLE `socnetworks`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `stages`
 --
@@ -649,6 +682,84 @@ ALTER TABLE `tasks`
 --
 ALTER TABLE `workareas`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- Ограничения внешнего ключа сохраненных таблиц
+--
+
+--
+-- Ограничения внешнего ключа таблицы `actions`
+--
+ALTER TABLE `actions`
+  ADD CONSTRAINT `actions_child_id_foreign` FOREIGN KEY (`child_id`) REFERENCES `actions` (`id`) ON DELETE SET NULL;
+
+--
+-- Ограничения внешнего ключа таблицы `agents`
+--
+ALTER TABLE `agents`
+  ADD CONSTRAINT `agents_client_id_foreign` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `agents_contact_id_foreign` FOREIGN KEY (`contact_id`) REFERENCES `contacts` (`id`) ON DELETE SET NULL;
+
+--
+-- Ограничения внешнего ключа таблицы `clients`
+--
+ALTER TABLE `clients`
+  ADD CONSTRAINT `clients_manager_id_foreign` FOREIGN KEY (`manager_id`) REFERENCES `employees` (`id`) ON DELETE SET NULL;
+
+--
+-- Ограничения внешнего ключа таблицы `employees`
+--
+ALTER TABLE `employees`
+  ADD CONSTRAINT `employees_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `flows`
+--
+ALTER TABLE `flows`
+  ADD CONSTRAINT `flows_project_id_foreign` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE SET NULL;
+
+--
+-- Ограничения внешнего ключа таблицы `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE SET NULL;
+
+--
+-- Ограничения внешнего ключа таблицы `permissions`
+--
+ALTER TABLE `permissions`
+  ADD CONSTRAINT `permissions_action_id_foreign` FOREIGN KEY (`action_id`) REFERENCES `actions` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `permissions_module_id_foreign` FOREIGN KEY (`module_id`) REFERENCES `modules` (`id`),
+  ADD CONSTRAINT `permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE SET NULL;
+
+--
+-- Ограничения внешнего ключа таблицы `projects`
+--
+ALTER TABLE `projects`
+  ADD CONSTRAINT `projects_client_id_foreign` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `projects_manager_id_foreign` FOREIGN KEY (`manager_id`) REFERENCES `employees` (`id`) ON DELETE SET NULL;
+
+--
+-- Ограничения внешнего ключа таблицы `socnetworks`
+--
+ALTER TABLE `socnetworks`
+  ADD CONSTRAINT `socnetworks_contact_id_foreign` FOREIGN KEY (`contact_id`) REFERENCES `contacts` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `socnetworks_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE SET NULL;
+
+--
+-- Ограничения внешнего ключа таблицы `stages`
+--
+ALTER TABLE `stages`
+  ADD CONSTRAINT `stages_flow_id_foreign` FOREIGN KEY (`flow_id`) REFERENCES `flows` (`id`) ON DELETE SET NULL;
+
+--
+-- Ограничения внешнего ключа таблицы `tasks`
+--
+ALTER TABLE `tasks`
+  ADD CONSTRAINT `tasks_director_id_foreign` FOREIGN KEY (`director_id`) REFERENCES `employees` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `tasks_executor_id_foreign` FOREIGN KEY (`executor_id`) REFERENCES `employees` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `tasks_stage_id_foreign` FOREIGN KEY (`stage_id`) REFERENCES `stages` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `tasks_workarea_id_foreign` FOREIGN KEY (`workarea_id`) REFERENCES `workareas` (`id`) ON DELETE SET NULL;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

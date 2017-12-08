@@ -18,6 +18,10 @@ class CreateActionsTable extends Migration
             $table->string('name',100);
             $table->integer('child_id')->unsigned()->nullable();
         });
+
+        Schema::table('actions', function (Blueprint $table) {
+            $table->foreign('child_id')->references('id')->on('actions')->onDelete('set null');
+        });
     }
 
     /**
@@ -27,6 +31,6 @@ class CreateActionsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('actions');
     }
 }

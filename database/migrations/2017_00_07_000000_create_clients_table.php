@@ -20,6 +20,10 @@ class CreateClientsTable extends Migration
             $table->string('site',100)->nullable();
             $table->integer('manager_id')->unsigned()->nullable();
         });
+
+        Schema::table('clients', function (Blueprint $table) {
+            $table->foreign('manager_id')->references('id')->on('employees')->onDelete('set null');
+        });
     }
 
     /**

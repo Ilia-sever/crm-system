@@ -19,6 +19,10 @@ class CreateFlowsTable extends Migration
             $table->integer('sort_order')->unsigned()->nullable();
             $table->integer('project_id')->unsigned()->nullable();
         });
+
+        Schema::table('flows', function (Blueprint $table) {
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('set null');
+        });
     }
 
     /**

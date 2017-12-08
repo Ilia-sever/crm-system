@@ -20,6 +20,10 @@ class CreateStagesTable extends Migration
             $table->integer('sort_order')->unsigned()->nullable();
             $table->integer('flow_id')->unsigned()->nullable();
         });
+
+        Schema::table('stages', function (Blueprint $table) {
+            $table->foreign('flow_id')->references('id')->on('flows')->onDelete('set null');
+        });
     }
 
     /**
