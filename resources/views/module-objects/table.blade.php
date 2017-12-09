@@ -9,7 +9,7 @@
 @endif
 <div class="search">
     <div class="input-group search-input">
-        <input type="text" class="form-control" id="exampleInputAmount" value="@if(isset($data['search-value'])){{$data['search-value']}}@endif">
+        <input type="text" class="form-control" id="exampleInputAmount" value="{{request('search-value')}}">
         <button id="search-start" class="input-group-addon">{{trans('strings.operations.search')}}</button>
     </div>
     <div class="form-group search-select">
@@ -17,7 +17,7 @@
         <select class="form-control">
             <option value="all">{{trans('strings.fields-name.all')}}</option>
             @foreach ($data['common-fields'] as $field)
-            <option value="{{$field}}" @if (isset($data['search-field'])) @if ($data['search-field']==$field) selected @endif @endif>{{trans('strings.fields-name.'. $field)}}</option>
+            <option value="{{$field}}" @if (request('search-field')==$field) selected @endif>{{trans('strings.fields-name.'. $field)}}</option>
             @endforeach
         </select>
     </div>

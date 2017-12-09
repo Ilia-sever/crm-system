@@ -20,102 +20,35 @@ class EmployeesController extends ModuleController
 
     protected $module_code = 'employees';
 
-	protected $validation_arr = array(
-            'surname' => 'min:2|max:100|nullable',
-            'firstname' => 'min:2|max:100|nullable',
-            'lastname' => 'min:2|max:100|nullable',
-            'sex' => 'alpha|max:100|nullable',
-            'dob' => 'date_format:"Y-m-d"|nullable',
-            'role_id' => 'numeric|max:100',
-            'post' => 'min:3|max:100|nullable',
-            'email' => 'email|required',
-            'new_password' => 'min:6|max:100|nullable|confirmed',
-            'tel' => 'min:5|max:100|nullable',
-            'skype' => 'min:3|max:100|nullable'
-    );
-
     protected $common_fields = array('fullname','email','tel','role');
 
     protected $default_sort_field = 'fullname';
 
-    protected function formRecords($params) {
-
-        $employees = Modules\Employee::getObjects($params);
-
-        $records = array();
-
-        foreach ($employees as $num => $employee) {
-            $records[$num] = $employee;
-        }
-
-        return $records;
-    }
-
-    public function show($id) {
-
-        $data = array();
-
-        $object = Modules\Employee::find($id);
-
-        abort_if(!$object,404);
-        abort_if(!auth()->user()->can('watch','employees',$object),403);
-        abort_if(!$object->isActive(),410);
-
-        $data['object'] = $object;
-
-        return view('module-objects.employees.show',compact('data'));
-    }
-
-
-    public function add() {
-
-        abort_if(!auth()->user()->can('create','employees'),403);
-
-    	$data = array();
-
-        $data['object'] = new OldRequest();
+    protected function addFormData($data) {
 
         $data['roles'] = Role::all();
 
-    	return view('module-objects.employees.control',compact('data'));
-    }
-
-    public function edit($id) {
-
-        $data = array();
-
-        $object = Modules\Employee::find($id);
-
-        abort_if(!$object,404);
-        abort_if(!auth()->user()->can('update','employees',$object),403);
-        abort_if(!$object->isActive(),410);
-
-        $data['object'] = $object;
-
-        $data['roles'] = Role::all();
-
-        return view('module-objects.employees.control',compact('data'));
+        return $data;
     }
 
     public function create() {
 
         abort_if(!auth()->user()->can('create','employees'),403);
 
-        $validator =  Validator::make(request()->all(), $this->validation_arr);
+        $request_data = $this->protectFields(['role_id','post'],request()->all());
 
-        $errors=$validator->errors();
-        
-        if (Modules\Employee::isEmailExist(request('email'))) {
-            $errors->add('email',trans('strings.messages.email-dublicate'));
+        $request_data = $this->validateRequest($request_data);
+
+        if (Modules\Employee::isEmailExist($request_data['email'])) {
+            $request_data['errors']->add('email',trans('strings.messages.email-dublicate'));
         }
         
-    	if ($errors->all()) {
-            return redirect('/employees/add/')->withErrors($validator)->withInput();
+    	if ($request_data['errors']->all()) {
+            return redirect('/employees/add/')->withErrors($request_data['errors'])->withInput();
         }
-
-        $request_data = request()->all();
 
         $employee = Modules\Employee::createObject($request_data);
+        $employee->setSocnetworks($request_data['socnetworks']);
 
         return $employee ? redirect('/employees/show/'.$employee->id) : redirect('/employees/add/');
   
@@ -127,18 +60,76 @@ class EmployeesController extends ModuleController
 
         abort_if(!auth()->user()->can('update','employees',$employee),403);
 
-        $request_data = $this->protectFields(['role_id','post'],request()->all());
-    	
-    	$validator =  Validator::make($request_data, $this->validation_arr);
+        $request_data = $this->validateRequest(request()->all());
 
-    	$errors=$validator->errors();
+        if ($request_data['email'] != $employee->email && Modules\Employee::isEmailExist($request_data['email'])) {
+            $request_data['errors']->add('email',trans('strings.messages.email-dublicate'));
+        }
 
-        if ($errors->all()) {
-            return redirect('/employees/edit/'.$request_data['id'])->withErrors($validator)->withInput();
+        if ($request_data['errors']->all()) {
+            return redirect('/employees/edit/'.$request_data['id'])->withErrors($request_data['errors'])->withInput();
         }
 
         $employee->updateObject($request_data);
+        $employee->setSocnetworks($request_data['socnetworks']);
 
         return redirect('/employees/show/'.$employee->id);
     }
+
+    protected function validateRequest($request_data,$object=null) {
+
+        $errors = Validator::make($request_data,[ 
+            'surname' => 'min:2|max:100|nullable',
+            'firstname' => 'min:2|max:100|nullable',
+            'lastname' => 'min:2|max:100|nullable',
+            'sex' => 'alpha|max:100|nullable',
+            'dob' => 'date_format:"Y-m-d"|nullable',
+            'role_id' => 'numeric',
+            'post' => 'min:3|max:100|nullable',
+            'email' => 'email|required',
+            'new_password' => 'min:6|max:100|nullable|confirmed',
+            'tel' => 'min:5|max:100|nullable',
+            'skype' => 'min:3|max:100|nullable'
+        ])->errors();
+
+        if(!$request_data['surname']&&!$request_data['firstname']&&!$request_data['lastname']) {
+            $errors->add('fullname',trans('strings.messages.fullname-empty'));
+        }
+
+        if ($request_data['role_id'] && !Role::find($request_data['role_id'])) {
+
+            $errors->add('role',trans('strings.messages.invalid-value', ['field' => trans('strings.fields-name.role')]));
+        }
+
+        $request_data['socnetworks'] = array();
+
+        foreach ($request_data['socnetwork_links'] as $num => $socnetwork_link) {
+
+            if (!$socnetwork_link) continue;
+
+            $socnetwork_data = [
+                'id'=>$request_data['socnetwork_ids'][$num],
+                'resource'=>$request_data['socnetwork_resources'][$num],
+                'link'=>$socnetwork_link
+            ];
+
+            $socnetwork_data_errors = Validator::make($socnetwork_data, [
+                'resource'=>'max:100|nullable',
+                'link'=>'max:256|required',
+            ])->errors();
+
+            if ($socnetwork_data_errors->all()) {
+                $errors->merge($socnetwork_data_errors);
+                break;
+            }
+            
+            $request_data['socnetworks'][] = $socnetwork_data;
+        }
+
+        $request_data['errors'] = $errors;
+
+        return $request_data;
+    }
+
+    
 }

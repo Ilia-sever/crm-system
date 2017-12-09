@@ -17,94 +17,28 @@ class ProjectsController extends ModuleController
     protected $model = "\App\Models\Modules\Project";
 
     protected $module_code = 'projects';
-    
-    protected $validation_arr = array(
-        'name' => 'min:3|max:100|required',
-        'client_id' => 'numeric|nullable|max:100',
-        'manager_id' => 'numeric|required|max:100'
-    );
 
     protected $common_fields = array('name','client','manager');
 
     protected $default_sort_field = 'name';
 
-    protected function formRecords($params) {
-
-        $projects = Modules\Project::getObjects($params);
-
-        $records = array();
-
-        foreach ($projects as $num => $project) {
-
-            $records[$num] = $project;
-        }
-
-        return $records;
-    }
-
-    public function show($id) {
-
-        $data = array();
-
-        $object = Modules\Project::find($id);
-
-        abort_if(!$object,404);
-        abort_if(!auth()->user()->can('watch','projects',$object),403);
-        abort_if(!$object->isActive(),410);
-
-        $data['object'] = $object;
-
-        return view('module-objects.projects.show',compact('data'));
-    }
-
-
-    public function add() {
-
-        abort_if(!auth()->user()->can('create','projects'),403);
-
-        $data = array();
-
-        $data['object'] = new OldRequest();
+    protected function addFormData($data) {
 
         $data['clients'] = $this->filterObjects('watch','clients',Modules\Client::getActive());
 
         $data['employees'] = $this->filterObjects('watch','employees',Modules\Employee::getManagers());
 
-        return view('module-objects.projects.control',compact('data'));
-    }
-
-    public function edit($id) {
-
-        $data = array();
-
-        $object = Modules\Project::find($id);
-
-        abort_if(!$object,404);
-        abort_if(!auth()->user()->can('update','projects',$object),403);
-        abort_if(!$object->isActive(),410);
-
-        $data['object'] = $object;
-
-        $data['clients'] = $this->filterObjects('watch','clients',Modules\Client::getActive());
-
-        $data['employees'] = $this->filterObjects('watch','employees',Modules\Employee::getManagers());
-
-        return view('module-objects.projects.control',compact('data'));
+        return $data;
     }
 
     public function create() {
 
         abort_if(!auth()->user()->can('create','projects'),403);
 
-        $request_data = request()->all();
+        $request_data = $this->validateRequest(request()->all());
 
-        $validator =  Validator::make($request_data, $this->validation_arr);
-
-        $errors=$validator->errors();
-
-        if ($errors->all()) {
-
-            return redirect('/projects/add/')->withErrors($validator)->withInput();
+        if ($request_data['errors']->all()) {
+            return redirect('/projects/add/')->withErrors($request_data['errors'])->withInput();
         }
 
         $project = Modules\Project::createObject(request()->all());
@@ -122,15 +56,10 @@ class ProjectsController extends ModuleController
 
         abort_if(!auth()->user()->can('update','projects',$project),403);
 
-        $request_data = request()->all();
-        
-        $validator =  Validator::make($request_data, $this->validation_arr);
+        $request_data = $this->validateRequest(request()->all());
 
-        $errors=$validator->errors();
-
-        if ($errors->all()) {
-
-            return redirect('/projects/edit/'.$request_data['id'])->withErrors($validator)->withInput();
+        if ($request_data['errors']->all()) {
+            return redirect('/projects/edit/'.$request_data['id'])->withErrors($request_data['errors'])->withInput();
         }
 
         if (($request_data['manager_id'] != $project->manager_id)) {
@@ -143,39 +72,41 @@ class ProjectsController extends ModuleController
         return redirect('/projects/show/'.$project->id);
     }
 
-    public function getFlowsPanel () {
+    protected function validateRequest($request_data) {
 
-        if (request('id')) {
+        $errors=Validator::make($request_data,[ 
+            'name' => 'min:3|max:100|required',
+            'client_id' => 'numeric|nullable|max:100',
+            'manager_id' => 'numeric|required|max:100',
+        ])->errors();
 
-            abort_if(!auth()->user()->can('update','projects',Modules\Project::find(request('id'))),403);
 
-        } else {
+        if ($request_data['client_id'] && !Modules\Client::find($request_data['client_id'])) {
 
-            abort_if(!auth()->user()->can('create','projects'),403);
+            $errors->add('manager',trans('strings.messages.invalid-value', ['field' => trans('strings.fields-name.client')]));
         }
 
-        $flows_id = explode(';', request('flows_list'));
-        $data['flows'] = array();
-        $sort_arr = array();
 
-        foreach ($flows_id as $flow_id) {
+        if ($request_data['manager_id'] && !Modules\Employee::find($request_data['manager_id'])) {
 
-            if ($flow_id) {
-
-                $flow = Modules\Internal\Flow::find($flow_id);
-
-                if ($flow) { 
-
-                    $data['flows'][] = $flow;
-
-                    $sort_arr[] = $flow->sort_order;
-                }
-            }
+            $errors->add('manager',trans('strings.messages.invalid-value', ['field' => trans('strings.fields-name.manager')]));
         }
 
-        array_multisort($sort_arr, SORT_ASC, $data['flows']);
 
-        return view('module-objects.projects.flows-stages-control',compact('data'));
+        $request_data['errors'] = $errors;
+
+        return $request_data;
+    }
+
+    public function getFlowsStagesModal() {
+
+        abort_if(request('id') && !auth()->user()->can('update','projects',Modules\Project::find(request('id'))),403);
+
+        abort_if(!request('id') && !auth()->user()->can('create','projects'),403);
+
+        $data['flows'] = Modules\Internal\Flow::getByList(explode(';', request('flows_list')));
+
+        return view('module-objects.projects.flows-stages-modal',compact('data'));
     }
 
 }

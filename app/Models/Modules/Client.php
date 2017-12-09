@@ -23,11 +23,11 @@ class Client extends ModuleObjectModel
     }
 
     public function getManager() {
-        return Modules\Employee::find($this->manager_id);
+        return Modules\Employee::active()->find($this->manager_id);
     }
 
     public function getProjects() {
-    	return Modules\Project::where('client_id',$this->id)->get();
+    	return Modules\Project::active()->where('client_id',$this->id)->get();
     }
 
     public function getContacts() {
@@ -38,7 +38,7 @@ class Client extends ModuleObjectModel
 
         foreach ($contacts_id as $contact_id) {
 
-            $contact = Modules\Contact::find($contact_id);
+            $contact = Modules\Contact::active()->find($contact_id);
 
             if (!$contact) continue;
 

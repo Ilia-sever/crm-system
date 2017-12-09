@@ -76,5 +76,30 @@
         <label>{{trans('strings.fields-name.skype')}}</label>
         <input type="text" class="form-control" name="skype" value="{{$data['object']->skype}}">
     </div>
+
+    <div class="form-group multifield">
+        <label>{{trans('strings.fields-name.socnetworks')}}</label>
+        @if ($data['object']->socnetworks)
+        @foreach($data['object']->socnetworks as $socnetwork)
+        <div class="multifield__item">
+            <div class="inputs-line">
+                <input type="hidden" name="socnetwork_ids[]" value="{{$socnetwork->id}}">
+                <input type="text" class="form-control" name="socnetwork_resources[]" value="{{$socnetwork->resource}}">
+                <input type="text" class="form-control" name="socnetwork_links[]" value="{{$socnetwork->link}}">
+            </div>
+            <button class="multifield__delete action-button delete-button"></button>
+        </div>
+        @endforeach
+        @endif
+        <div class="multifield__item multifield__example">
+            <div class="inputs-line">
+                <input type="hidden" name="socnetwork_ids[]">
+                <input type="text" class="form-control" name="socnetwork_resources[]" value="" placeholder="{{trans('strings.fields-name.resource')}}">
+                <input type="text" class="form-control" name="socnetwork_links[]" value="" placeholder="{{trans('strings.fields-name.link')}}">
+            </div>
+            <button class="multifield__delete action-button delete-button"></button>
+        </div>
+        <button class="multifield__add action-button add-button"></button>
+    </div>
     
 @endsection

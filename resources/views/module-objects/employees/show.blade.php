@@ -36,4 +36,15 @@
         <p class="text-info" name="skype">{{$data['object']->skype}}</p>
     </div>
 
+    @foreach($data['object']->socnetworks as $socnetwork)
+    <div class="object-field">
+        @if ($socnetwork->resource)
+        <label>{{$socnetwork->resource}}</label>
+        @else
+        <label>{{trans('strings.fields-name.other-resource')}}</label>
+        @endif
+        <p class="text-info" name="skype"><a href="{{$socnetwork->link}}">{{$socnetwork->link}}</a></p>
+    </div>
+    @endforeach
+
 @endsection

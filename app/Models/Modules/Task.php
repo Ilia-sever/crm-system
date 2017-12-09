@@ -31,7 +31,7 @@ class Task extends ModuleObjectModel
     }
 
 	public static function getForExecutor($executor_id) {
-		return static::where('enable','1')->where('executor_id',$executor_id)->where('status','began')->orderBy('deadline')->get();
+		return static::active()->where('executor_id',$executor_id)->where('status','began')->orderBy('deadline')->get();
 	}
 
     public function getStage() {
@@ -40,7 +40,7 @@ class Task extends ModuleObjectModel
     }
 
     public function getWorkarea() {
-        return Modules\Workarea::find($this->workarea_id);
+        return Modules\Workarea::active()->find($this->workarea_id);
     }
 
 	public function getAssignment() {
@@ -49,12 +49,16 @@ class Task extends ModuleObjectModel
 
             if (!$this->stage) return;
 
+            if (!$this->stage->project->isActive()) return;
+
             return $this->stage->project->name . ' - ' . $this->stage->flow->name . ' - ' . $this->stage->name;
         }
 
 		if ($this->workarea_id) {
 
             if (!$this->workarea) return;
+
+            if (!$this->workarea->isActive()) return;
 
             return $this->workarea->name;
 		}
@@ -67,7 +71,7 @@ class Task extends ModuleObjectModel
 	}
 
 	public function getExecutor() {
-		return Modules\Employee::find($this->executor_id);
+		return Modules\Employee::active()->find($this->executor_id);
 	}
 
     public function getFormatedStatus () {

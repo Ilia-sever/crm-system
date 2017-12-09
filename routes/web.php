@@ -38,7 +38,7 @@ foreach ($modules as $key => $module) {
 	Route::post('/'.$module_low.'/delete','Modules\\'.		$module.'Controller@delete');
 }
 
-Route::post('/projects/flows','Modules\ProjectsController@getFlowsPanel');
+Route::post('/projects/flows_stages_modal','Modules\ProjectsController@getFlowsStagesModal');
 
 Route::get('/flows/control/{project_id}/{id}','Modules\Internal\FlowsController@control');
 Route::post('/flows/save','Modules\Internal\FlowsController@save');

@@ -20,9 +20,11 @@
     <div class="object-field">
         <label>{{trans('strings.fields-name.assignment')}}</label>
         <p class="text-info" name="role">
-        @if ($data['object']->stage_id)
+        @if ($data['object']->stage)
+        @if ($data['object']->stage->project->isActive())
         <a href="/projects/show/{{$data['object']->stage->project->id}}">{{$data['object']->stage->project->name}}</a> - {{$data['object']->stage->flow->name}} - {{$data['object']->stage->name}}
-        @elseif ($data['object']->workarea_id)
+        @endif
+        @elseif ($data['object']->workarea)
         <a href="/workareas/show/{{$data['object']->workarea->id}}">{{$data['object']->workarea->name}}</a>
         @else
         {{trans('strings.fields-name.assignment-none')}}

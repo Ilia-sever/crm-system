@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Hash;
 
 class Employee extends ModuleObjectModel
 {
+    use Modules\Traits\HumanTrait;
+
     public function isRelatedEmployee($employee_id) {
         return ($employee_id == $this->id) ? true : false;
     }
@@ -31,6 +33,10 @@ class Employee extends ModuleObjectModel
         return $data;
     }
 
+    public function setSocnetworks($socnetworks) {
+        $this->setSocnetworksBy($socnetworks,'employee_id');
+    }
+
     protected static function getManagers() {
 
         $available_roles = array('director','manager');
@@ -40,7 +46,7 @@ class Employee extends ModuleObjectModel
             $available_roles_id[] = $role_id;
         }
 
-        return static::where('enable','1')->whereIn('role_id',$available_roles_id)->get();
+        return static::active()->whereIn('role_id',$available_roles_id)->get();
     }    
 
     public static function isEmailExist($email) {
@@ -49,19 +55,6 @@ class Employee extends ModuleObjectModel
 
     public function countNewNotifications() {
         return Notification::where('employee_id',$this->id)->where('viewed','0')->count();
-    }
-
-    public function __toString() {
-        return $this->fullname;
-    }
-
-    public function getFullname() {
-
-        $fullname = '';
-        $fullname .= ($this->surname) ? $this->surname . ' ' : '';
-        $fullname .= ($this->firstname) ? $this->firstname . ' ' : '';
-        $fullname .= ($this->lastname) ? $this->lastname . ' ' : '';
-        return $fullname;
     }
 
     public function getFormatedDob() {
@@ -74,6 +67,10 @@ class Employee extends ModuleObjectModel
 
     public function getRole() {
         return Role::find($this->role_id);;
+    }
+
+    public function getSocnetworks() {
+        return $this->getSocnetworksBy('employee_id');
     }
 
 }

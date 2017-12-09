@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers\Modules;
 
-use App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Input;
+use Validator;
+
+use App\Special\OldRequest;
+
+use App\Models\Modules;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use App\Models\Permission;
 
-abstract class ModuleController extends \App\Http\Controllers\Controller
+abstract class ModuleController extends Controller
 {
     protected $model = '';
     protected $module_code = '';
@@ -15,16 +22,8 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
     protected $default_sort_field = '';
     protected $default_sort_order = '';
 
-    abstract protected function formRecords($params);
-
-    abstract public function show($id);
-
-    abstract public function add();
-
     abstract public function create();
 
-    abstract public function edit($id);
-    
     abstract public function update();
 
     public function getRecords() {
@@ -67,7 +66,7 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
 
         $params['db_search_possible'] = ($params['search_field']) ? $model::isFieldExist($params['search_field']) : true;
 
-        $data['records'] = $this->filterObjects('watch',$this->module_code,$this->formRecords($params));
+        $data['records'] = $this->filterObjects('watch',$this->module_code,$model::getObjects($params)->all());
 
         //not-db sorting
         if ($data['records'] && !$params['db_sort_possible']) {
@@ -142,19 +141,60 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
 
         $data['common-fields'] = $this->common_fields;
 
-        if (request('search-field')) {
-            $data['search-field'] = request('search-field');
-        }
-        if (request('search-value')) {
-            $data['search-value'] = request('search-value'); 
-        }
-        if (request('success')) {
-            if (request('success') + 3 > date('U')) {
-                $data['success'] = trans ('strings.messages.success'); 
-            }
-        }
-
         return view('module-objects.table',compact('data'));
+    }
+
+    public function show($id) {
+
+        abort_if(!is_numeric($id),404);
+
+        $model=$this->model;
+
+        $data = array();
+
+        $object = $model::find($id);
+
+        abort_if(!$object,404);
+        abort_if(!auth()->user()->can('watch',$this->module_code,$object),403);
+        abort_if(!$object->isActive(),410);
+
+        $data['object'] = $object;
+
+        return view('module-objects.'.$this->module_code.'.show',compact('data'));
+    }
+
+    public function add() {
+
+        abort_if(!auth()->user()->can('create',$this->module_code),403);
+
+        $data = array();
+
+        $data['object'] = new OldRequest();
+
+        $data = $this->addFormData($data);
+
+        return view('module-objects.'.$this->module_code.'.control',compact('data'));
+    }
+
+    public function edit($id) {
+
+        abort_if(!is_numeric($id),404);
+
+        $model=$this->model;
+
+        $data = array();
+
+        $object = $model::find($id);
+
+        abort_if(!$object,404);
+        abort_if(!auth()->user()->can('update',$this->module_code,$object),403);
+        abort_if(!$object->isActive(),410);
+
+        $data['object'] = $object;
+
+        $data = $this->addFormData($data);
+
+        return view('module-objects.'.$this->module_code.'.control',compact('data'));
     }
 
     public function delete() {
@@ -179,6 +219,11 @@ abstract class ModuleController extends \App\Http\Controllers\Controller
 
         return 'success';  
     }
+
+    protected function addFormData($data) {
+
+        return $data;
+    }  
 
     protected function filterObjects($action,$module,$objects) {
 

@@ -481,7 +481,7 @@ $(document).ready(function() {
 
         $('.multifield__add').click(function(event) {
             event.preventDefault();
-            $('.multifield__example').clone().removeClass('multifield__example').insertBefore('.multifield__add').find('.select-plus-ready').addClass('select-plus');
+            $(this).parent().find('.multifield__example').clone().removeClass('multifield__example').insertBefore($(this).parent().find('.multifield__add')).find('.select-plus-ready').addClass('select-plus');
             upgradeSelects();
             $('.multifield__delete').click(function(event) {
                 event.preventDefault();
@@ -499,7 +499,7 @@ $(document).ready(function() {
         event.preventDefault();
         $.ajax({
                 type: "POST",
-                url: "/projects/flows",
+                url: "/projects/flows_stages_modal",
                 data: $(".object-form").serialize(),
                 success: function(content) {
                     viewModalWindow(content);

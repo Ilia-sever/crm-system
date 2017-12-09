@@ -15,7 +15,7 @@ class CreateSocnetworksTable extends Migration
     {
         Schema::create('socnetworks', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('resource',100);
+            $table->string('resource',100)->nullable();
             $table->string('link',256);
             $table->integer('employee_id')->unsigned()->nullable();
             $table->integer('contact_id')->unsigned()->nullable();

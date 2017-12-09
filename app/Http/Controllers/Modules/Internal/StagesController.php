@@ -13,72 +13,49 @@ use App\Models\Modules;
 
 class StagesController extends \App\Http\Controllers\Controller
 {
-
-	protected $validation_arr = array(
-        'name' => 'min:3|max:100|required',
-        'status' => 'min:3|max:100|required',
-        'sort_order' => 'integer|min:0|nullable|max:100'
-    );
-
     public function control($flow_id,$id) {
 
         $stage = ($id) ? Modules\Internal\Stage::find($id) : null;
 
-        $flow = ($flow_id) ? Modules\Internal\Flow::find($flow_id) : Modules\Internal\Flow::find($stage->flow->id);
+        if (!$flow_id) $flow_id = $stage->flow->id;
+
+        $flow = Modules\Internal\Flow::find($flow_id);
 
         if (!$this->checkAccess($flow)) return;
 
-    	if ($id) {
+    	if (!$id) {
 
-            if (!$stage) return;
+            $data['title'] = trans('strings.operations.add-stage').' ('.$flow->name.') ';
 
-    		$data = array(
-    			'title' => trans('strings.operations.edit-stage').' ('.$flow->name.') ',
-    			'id' => $stage->id,
-    			'flow_id' => $stage->flow_id,
-    			'name' => $stage->name,
-                'status' => $stage->status,
-    			'sort_order' => $stage->sort_order
-    		);
+            $data['object'] = new OldRequest();
 
     	} else {
 
-    		$data = array(
-    			'title' => trans('strings.operations.add-stage').' ('.$flow->name.') ',
-    			'id' => '',
-    			'flow_id' => $flow_id,
-    			'name' => '',
-                'status' => '',
-    			'sort_order' => ''
-    		);
+            if (!$stage) return;
+
+            $data['title'] = trans('strings.operations.edit-stage').' ('.$flow->name.') ';
+
+    		$data['object'] = $stage;
     	}
+
+        $data['flow_id'] = $flow_id;
 
     	return view('module-objects.projects.stages.control',compact('data'));
     }
 
     public function save() {
 
-        $flow = Modules\Internal\Flow::find(request('flow_id'));
+        if (!$this->checkAccess(Modules\Internal\Flow::find(request('flow_id')))) return;
 
-        if (!$this->checkAccess($flow)) return;
-
-    	$validator =  Validator::make(request()->all(), $this->validation_arr);
-
-        $errors=$validator->errors();
+    	$errors =  Validator::make(request()->all(), [
+            'name' => 'min:3|max:100|required',
+            'status' => 'min:3|max:100|required',
+            'sort_order' => 'integer|min:0|nullable|max:100'
+        ])->errors();
 
         if ($errors->all()) {
 
-            $data = array(
-                'title' => (request('id')) ? trans('strings.operations.edit-stage') : trans('strings.operations.add-stage'),
-                'id' => request('id'),
-                'flow_id' => request('flow_id'),
-                'name' => request('name'),
-                'status' => request('status'),
-                'sort_order' => request('sort_order')
-            );
-
-
-            return view('module-objects.projects.stages.control',compact('data'))->withErrors($validator);
+            return redirect('/stages/control/'.$request('flow_id').'/'.$request('id'))->withErrors($errors)->withInput();
         }
 
         if (!request('id')) {
@@ -88,9 +65,10 @@ class StagesController extends \App\Http\Controllers\Controller
         } else {
 
             $stage = Modules\Internal\Stage::find(request('id'));
+
+            if (!$stage) return;
         	
-            $stage->updateObject(request()->all());
-        	
+            $stage->updateObject(request()->all());	
         }
 
         return '';
@@ -100,27 +78,19 @@ class StagesController extends \App\Http\Controllers\Controller
 
     	$stage = Modules\Internal\Stage::find(request('deleting'));
 
-        $flow = Modules\Internal\Flow::find($stage->flow_id);
-
-        if (!$this->checkAccess($flow)) return;
+        if (!$this->checkAccess(Modules\Internal\Flow::find($stage->flow_id))) return;
 
         $stage->unassignTasks();
         $stage->delete();
-
     }
 
     public function checkAccess($flow) {
 
         if (!$flow) return false;
 
-        if ($flow->project) {
+        if ($flow->project && !auth()->user()->can('update','projects',Modules\Project::find($flow->project->id))) return false;
 
-            if (!auth()->user()->can('update','projects',Modules\Project::find($flow->project->id))) return false;
-
-        } else {
-
-            if (!auth()->user()->can('create','projects')) return false;
-        }
+        if (!$flow->project && !auth()->user()->can('create','projects')) return false;
 
         return true;
     }

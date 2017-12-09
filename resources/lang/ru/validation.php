@@ -132,8 +132,11 @@ return [
     */
 
     'attributes'           => [
-       'all'               => 'Все поля',
+        'all'               => 'Все поля',
         'actions'           => 'Действия',
+        'notifications'     => 'Уведомления',
+        'my-tasks'          => 'Мои текущие задачи',
+        'my-projects'       => 'Проекты под моим управлением',
         'fullname'          => 'ФИО',
         'email'             => 'Email',
         'password'          => 'Пароль',
@@ -168,8 +171,9 @@ return [
         'deadline'          => 'Крайний срок',
         'plaintime'         => 'Планируемое время',
         'assignment'        => 'Приписка',
-        'workarea'          => 'Рабочая область',
-        'stage'             => 'Этап проекта',
+        'assignment-none'   => 'Без приписки',
+        'assignment-workarea'=> 'Приписать к рабочей области',
+        'assignment-stage'  => 'Приписать к этапу проекта',
         'director'          => 'Постановщик',
         'executor'          => 'Исполнитель',
         'description'       => 'ТЗ',
@@ -179,9 +183,15 @@ return [
         'flows'             => 'Потоки',
         'stages'            => 'Этапы',
         'sort_order'        => 'Номер сортировки',
-        'notifications'     => 'Уведомления',
-        'my-tasks'          => 'Мои текущие задачи',
-        'my-projects'       => 'Проекты под моим управлением'
+        'count_of_tasks'    => 'Число задач',
+        'tasks'             => 'Приписанные задачи',
+        'site'              => 'Сайт',
+        'client-projects'   => 'Заказанные проекты',
+        'client-contacts'   => 'Представители',
+        'companies'         => 'Компании',
+        'resource'          => 'Название ресурса',
+        'link'              => 'Ссылка',
+
     ],
 
 ];

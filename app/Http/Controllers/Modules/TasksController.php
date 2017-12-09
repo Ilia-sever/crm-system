@@ -18,98 +18,27 @@ class TasksController extends ModuleController
 
     protected $module_code = 'tasks';
 
-    protected $validation_arr = array(
-        'name' => 'min:5|max:100|required',
-        'status' => 'alpha_dash|min:3|max:100|required',
-        'deadline' => 'date_format:"Y-m-d"|nullable',
-        'plaintime' => 'max:100|required',
-        'workarea_id' => 'numeric|nullable|max:100',
-        'stage_id' => 'numeric|nullable|max:100',
-        'executor_id' => 'numeric|nullable|max:100',
-        'description' => 'min:5|max:10000|nullable'
-    );
-
     protected $common_fields = array('name','status','deadline','plaintime','assignment','director','executor');
 
     protected $default_sort_field = 'status';
 
-
-    protected function formRecords($params) {
-
-        $tasks = Modules\Task::getObjects($params);
-
-        $records = array();
-
-        foreach ($tasks as $num => $task) {
-            $records[$num] = $task;
-        }
-
-        return $records;
-    }
-
-    public function show($id) {
-
-        $data = array();
-
-        $object = Modules\Task::find($id);
-
-        abort_if(!$object,404);
-        abort_if(!auth()->user()->can('watch','tasks',$object),403);
-        abort_if(!$object->isActive(),410);
-
-        $data['object'] = $object;
-
-        return view('module-objects.tasks.show',compact('data'));
-    }
-
-
-    public function add() {
-
-        abort_if(!auth()->user()->can('create','tasks'),403);
-
-        $data = array();
-
-        $data['object'] = new OldRequest();
+    protected function addFormData($data) {
 
         $data['employees'] = $this->filterObjects('watch','employees',Modules\Employee::getActive());
-        $data['projects'] = $this->filterObjects('watch','projects',Modules\Project::getActive());;
-        $data['workareas'] = $this->filterObjects('watch','workareas',Modules\Workarea::getActive());;
+        $data['projects'] = $this->filterObjects('watch','projects',Modules\Project::getActive());
+        $data['workareas'] = $this->filterObjects('watch','workareas',Modules\Workarea::getActive());
 
-        return view('module-objects.tasks.control',compact('data'));
-    }
-
-    public function edit($id) {
-
-        $data = array();
-
-        $object = Modules\Task::find($id);
-
-        abort_if(!$object,404);
-        abort_if(!auth()->user()->can('update','tasks',$object),403);
-        abort_if(!$object->isActive(),410);
-
-        $data['object'] = $object;
-
-        $data['employees'] = $this->filterObjects('watch','employees',Modules\Employee::getActive());
-        $data['projects'] = $this->filterObjects('watch','projects',Modules\Project::getActive());;
-        $data['workareas'] = $this->filterObjects('watch','workareas',Modules\Workarea::getActive());;
-
-        return view('module-objects.tasks.control',compact('data'));
+        return $data;
     }
 
     public function create() {
 
         abort_if(!auth()->user()->can('create','tasks'),403);
 
-        $request_data = request()->all();
+        $request_data = $this->validateRequest(request()->all());
 
-        $validator = Validator::make($request_data, $this->validation_arr);
-
-        $errors=$validator->errors();
-        
-        if ($errors->all()) {
-
-            return redirect('/tasks/add/')->withErrors($validator)->withInput();
+        if ($request_data['errors']->all()) {
+            return redirect('/tasks/add/')->withErrors($request_data['errors'])->withInput();
         }
 
         $request_data['director_id'] = auth()->user()->id;
@@ -131,16 +60,10 @@ class TasksController extends ModuleController
 
         abort_if(!auth()->user()->can('update','tasks',$task),403);
 
-        $request_data = request()->all();
-        
-        $validator =  Validator::make($request_data, $this->validation_arr);
+        $request_data = $this->validateRequest(request()->all());
 
-        $errors=$validator->errors();
-
-        if ($errors->all()) {
-
-        return redirect('/tasks/edit/'.$request_data['id'])->withErrors($validator)->withInput();
-  
+        if ($request_data['errors']->all()) {
+            return redirect('/tasks/edit/'.$request_data['id'])->withErrors($request_data['errors'])->withInput();
         }
 
         if (($request_data['executor_id'] != $task->executor_id) && ($request_data['status']=='began')) {
@@ -160,6 +83,40 @@ class TasksController extends ModuleController
 
         return redirect('/tasks/show/'.$task->id);
 
+    }
+
+    protected function validateRequest($request_data) {
+
+        $errors=Validator::make($request_data,[ 
+            'name' => 'min:5|max:100|required',
+            'status' => 'alpha_dash|min:3|max:100|required',
+            'deadline' => 'date_format:"Y-m-d"|nullable',
+            'plaintime' => 'max:100|required',
+            'workarea_id' => 'numeric|nullable|max:100',
+            'stage_id' => 'numeric|nullable|max:100',
+            'executor_id' => 'numeric|nullable|max:100',
+            'description' => 'min:5|max:10000|nullable'
+        ])->errors();
+
+        if ($request_data['workarea_id'] && !Modules\Workarea::find($request_data['workarea_id'])) {
+
+            $errors->add('workarea',trans('strings.messages.invalid-value', ['field' => trans('strings.fields-name.workarea')]));
+        }
+
+        if ($request_data['stage_id'] && !Modules\Internal\Stage::find($request_data['stage_id'])) {
+
+            $errors->add('stage',trans('strings.messages.invalid-value', ['field' => trans('strings.fields-name.stage')]));
+        }
+
+        if ($request_data['executor_id'] && !Modules\Employee::find($request_data['executor_id'])) {
+
+            $errors->add('executor',trans('strings.messages.invalid-value', ['field' => trans('strings.fields-name.executor')]));
+        }
+
+
+        $request_data['errors'] = $errors;
+
+        return $request_data;
     }    
 
 }

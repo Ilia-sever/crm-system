@@ -34,6 +34,11 @@ class ModuleObjectModel extends MainModel
         return static::create($data);
     }
 
+    public static function active() {
+
+        return static::where('enable','1');
+    }
+
     public function disable() {
 
     	$this->update(['enable' => '0']);
@@ -41,7 +46,7 @@ class ModuleObjectModel extends MainModel
 
     public static function getObjects($params) {
 
-        $objects = static::where('enable','1');
+        $objects = static::active();
 
         if ($params['search_field'] && $params['search_value'] && $params['db_search_possible']) {
 
@@ -60,7 +65,7 @@ class ModuleObjectModel extends MainModel
 	}
 
     public static function getActive() {
-        return static::where('enable','1')->get();
+        return static::active()->get();
 
     }
 

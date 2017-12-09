@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Hash;
 
 class Contact extends ModuleObjectModel
 {
+    use Modules\Traits\HumanTrait;
+
     public function isRelatedEmployee($employee_id) {
         foreach ($this->companies as $company) {
             if ($company->manager_id == $employee_id) return true;
@@ -34,17 +36,8 @@ class Contact extends ModuleObjectModel
 
     }
 
-    public function __toString() {
-        return $this->fullname;
-    }
-
-    public function getFullname() {
-
-        $fullname = '';
-        $fullname .= ($this->surname) ? $this->surname . ' ' : '';
-        $fullname .= ($this->firstname) ? $this->firstname . ' ' : '';
-        $fullname .= ($this->lastname) ? $this->lastname . ' ' : '';
-        return $fullname;
+    public function setSocnetworks($socnetworks) {
+        $this->setSocnetworksBy($socnetworks,'contact_id');
     }
 
     public function getCompanies() {
@@ -55,7 +48,7 @@ class Contact extends ModuleObjectModel
 
         foreach ($companies_id as $company_id) {
 
-            $company = Modules\Client::find($company_id);
+            $company = Modules\Client::active()->find($company_id);
 
             if (!$company) continue;
 
@@ -63,5 +56,9 @@ class Contact extends ModuleObjectModel
         }
 
         return $companies;
+    }
+
+    public function getSocnetworks() {
+        return $this->getSocnetworksBy('contact_id');
     }
 }

@@ -32,15 +32,15 @@ class Project extends ModuleObjectModel
     }
 
 	public static function getForManager($employee_id) {
-		return static::where('enable','1')->where('manager_id',$employee_id)->orderBy('name')->get();
+		return static::active()->where('manager_id',$employee_id)->orderBy('name')->get();
 	}
 
 	public function getClient() {
-		return Modules\Client::find($this->client_id);
+		return Modules\Client::active()->find($this->client_id);
 	}
 
 	public function getManager() {
-		return Modules\Employee::find($this->manager_id);
+		return Modules\Employee::active()->find($this->manager_id);
 	}
 
 	public function getFlows() {
