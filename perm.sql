@@ -16,6 +16,7 @@ Available actions:
 
 11 - set_role_id
 12 - set_post
+13 - setup_types
 */
 
 
@@ -249,6 +250,45 @@ Available actions:
 	
 	/*Watch*/
 	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '3', '6', '1');
+	/*Create*/
+	/*Update*/
+	/*Delete*/
+	/*Set fields*/
+
+
+/* 7.Transactions*/
+
+	/*Directors*/
+
+	/*Watch*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '7', '1');
+	/*Create*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '7', '2');
+	/*Update*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '7', '3');
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '7', '13');
+	/*Delete*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '7', '4');
+	/*Set fields*/
+
+
+	/*Managers*/
+
+	/*Watch*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '7', '5');
+	/*Create*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '7', '2');
+	/*Update*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '7', '9');
+	/*Delete*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '7', '10');
+	/*Set fields*/
+
+
+	/*Executors*/
+	
+	/*Watch*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '3', '7', '5');
 	/*Create*/
 	/*Update*/
 	/*Delete*/

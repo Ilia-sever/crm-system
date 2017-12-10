@@ -12,6 +12,11 @@ class MainModel extends Model
     public $timestamps = false;
 	protected $guarded = [];
 
+    public static function table() {
+        
+        return with(new static)->getTable();
+    }
+
 	public function __get($property) {
 
         $prop = Model::__get($property);
@@ -36,7 +41,7 @@ class MainModel extends Model
 
     protected static function filterRequest($data) {
 
-        $table = with(new static)->getTable();
+        $table = static::table();
 
         foreach ($data as $column => $value) {
             if (!Schema::hasColumn($table, $column) || $column=='id') unset($data[$column]);

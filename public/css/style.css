@@ -58,6 +58,7 @@ a:hover,
 a:visited,
 a:active {
     color:'';
+    text-decoration: none;
 }
 
 a,
@@ -652,6 +653,30 @@ h1 {
 	display: none;
 }
 
+.multitable {
+}
+
+.multitable thead {
+	border-bottom: 1px solid #e6e6e6;
+}
+.multitable td,
+.multitable th {
+	font-weight: normal;
+	padding: 10px; 
+	border-right: 1px solid #e6e6e6;
+	text-align: center;
+}
+.multitable td:first-child,
+.multitable th:first-child {
+	min-width: 250px;
+}
+.multitable td:last-child,
+.multitable th:last-child {
+	border-right: none;
+}
+.multitable__example {
+	display: none;
+}
 .select2-selection {
 	border: 1px solid #ced4da !important;
 	height: auto !important;
@@ -796,7 +821,62 @@ h1 {
 	margin-right: 5px;
 }
 
+.index-additional {
+	width: 100%;
+	padding: 20px 0;
+}
 
+.icon-button {
+	background-color: #13151e;
+	color:#fff;
+	border:0;
+	border-radius: 5px;
+	padding: 7px 10px 7px 40px;
+	opacity: 0.9;
+}
+.icon-button:hover {
+	color:#fff;
+	opacity: 1;
+}
+.icon-button_setup {
+	background-image: url('/images/buttons/setup.png');
+	background-size: 20px auto;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+}
+
+.transaction-types-form {
+	width: 100%;
+	max-width: none;
+}
+.indicate {
+	display: none;
+}
+
+.button-notice {
+	display: none;
+	margin-top: 20px;
+	margin-bottom: -20px;
+}
+.button-notice span {
+	color: #AE4747;
+	padding: 6px 0px;
+	display: block;
+}
+.button-notice span:before {
+	content: '*';
+}
+.out-link {
+	padding-left: 10px;
+	color:000;
+	opacity: 0.6;
+}
+.out-link:after {
+	content: ' >';
+}
+.out-link:hover {
+	opacity: 0.7;
+}
 
 
 

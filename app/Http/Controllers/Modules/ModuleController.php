@@ -74,7 +74,7 @@ abstract class ModuleController extends Controller
             $sort_arr = array();
 
             foreach($data['records'] as $record) {
-                $sort_arr[] = $record[$params['sort_by']];
+                $sort_arr[] = $record->$params['sort_by'].'';
             }
 
             $order = ($params['order_by']=='desc') ? SORT_DESC : SORT_ASC;

@@ -97,7 +97,25 @@ class Notification extends MainModel
 		$notify_data['employee_id'] = $employee_id;
 
 		static::notify($notify_data);
+	}
 
+	public static function notifyAboutTransaction(Modules\Transaction $transaction, $employee_id) {
+
+		$notify_data = array();
+
+		$notify_data['title'] = trans("strings.notifications.new-transaction");
+
+		$text = $transaction->type->name;
+		$text .= ' ('.$transaction->formated_sum.'). ';
+		$text .= $transaction->assignment;
+
+		$notify_data['text'] = $text;
+
+		$notify_data['link'] = '/transactions/show/' . $transaction->id;  
+
+		$notify_data['employee_id'] = $employee_id;
+
+		static::notify($notify_data);
 	}
 
 

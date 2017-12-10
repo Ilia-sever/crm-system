@@ -447,7 +447,7 @@ $(document).ready(function() {
 
         $('.checkbox-tab__checkbox').change(function() {
 
-            let tab = $(this).parent().parent().parent().find('.checkbox-tab__tab');
+            let tab = $(this).closest('.checkbox-tab__tab');
 
             if (!$(this).is(':checked')) {
                 tab.find('input').val('');
@@ -481,7 +481,9 @@ $(document).ready(function() {
 
         $('.multifield__add').click(function(event) {
             event.preventDefault();
-            $(this).parent().find('.multifield__example').clone().removeClass('multifield__example').insertBefore($(this).parent().find('.multifield__add')).find('.select-plus-ready').addClass('select-plus');
+            new_item = $(this).parent().find('.multifield__example').clone();
+            new_item.removeClass('multifield__example').insertBefore($(this).parent().find('.multifield__add'));
+            new_item.find('.select-plus-ready').addClass('select-plus');
             upgradeSelects();
             $('.multifield__delete').click(function(event) {
                 event.preventDefault();
@@ -491,6 +493,31 @@ $(document).ready(function() {
         $('.multifield__delete').click(function(event) {
             event.preventDefault();
             $(this).parent().remove();
+        })
+    }
+
+    //функционал таблицы редактирования
+    if ($(".multitable").length > 0) {
+
+        $('.multitable__add').click(function(event) {
+            event.preventDefault();
+            new_number = parseInt($(this).val());
+            new_row = $(this).closest('.multitable').find('.multitable__example').clone();
+            new_row.removeClass('multitable__example').insertBefore($(this).closest('.multitable__final'));
+            new_row.find('input').each(function() {
+                $(this).attr('name',$(this).attr('name')+'[new_'+new_number+']');
+            });
+            $(this).val(new_number+1);
+            $('.multitable__delete').click(function(event) {
+                event.preventDefault();
+                $(this).closest('.multitable__row').remove();
+                $('.button-notice').show();
+            })            
+        }) 
+        $('.multitable__delete').click(function(event) {
+            event.preventDefault();
+            $(this).closest('.multitable__row').remove();
+            $('.button-notice').show();
         })
     }
 
@@ -512,6 +539,26 @@ $(document).ready(function() {
         event.preventDefault();
         $('.password-generate__value').text(generatePassword());
     })
+
+    //выбор типа транзакции
+    if ($(".indication").length > 0) {
+        var first_start = true;
+        $('.indication').change(function() {
+            $('.indicate').hide();
+            if (first_start == false) {
+                $('.indicate input').val('');
+                $('.indicate .select-plus').val('').trigger("change");
+            }
+            for_arr = $('.indication option:selected').attr('for').split(/[\n\s]+/);
+            $.each(for_arr, function(index, for_class) {
+                if (for_class)
+                $('.'+for_class).show();
+            });
+            first_start = false;
+        })
+        $('.indication').change();
+    }
+
 
     
     

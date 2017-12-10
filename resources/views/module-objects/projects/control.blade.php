@@ -28,7 +28,7 @@
     <label>{{trans('strings.fields-name.flows-stages')}}</label>
     <input type="hidden" name="flows_list" value="{{$data['object']->flows_list}}">
     <button class="flows-stages__control">{{trans('strings.operations.edit')}}</button>
-
 </div>
+
 
 @endsection

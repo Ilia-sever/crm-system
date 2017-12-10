@@ -48,6 +48,9 @@ Route::get('/stages/control/{flow_id}/{id}','Modules\Internal\StagesController@c
 Route::post('/stages/save','Modules\Internal\StagesController@save');
 Route::post('/stages/delete','Modules\Internal\StagesController@delete');
 
+Route::get('/transactions/types/edit','Modules\TransactionsController@editTypes');
+Route::post('/transactions/types/save','Modules\TransactionsController@saveTypes');
+
 Route::get('/help', function () {
 	return view('static.help');
 });

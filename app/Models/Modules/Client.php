@@ -48,4 +48,9 @@ class Client extends ModuleObjectModel
         return $contacts;
     }
 
+    public function getTransactions() {
+        
+        return Modules\Transaction::active()->where('client_id',$this->id)->orderBy('datetimeof','desc')->limit(config('settings.page-limit'))->get();
+    }
+
 }

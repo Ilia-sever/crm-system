@@ -35,6 +35,11 @@ class Project extends ModuleObjectModel
 		return static::active()->where('manager_id',$employee_id)->orderBy('name')->get();
 	}
 
+	public function __toString() {
+		
+		return $this->name;
+	}
+
 	public function getClient() {
 		return Modules\Client::active()->find($this->client_id);
 	}
@@ -53,5 +58,10 @@ class Project extends ModuleObjectModel
 			$string_list .= $flow->id . ';';
 		}
 		return $string_list;
+	}
+
+	public function getTransactions() {
+		
+		return Modules\Transaction::active()->where('project_id',$this->id)->orderBy('datetimeof','desc')->limit(config('settings.page-limit'))->get();
 	}
 }
