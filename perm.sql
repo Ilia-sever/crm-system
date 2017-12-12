@@ -294,3 +294,43 @@ Available actions:
 	/*Delete*/
 	/*Set fields*/
 
+
+/* 8.Documents*/
+
+	/*Directors*/
+
+	/*Watch*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '8', '1');
+	/*Create*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '8', '2');
+	/*Update*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '8', '3');
+	/*Delete*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '1', '8', '4');
+	/*Set fields*/
+
+
+	/*Managers*/
+
+	/*Watch*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '8', '5');
+	/*Create*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '8', '2');
+	/*Update*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '8', '9');
+	/*Delete*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '2', '8', '10');
+	/*Set fields*/
+
+
+	/*Executors*/
+	
+		/*Watch*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '3', '8', '5');
+	/*Create*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '3', '8', '2');
+	/*Update*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '3', '8', '9');
+	/*Delete*/
+	INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `action_id`) VALUES (NULL, '3', '8', '10');
+	/*Set fields*/

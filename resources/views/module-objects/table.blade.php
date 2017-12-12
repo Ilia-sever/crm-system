@@ -5,7 +5,7 @@
 @includeIf('module-objects.'.$module_code.'.index-additional')
 @if (auth()->user()->can('create',"$module_code"))
 <a href="/{{$module_code}}/add/">
-    <button type="button" class="create-button btn btn-success">{{trans('strings.operations.add')}}</button>
+    <button type="button" class="create-button btn btn-success" id="create-{{$module_code}}">{{trans('strings.operations.add')}}</button>
 </a>
 @endif
 <div class="search">

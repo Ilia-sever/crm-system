@@ -46,6 +46,8 @@ function refreshRecords(records) {
         event.preventDefault();
         getRecords($(this).text());
     })
+
+    $('.show-documents').fancybox();
 }
 
 function getRecords(page) {
@@ -525,13 +527,13 @@ $(document).ready(function() {
     $(".flows-stages__control").click(function(event) {
         event.preventDefault();
         $.ajax({
-                type: "POST",
-                url: "/projects/flows_stages_modal",
-                data: $(".object-form").serialize(),
-                success: function(content) {
-                    viewModalWindow(content);
-                }
-            });
+            type: "POST",
+            url: "/projects/flows_stages_modal",
+            data: $(".object-form").serialize(),
+            success: function(content) {
+                viewModalWindow(content);
+            }
+        });
     });
 
     //генерация пароля 
@@ -588,6 +590,35 @@ $(document).ready(function() {
     }
 
     //9 другое
+
+    $('.show-documents').fancybox();
+
+
+    $('#create-documents').click(function(event) {
+        event.preventDefault();
+        $('.download-form__input').click();  
+    });
+
+    $('.download-form__input').change(function() {
+            let form_data = new FormData();
+            form_data.append('_token', $('meta[name="csrf-token"]').attr('content'));
+            form_data.append('file', $('.download-form__input')[0].files[0]);
+            $.ajax({
+                type: "POST",
+                url: "/documents/create",
+                data: form_data,
+                processData: false,
+                contentType: false,
+                success: function(json) {
+                    $('.download-form__input').val('');
+                    if (json['error'] == '') {
+                        getRecords();
+                    } else {
+                        viewModalWindow(json['error']);
+                    }
+                }
+            });
+    });
 
 
 });

@@ -51,6 +51,8 @@ Route::post('/stages/delete','Modules\Internal\StagesController@delete');
 Route::get('/transactions/types/edit','Modules\TransactionsController@editTypes');
 Route::post('/transactions/types/save','Modules\TransactionsController@saveTypes');
 
+Route::get('/documents/download/{id}','Modules\DocumentsController@download');
+
 Route::get('/help', function () {
 	return view('static.help');
 });

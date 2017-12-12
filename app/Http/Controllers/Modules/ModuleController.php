@@ -132,6 +132,11 @@ abstract class ModuleController extends Controller
 
         }
 
+        if (view()->exists('module-objects.'.$this->module_code.'.table-rows')) {
+
+            return view('module-objects.'.$this->module_code.'.table-rows',compact('data'));
+        }
+
         return view('module-objects.table-rows',compact('data'));
     }
 
