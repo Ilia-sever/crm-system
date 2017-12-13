@@ -36,7 +36,7 @@ class FlowsController extends \App\Http\Controllers\Controller
 
         $data['project_id'] = $project_id;
 
-        return view('module-objects.projects.flows.control',compact('data'));
+        return view('modules.projects.flows.control',compact('data'));
     }
 
     public function save() {

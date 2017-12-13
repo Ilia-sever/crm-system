@@ -2,7 +2,7 @@
 @include('layouts.delete-confirmation')
 <meta id="module-code" value="{{$module_code}}">
 <h1>{{trans_choice('strings.modules.' . $module_code,2)}}</h1>
-@includeIf('module-objects.'.$module_code.'.index-additional')
+@includeIf('modules.'.$module_code.'.index-additional')
 @if (auth()->user()->can('create',"$module_code"))
 <a href="/{{$module_code}}/add/">
     <button type="button" class="create-button btn btn-success" id="create-{{$module_code}}">{{trans('strings.operations.add')}}</button>

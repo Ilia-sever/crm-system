@@ -14,7 +14,11 @@ use App\Special\Tools\DateTimeConverter;
 class Task extends ModuleObjectModel
 {
     public function isRelatedEmployee($employee_id) {
-        if ($employee_id == $this->director_id || $employee_id == $this->executor_id) return true;
+
+        if ($this->isControlledEmployee($employee_id)) return true; 
+
+        if ($employee_id == $this->executor_id) return true;
+        
         return false;
     }
 

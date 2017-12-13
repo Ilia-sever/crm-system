@@ -21,11 +21,11 @@ class Transaction extends ModuleObjectModel
         if ($employee_id == $this->employee_id) return true;
 
         if ($this->project) {
-            if ($employee_id == $this->project->manager_id) return true;
+            if ($this->project->isRelatedEmployee($employee_id)) return true;
         }
 
         if ($this->client) {
-            if ($employee_id == $this->client->manager_id) return true;
+            if ($this->client->isRelatedEmployee($employee_id)) return true;
         }
 
         return false;

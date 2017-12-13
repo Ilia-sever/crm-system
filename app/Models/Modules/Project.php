@@ -17,6 +17,10 @@ class Project extends ModuleObjectModel
 		return ($employee_id == $this->manager_id) ? true : false;
 	}
 
+	public static function getForManager($employee_id) {
+		return static::active()->where('manager_id',$employee_id)->orderBy('name')->get();
+	}
+
     public function assignNewFlows($flows_id) {
 
     	foreach ($flows_id as $flow_id) {
@@ -30,10 +34,6 @@ class Project extends ModuleObjectModel
             }    
         }
     }
-
-	public static function getForManager($employee_id) {
-		return static::active()->where('manager_id',$employee_id)->orderBy('name')->get();
-	}
 
 	public function attachDocuments($attachments) {
 

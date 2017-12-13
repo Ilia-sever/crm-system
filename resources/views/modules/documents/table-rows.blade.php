@@ -11,7 +11,7 @@
     @foreach ($data['common-fields'] as $field)
     <td>
         @if ($field=='name')
-            @include('module-objects.documents.document-preview')
+            @include('modules.documents.document-preview')
         @else
             @php $formated_field = 'formated_'.$field; @endphp 
             @if ($object->$formated_field)

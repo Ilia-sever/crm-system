@@ -120,7 +120,7 @@ class ProjectsController extends ModuleController
 
         $data['flows'] = Modules\Internal\Flow::getByList(explode(';', request('flows_list')));
 
-        return view('module-objects.projects.flows-stages-modal',compact('data'));
+        return view('modules.projects.flows-stages-modal',compact('data'));
     }
 
 }

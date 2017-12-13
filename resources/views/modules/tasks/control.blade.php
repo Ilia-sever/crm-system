@@ -1,4 +1,4 @@
-@extends ('module-objects.common-control') @section ('object-control')
+@extends ('modules.common-control') @section ('object-control')
 <div class="form-group ">
     <label>{{trans('strings.fields-name.name')}}</label>
     <input type="text" class="form-control" name="name" value="{{$data['object']->name}}">
@@ -72,6 +72,6 @@
     <textarea class="form-control" name="description">{{$data['object']->description}}</textarea>
 </div>
 
-@include('module-objects.documents.attachments-field')
+@include('modules.documents.attachments-field')
 
 @endsection

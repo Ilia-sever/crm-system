@@ -132,12 +132,12 @@ abstract class ModuleController extends Controller
 
         }
 
-        if (view()->exists('module-objects.'.$this->module_code.'.table-rows')) {
+        if (view()->exists('modules.'.$this->module_code.'.table-rows')) {
 
-            return view('module-objects.'.$this->module_code.'.table-rows',compact('data'));
+            return view('modules.'.$this->module_code.'.table-rows',compact('data'));
         }
 
-        return view('module-objects.table-rows',compact('data'));
+        return view('modules.table-rows',compact('data'));
     }
 
     public function index() {
@@ -146,7 +146,7 @@ abstract class ModuleController extends Controller
 
         $data['common-fields'] = $this->common_fields;
 
-        return view('module-objects.table',compact('data'));
+        return view('modules.table',compact('data'));
     }
 
     public function show($id) {
@@ -165,7 +165,7 @@ abstract class ModuleController extends Controller
 
         $data['object'] = $object;
 
-        return view('module-objects.'.$this->module_code.'.show',compact('data'));
+        return view('modules.'.$this->module_code.'.show',compact('data'));
     }
 
     public function add() {
@@ -178,7 +178,7 @@ abstract class ModuleController extends Controller
 
         $data = $this->addFormData($data);
 
-        return view('module-objects.'.$this->module_code.'.control',compact('data'));
+        return view('modules.'.$this->module_code.'.control',compact('data'));
     }
 
     public function edit($id) {
@@ -199,7 +199,7 @@ abstract class ModuleController extends Controller
 
         $data = $this->addFormData($data);
 
-        return view('module-objects.'.$this->module_code.'.control',compact('data'));
+        return view('modules.'.$this->module_code.'.control',compact('data'));
     }
 
     public function delete() {

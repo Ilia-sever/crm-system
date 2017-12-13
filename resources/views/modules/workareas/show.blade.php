@@ -1,4 +1,4 @@
-@extends ('module-objects.common-show') @section ('object-show')
+@extends ('modules.common-show') @section ('object-show')
 
     <input type="hidden" name="id" value="{{$data['object']->id}}">
     <div class="object-field">

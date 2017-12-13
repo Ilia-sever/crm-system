@@ -132,12 +132,14 @@ return [
     */
 
     'attributes'           => [
-        'all'                       => 'Все поля',
+            'all'                       => 'Все поля',
         'actions'                   => 'Действия',
         'assignment'                => 'Приписка',
         'assignment-none'           => 'Без приписки',
         'assignment-workarea'       => 'Приписать к рабочей области',
         'assignment-stage'          => 'Приписать к этапу проекта',
+        'attachments'               => 'Вложения',
+        'author'                    => 'Автор',
         'client'                    => 'Клиент',
         'client-projects'           => 'Заказанные проекты',
         'client-contacts'           => 'Представители',

@@ -349,7 +349,6 @@ function modalWindowFunctional() {
 
     if ($('.document-select').length > 0) {
 
-
         $('#create-documents').click(function(event) {
             event.preventDefault();
             $('.download-form__input').click();
@@ -370,6 +369,7 @@ function modalWindowFunctional() {
                     $('.document-select-list').html(select_items);
 
                     $('.document-select-list__item').click(function() {
+
                         let id = $(this).find(".document-id").text();
                         let name = $(this).find(".document-name").text();
 
@@ -412,6 +412,7 @@ function viewModalWindow (content) {
 
 
 function openDocumentSelectPanel() {
+    //открыть модальное окно выбора документа
     $.ajax({
         type: "GET",
         url: "/documents/select_panel",
@@ -422,6 +423,7 @@ function openDocumentSelectPanel() {
 }
 
 function uploadFile(update_target) {
+    //загрузить документ и после выполнить действие в зависимости от update_target
 
     let form_data = new FormData();
     form_data.append('_token', $('meta[name="csrf-token"]').attr('content'));
@@ -519,6 +521,7 @@ $(document).ready(function() {
 
     //7. установка функционала полям в формах создания/редактирования объектов
 
+    //модернизация селектов
     upgradeSelects();
 
     //запуск вкладок
@@ -538,7 +541,7 @@ $(document).ready(function() {
 
         $('.checkbox-tab__checkbox').change(function() {
 
-            let tab = $(this).closest('.checkbox-tab__tab');
+            let tab = $(this).closest('.checkbox-tab').find('.checkbox-tab__tab');
 
             if (!$(this).is(':checked')) {
                 tab.find('input').val('');
@@ -662,10 +665,6 @@ $(document).ready(function() {
             $(this).closest('.attachments__item').remove();
         })
     }
-
-
-
-    
     
 
 
@@ -694,8 +693,10 @@ $(document).ready(function() {
 
     //9 другое
 
-    $('.show-documents').fancybox();
 
+    //функционал отображения документов 
+
+    $('.show-documents').fancybox();
 
     $('#create-documents').click(function(event) {
         event.preventDefault();

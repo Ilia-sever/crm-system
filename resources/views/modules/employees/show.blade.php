@@ -1,11 +1,26 @@
-@extends ('module-objects.common-show') @section ('object-show')
+@extends ('modules.common-show') @section ('object-show')
 
     <input type="hidden" name="id" value="{{$data['object']->id}}">
     <div class="object-field">
         <label>{{trans('strings.fields-name.fullname')}}</label>
         <p class="text-info" name="surname">{{$data['object']->fullname}}</p>
     </div>
-    
+    <div class="object-field">
+        <label>{{trans('strings.fields-name.sex')}}</label>
+        <p class="text-info" name="sex">{{$data['object']->sex_name}}</p>
+    </div>
+    <div class="object-field">
+        <label>{{trans('strings.fields-name.dob')}}</label>
+        <p class="text-info" name="dob">{{$data['object']->formated_dob}}</p>
+    </div>
+    <div class="object-field">
+        <label>{{trans('strings.fields-name.role')}}</label>
+        <p class="text-info" name="role">{{$data['object']->role}}</p>
+    </div>
+    <div class="object-field">
+        <label>{{trans('strings.fields-name.post')}}</label>
+        <p class="text-info" name="post">{{$data['object']->post}}</p>
+    </div>
     <div class="object-field">
         <label>{{trans('strings.fields-name.email')}}</label>
         <p class="text-info" name="email">{{$data['object']->email}}</p>
@@ -31,16 +46,5 @@
         <p class="text-info" name="skype"><a href="{{$socnetwork->link}}">{{$socnetwork->link}}</a></p>
     </div>
     @endforeach
-
-    <div class="object-field">
-        <label>{{trans('strings.fields-name.companies')}}</label>
-        <ul class="text-info text-info_full">
-        @foreach($data['object']->companies as $company)
-        <li>
-            <a href="/clients/show/{{$company->id}}">{{$company->name}}</a>
-        </li>
-        @endforeach
-        </ul>
-    </div>
 
 @endsection

@@ -123,7 +123,7 @@ class TransactionsController extends ModuleController
         
         $data['transaction_types'] = Modules\Internal\TransactionType::all();
 
-        return view('module-objects.transactions.types-control',compact('data'));
+        return view('modules.transactions.types-control',compact('data'));
     }
 
     public function saveTypes() {

@@ -40,7 +40,7 @@ class StagesController extends \App\Http\Controllers\Controller
 
         $data['flow_id'] = $flow_id;
 
-    	return view('module-objects.projects.stages.control',compact('data'));
+    	return view('modules.projects.stages.control',compact('data'));
     }
 
     public function save() {
@@ -55,7 +55,7 @@ class StagesController extends \App\Http\Controllers\Controller
 
         if ($errors->all()) {
 
-            return redirect('/stages/control/'.$request('flow_id').'/'.$request('id'))->withErrors($errors)->withInput();
+            return redirect('/stages/control/'.request('flow_id').'/'.request('id'))->withErrors($errors)->withInput();
         }
 
         if (!request('id')) {

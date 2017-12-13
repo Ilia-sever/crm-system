@@ -157,7 +157,7 @@ class DocumentsController extends ModuleController
 
         if(!auth()->user()->can('watch','documents')) return '';
         
-        return view('module-objects.documents.select-panel');
+        return view('modules.documents.select-panel');
     }
 
     public function getSelectItems($select_search='') {
@@ -171,7 +171,7 @@ class DocumentsController extends ModuleController
             $data['select-items'] = $this->filterObjects('watch','documents',$documents->get());
         }
 
-        return view('module-objects.documents.select-items',compact('data'));
+        return view('modules.documents.select-items',compact('data'));
     }
 
 }

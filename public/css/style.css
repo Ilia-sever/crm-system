@@ -148,10 +148,12 @@ input:focus {
 }
 
 .header {
-	background-color: #13151e;
-	padding: 8px 10px 8px 10px;
+	background-color: #282E36;
+	background-color: #343C47;
+	padding: 5px 10px;
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: center;
 	border-bottom: 2px solid #424D5E;
@@ -190,7 +192,7 @@ input:focus {
 }
 
 .logo img {
-	width:200px;
+	width:175px;
 	height: auto;
 }
 
@@ -213,6 +215,7 @@ input:focus {
 	justify-content: space-between;
 	align-items: center;
 	padding: 0;
+	margin: 0;
 }
 
 .navigation__link {
@@ -286,7 +289,7 @@ input:focus {
 
 .aside-panel {
 	padding: 20px 0 0 0;
-	background-color: #13151e; 
+	background-color: #282E36; 
 	position: relative;
 }
 
@@ -345,12 +348,22 @@ input:focus {
 
 .content {
 	padding: 20px;
-	background-color: #F5F9FC;
+	background-color: #EEEEEE;
 
 }
 
 h1 {
 	font-weight: bold;
+	background-color: #fff;
+	width: 150%;
+	margin: -20px -20px 20px -20px;
+	padding: 15px 20px;
+	border-bottom: 2px solid #e6e6e6;
+	color:#343C47;
+	font-size: 32px;
+}
+h2 {
+	font-size: 26px;
 }
 
 .hidden {
@@ -358,8 +371,24 @@ h1 {
 }
 
 .create-button {
-	margin: 20px 0 10px 0;
+	margin: 0 0 10px 0;
+	background-color: rgba(73, 156, 95, 0.9);
+	border: 2px solid #468652;
+	padding: 4px 12px;
 }
+.create-button:hover {
+	background-color: rgba(73, 156, 95, 1);
+}
+
+.delete-all-button {
+	background-color: rgba(168, 57, 70, 0.9);
+	border: 2px solid #8a3b44;
+	padding: 4px 12px;
+}
+.delete-all-button:hover {
+	background-color: rgba(168, 57, 70, 1);
+}
+
 .search {
 	width: 100%;
 	display: flex;
@@ -396,11 +425,14 @@ h1 {
 	background-color: #fff;
 	overflow-x: scroll;
 	max-width: 100%;
+	border:  1px solid #e6e6e6;
 	
 }
 
-.records-table tbody tr:hover {
-	background-color: #EBEFF6;
+.records-table thead th {
+	background-color: rgba(52, 60, 71, 0.8);;
+	color: #e6e6e6;
+	font-weight: normal;
 }
 
 .records-table tbody td,
@@ -408,8 +440,10 @@ h1 {
 	border: 1px solid #ccc;
 }
 
-.records-table__row_empty {
-
+.records-table tbody tr,
+.records-table tbody td {
+	border-top: 1px solid #e6e6e6;
+	border-bottom:  1px solid #e6e6e6;
 }
 
 .records-table__row_empty:hover {
@@ -441,7 +475,7 @@ h1 {
 }
 
 .pagination__button_active {
-	background-color: #13151e;
+	background-color: #282E36;
 	color: #fff;
 }
 
@@ -489,7 +523,7 @@ h1 {
 	width: 30px;
 	height: 30px;
 	border-radius: 5px;
-	background-color: #13151e;
+	background-color: #282E36;
 	display: block;
 	margin: 0 5px;
 	border: 0;
@@ -559,9 +593,9 @@ h1 {
 .object-form {
 	margin-top: 20px;
 	padding: 20px;
-	border: 1px solid #ccc;
+	border: 2px solid #ccc;
+	border-radius: 10px;
 	background-color: #fff;
-	box-shadow: 0 0 20px rgba(0,0,0,0.3);
 	max-width: 600px;
 }
 
@@ -606,7 +640,7 @@ h1 {
 }
 
 .module-button {
-	background-color: #13151e;
+	background-color: #282E36;
 	color: #fff;
 	margin-top: 20px;
 }
@@ -615,7 +649,7 @@ h1 {
 }
 
 .ui-state-active {
-	background-color: #13151e !important; 
+	background-color: #282E36 !important; 
 	border: 1px solid #000 !important;
 
 }
@@ -830,11 +864,11 @@ h1 {
 
 .index-additional {
 	width: 100%;
-	padding: 20px 0;
+	padding-bottom: 20px;
 }
 
 .icon-button {
-	background-color: #13151e;
+	background-color: #282E36;
 	color:#fff;
 	border:0;
 	border-radius: 5px;
@@ -920,6 +954,28 @@ h1 {
 	margin: 0 0 0 10px;
 }
 
+.attachments-list {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.attachments-list li { 
+	padding: 10px 0;
+	margin: 0;
+	list-style-type: none;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	border-bottom: 1px solid #e6e6e6;
+}
+.attachments-list li:last-child {
+	border-bottom: 0;
+}
+.attachments-list li > a {
+	margin-right: 10px;
+}
 .attachments__item {
 	display: flex;
 	flex-direction: row;
@@ -974,28 +1030,6 @@ h1 {
 	width: 100%;
 }
 
-.attachments-list {
-	width: 100%;
-	margin: 0;
-	padding: 0;
-}
-
-.attachments-list li { 
-	padding: 10px 0;
-	margin: 0;
-	list-style-type: none;
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-start;
-	align-items: center;
-	border-bottom: 1px solid #e6e6e6;
-}
-.attachments-list li:last-child {
-	border-bottom: 0;
-}
-.attachments-list li > a {
-	margin-right: 10px;
-}
 
 
 

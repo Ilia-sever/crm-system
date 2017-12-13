@@ -2,9 +2,8 @@
 @foreach($data['select-items'] as $object)
 <li class="document-select-list__item">
 	<span class="hidden document-id">{{$object->id}}</span>
-	@include('module-objects.documents.document-preview')
+	@include('modules.documents.document-preview')
 	<p>{{$object->datetimeof}}</p>
-
 </li>
 @endforeach
 @else

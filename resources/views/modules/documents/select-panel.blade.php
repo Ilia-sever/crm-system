@@ -7,6 +7,6 @@
         <button class="input-group-addon document-search__button">{{trans('strings.operations.search')}}</button>
     </div>
     <ul class="document-select-list">
-    	
+    	<!-- place to 'select-items' view -->
     </ul>
 </div>

@@ -22,5 +22,4 @@ class Workarea extends ModuleObjectModel
         return Modules\Task::active()->where('workarea_id',$this->id)->orderBy('name')->get();
     }
 
-
 }

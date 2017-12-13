@@ -6,6 +6,11 @@
     <span class="auth-form__title">{{trans('strings.modules.auth')}}</span>
     <span class="auth-form__caption">{{trans('strings.messages.auth')}}</span>
 
+    <span class="auth-form__caption">DEMO:</span>
+    <span class="auth-form__caption">director@mail.ru 111111</span>
+    <span class="auth-form__caption">manager@mail.ru 222222</span>
+    <span class="auth-form__caption">executor@mail.ru 333333</span>
+
     @include ('layouts.form-errors')
 
     <div class="form-group">

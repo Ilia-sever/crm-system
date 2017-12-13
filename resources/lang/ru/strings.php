@@ -40,8 +40,8 @@ return [
     'operations'                    => [
         'acount'                    => 'Мой аккаунт',
         'add'                       => 'Добавить',
-        'add-stage'                 => 'Новый этап',
-        'add-flow'                  => 'Новый поток',
+        'add-stage'                 => 'Создание этапа',
+        'add-flow'                  => 'Создание потока',
         'agree'                     => 'Да',
         'back'                      => 'Назад',
         'creating-object'           => 'Создание объекта ',
