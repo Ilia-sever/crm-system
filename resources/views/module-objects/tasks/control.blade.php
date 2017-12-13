@@ -71,4 +71,7 @@
     <label>{{trans('strings.fields-name.description')}}</label>
     <textarea class="form-control" name="description">{{$data['object']->description}}</textarea>
 </div>
+
+@include('module-objects.documents.attachments-field')
+
 @endsection

@@ -62,12 +62,14 @@ return [
         'save'                      => 'Сохранить',
         'search'                    => 'Искать',
         'search-by'                 => 'Искать по',
+        'select-document'           => 'Выбор документа',
         'set-new-password'          => 'Установить новый пароль',
         'setup-transaction-types'   => 'Настроить типы транзакций',
         'showing-object'            => 'Просмотр объекта ',
         'transaction-types'         => 'Типы транзакций',
         'watch'                     => 'Смотреть',
         'watch-other'               => 'Смотреть другие',
+        'upload'                    => 'Загрузить',
 
     ],
 
@@ -101,6 +103,7 @@ return [
         'assignment-none'           => 'Без приписки',
         'assignment-workarea'       => 'Приписать к рабочей области',
         'assignment-stage'          => 'Приписать к этапу проекта',
+        'attachments'               => 'Вложения',
         'author'                    => 'Автор',
         'client'                    => 'Клиент',
         'client-projects'           => 'Заказанные проекты',

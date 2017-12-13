@@ -345,6 +345,57 @@ function modalWindowFunctional() {
     })
 
 
+    //3. Функционал для модального окна "Выбор документа"
+
+    if ($('.document-select').length > 0) {
+
+
+        $('#create-documents').click(function(event) {
+            event.preventDefault();
+            $('.download-form__input').click();
+        });
+
+        $('.download-form__input').change(function() {
+            uploadFile('modal');
+        });
+
+        function refreshSelectList() {
+
+            let select_search = $('.document-search__input').val();
+
+            $.ajax({
+                type: "GET",
+                url: "/documents/get_select_items/"+select_search,
+                success: function(select_items) {
+                    $('.document-select-list').html(select_items);
+
+                    $('.document-select-list__item').click(function() {
+                        let id = $(this).find(".document-id").text();
+                        let name = $(this).find(".document-name").text();
+
+                        new_item = $('.attachments__example').clone();
+                        new_item.removeClass('attachments__example').insertBefore($('.attachments__add'));
+                        new_item.find('input[name="attachments[]"]').val(id);
+                        new_item.find('p').text(name);
+
+                        $('.attachments__delete').click(function(event) {
+                            event.preventDefault();
+                            $(this).closest('.attachments__item').remove();
+                        })
+                        
+                        $.fancybox.close();
+                    })
+                }
+            });
+        }
+
+        refreshSelectList();
+
+        $('.document-search__input').keyup(function() {refreshSelectList()});
+        $('.document-search__button').click(function() {refreshSelectList()});
+    }
+
+
 }
 
 function viewModalWindow (content) {
@@ -359,6 +410,44 @@ function viewModalWindow (content) {
     $(".fancybox-init").click();
 }
 
+
+function openDocumentSelectPanel() {
+    $.ajax({
+        type: "GET",
+        url: "/documents/select_panel",
+        success: function(content) {
+            viewModalWindow(content);
+        }
+    });
+}
+
+function uploadFile(update_target) {
+
+    let form_data = new FormData();
+    form_data.append('_token', $('meta[name="csrf-token"]').attr('content'));
+    form_data.append('file', $('.download-form__input')[0].files[0]);
+    $.ajax({
+        type: "POST",
+        url: "/documents/create",
+        data: form_data,
+        processData: false,
+        contentType: false,
+        success: function(json) {
+            $('.download-form__input').val('');
+            if (json['error'] == '') {
+
+                if (update_target == 'table') { 
+                    getRecords();
+                } else if (update_target == 'modal') {
+                    openDocumentSelectPanel();
+                }
+
+            } else {
+                viewModalWindow(json['error']);
+            }
+        }
+    });
+}
 
 $(document).ready(function() {
 
@@ -561,6 +650,20 @@ $(document).ready(function() {
         $('.indication').change();
     }
 
+    //прикрепление вложений
+    if ($(".attachments").length > 0) {
+        $('.attachments__add').click(function(event) {
+            event.preventDefault();
+            openDocumentSelectPanel();
+        })
+
+        $('.attachments__delete').click(function(event) {
+            event.preventDefault();
+            $(this).closest('.attachments__item').remove();
+        })
+    }
+
+
 
     
     
@@ -600,24 +703,7 @@ $(document).ready(function() {
     });
 
     $('.download-form__input').change(function() {
-            let form_data = new FormData();
-            form_data.append('_token', $('meta[name="csrf-token"]').attr('content'));
-            form_data.append('file', $('.download-form__input')[0].files[0]);
-            $.ajax({
-                type: "POST",
-                url: "/documents/create",
-                data: form_data,
-                processData: false,
-                contentType: false,
-                success: function(json) {
-                    $('.download-form__input').val('');
-                    if (json['error'] == '') {
-                        getRecords();
-                    } else {
-                        viewModalWindow(json['error']);
-                    }
-                }
-            });
+        uploadFile('table');
     });
 
 

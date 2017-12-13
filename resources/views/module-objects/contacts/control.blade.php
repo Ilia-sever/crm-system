@@ -58,6 +58,15 @@
 
     <div class="form-group multifield">
         <label>{{trans('strings.fields-name.companies')}}</label>
+        <div class="multifield__item multifield__example">
+            <select class="form-control select-plus-ready" name="companies[]">
+                <option value="">{{trans('strings.messages.select')}}</option>
+                @foreach($data['clients'] as $client)
+                <option value="{{$client->id}}">{{$client->name}}</option>
+                @endforeach
+            </select>
+            <button class="multifield__delete action-button delete-button"></button>   
+        </div>
         @if ($data['object']->companies)
         @foreach($data['object']->companies as $company)
         <div class="multifield__item">
@@ -71,15 +80,7 @@
         </div>
         @endforeach
         @endif
-        <div class="multifield__item multifield__example">
-            <select class="form-control select-plus-ready" name="companies[]">
-                <option value="">{{trans('strings.messages.select')}}</option>
-                @foreach($data['clients'] as $client)
-                <option value="{{$client->id}}">{{$client->name}}</option>
-                @endforeach
-            </select>
-            <button class="multifield__delete action-button delete-button" value="$company->id"></button>   
-        </div>
+        
         <button class="multifield__add action-button add-button"></button>
     </div>
 

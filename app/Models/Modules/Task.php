@@ -34,6 +34,18 @@ class Task extends ModuleObjectModel
 		return static::active()->where('executor_id',$executor_id)->where('status','began')->orderBy('deadline')->get();
 	}
 
+    public function attachDocuments($attachments) {
+
+        Modules\Internal\Attachment::where('task_id',$this->id)->whereNotIn('document_id',$attachments)->delete();
+
+        foreach ($attachments as $attachment) {
+
+            if (Modules\Internal\Attachment::where('task_id',$this->id)->where('document_id',$attachment)->count()) continue;
+            
+            Modules\Internal\Attachment::createObject(['task_id'=>$this->id,'document_id'=>$attachment]);
+        }
+    }
+
     public function getStage() {
         return Modules\Internal\Stage::find($this->stage_id);
         
@@ -73,6 +85,13 @@ class Task extends ModuleObjectModel
 	public function getExecutor() {
 		return Modules\Employee::active()->find($this->executor_id);
 	}
+
+    public function getDocuments() {
+
+        $documents = $this->belongsToMany(Modules\Document::class, 'attachments', 'task_id', 'document_id')->where('enable',1);
+
+        return ($documents->count()) ? $documents->get() : array();
+    }
 
     public function getFormatedStatus () {
         return trans('strings.fields-name.statuses.'.$this->status);

@@ -45,6 +45,8 @@ class TasksController extends ModuleController
 
         $task = Modules\Task::createObject($request_data);
 
+        $task->attachDocuments($request_data['attachments']);
+
         if (($task->status == 'began')) {
 
             Notification::notifyAboutTask('assign-to-task', $task, $task->executor_id);
@@ -81,6 +83,8 @@ class TasksController extends ModuleController
 
         $task->updateObject($request_data);
 
+        $task->attachDocuments($request_data['attachments']);
+
         return redirect('/tasks/show/'.$task->id);
 
     }
@@ -113,6 +117,17 @@ class TasksController extends ModuleController
             $errors->add('executor',trans('strings.messages.invalid-value', ['field' => trans('strings.fields-name.executor')]));
         }
 
+        if (!$request_data['attachments']) {
+
+            $request_data['attachments'] = array();
+        }
+
+        foreach ($request_data['attachments'] as $num => $attachment) {
+
+            if (!$attachment || !is_numeric($attachment)) {
+                unset($request_data['attachments'][$num]);
+            }
+        }
 
         $request_data['errors'] = $errors;
 

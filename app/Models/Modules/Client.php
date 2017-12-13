@@ -32,25 +32,16 @@ class Client extends ModuleObjectModel
 
     public function getContacts() {
 
-        $contacts = array();
+        $contacts = $this->belongsToMany(Modules\Contact::class, 'agents', 'client_id','contact_id')->where('enable',1);
 
-        $contacts_id =  Modules\Internal\Agent::where('client_id',$this->id)->pluck('contact_id');
-
-        foreach ($contacts_id as $contact_id) {
-
-            $contact = Modules\Contact::active()->find($contact_id);
-
-            if (!$contact) continue;
-
-            $contacts[] = $contact;
-        }
-        
-        return $contacts;
+        return ($contacts->count()) ? $contacts->get() : array();
     }
 
     public function getTransactions() {
         
-        return Modules\Transaction::active()->where('client_id',$this->id)->orderBy('datetimeof','desc')->limit(config('settings.page-limit'))->get();
+        $transactions = Modules\Transaction::active()->where('client_id',$this->id)->orderBy('datetimeof','desc')->limit(config('settings.page-limit'));
+
+        return ($transactions->count()) ? $transactions->get() : array();
     }
 
 }

@@ -52,6 +52,8 @@ Route::get('/transactions/types/edit','Modules\TransactionsController@editTypes'
 Route::post('/transactions/types/save','Modules\TransactionsController@saveTypes');
 
 Route::get('/documents/download/{id}','Modules\DocumentsController@download');
+Route::get('/documents/select_panel','Modules\DocumentsController@getSelectPanel');
+Route::get('/documents/get_select_items/{select_search?}','Modules\DocumentsController@getSelectItems');
 
 Route::get('/help', function () {
 	return view('static.help');

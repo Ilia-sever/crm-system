@@ -43,6 +43,7 @@ class ProjectsController extends ModuleController
 
         $project = Modules\Project::createObject(request()->all());
         $project->assignNewFlows(explode(';', $request_data['flows_list']));
+        $project->attachDocuments($request_data['attachments']);
 
         Notification::notifyAboutProject('assign-to-project', $project, $project->manager_id);
 
@@ -68,6 +69,7 @@ class ProjectsController extends ModuleController
 
         $project->updateObject($request_data);
         $project->assignNewFlows(explode(';', request('flows_list')));
+        $project->attachDocuments($request_data['attachments']);
 
         return redirect('/projects/show/'.$project->id);
     }
@@ -90,6 +92,18 @@ class ProjectsController extends ModuleController
         if ($request_data['manager_id'] && !Modules\Employee::find($request_data['manager_id'])) {
 
             $errors->add('manager',trans('strings.messages.invalid-value', ['field' => trans('strings.fields-name.manager')]));
+        }
+
+        if (!$request_data['attachments']) {
+
+            $request_data['attachments'] = array();
+        }
+
+        foreach ($request_data['attachments'] as $num => $attachment) {
+
+            if (!$attachment || !is_numeric($attachment)) {
+                unset($request_data['attachments'][$num]);
+            }
         }
 
 

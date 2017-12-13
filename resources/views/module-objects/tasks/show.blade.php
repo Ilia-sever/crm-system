@@ -3,23 +3,23 @@
     <input type="hidden" name="id" value="{{$data['object']->id}}">
     <div class="object-field">
         <label>{{trans('strings.fields-name.name')}}</label>
-        <p class="text-info" name="surname">{{$data['object']->name}}</p>
+        <p class="text-info">{{$data['object']->name}}</p>
     </div>
     <div class="object-field">
         <label>{{trans('strings.fields-name.status')}}</label>
-        <p class="text-info" name="sex">{{$data['object']->formated_status}}</p>
+        <p class="text-info">{{$data['object']->formated_status}}</p>
     </div>
     <div class="object-field">
         <label>{{trans('strings.fields-name.deadline')}}</label>
-        <p class="text-info" name="dob">{{$data['object']->formated_deadline}}</p>
+        <p class="text-info">{{$data['object']->formated_deadline}}</p>
     </div>
     <div class="object-field">
         <label>{{trans('strings.fields-name.plaintime')}}</label>
-        <p class="text-info" name="role">{{$data['object']->formated_plaintime}}</p>
+        <p class="text-info">{{$data['object']->formated_plaintime}}</p>
     </div>
     <div class="object-field">
         <label>{{trans('strings.fields-name.assignment')}}</label>
-        <p class="text-info" name="role">
+        <p class="text-info">
         @if ($data['object']->stage)
         @if ($data['object']->stage->project->isActive())
         <a href="/projects/show/{{$data['object']->stage->project->id}}">{{$data['object']->stage->project->name}}</a> - {{$data['object']->stage->flow->name}} - {{$data['object']->stage->name}}
@@ -33,16 +33,19 @@
     </div>
     <div class="object-field">
         <label>{{trans('strings.fields-name.director')}}</label>
-        <p class="text-info" name="email"><a href="/employees/show/{{$data['object']->director->id}}">{{$data['object']->director}}</a></p>
+        <p class="text-info"><a href="/employees/show/{{$data['object']->director->id}}">{{$data['object']->director}}</a></p>
     </div>
 
     <div class="object-field">
         <label>{{trans('strings.fields-name.executor')}}</label>
-        <p class="text-info" name="tel"><a href="/employees/show/{{$data['object']->executor->id}}">{{$data['object']->executor}}</a></p>
+        <p class="text-info"><a href="/employees/show/{{$data['object']->executor->id}}">{{$data['object']->executor}}</a></p>
     </div>
 
     <div class="object-field">
         <label>{{trans('strings.fields-name.description')}}</label>
-        <p class="text-info" name="skype">{{$data['object']->description}}</p>
+        <p class="text-info">{{$data['object']->description}}</p>
     </div>
+
+    @include('module-objects.documents.attachments-list')
+
 @endsection

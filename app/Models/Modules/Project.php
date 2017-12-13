@@ -35,6 +35,18 @@ class Project extends ModuleObjectModel
 		return static::active()->where('manager_id',$employee_id)->orderBy('name')->get();
 	}
 
+	public function attachDocuments($attachments) {
+
+        Modules\Internal\Attachment::where('project_id',$this->id)->whereNotIn('document_id',$attachments)->delete();
+
+        foreach ($attachments as $attachment) {
+
+            if (Modules\Internal\Attachment::where('project_id',$this->id)->where('document_id',$attachment)->count()) continue;
+            
+            Modules\Internal\Attachment::createObject(['project_id'=>$this->id,'document_id'=>$attachment]);
+        }
+    }
+
 	public function __toString() {
 		
 		return $this->name;
@@ -53,6 +65,7 @@ class Project extends ModuleObjectModel
 	}
 
 	public function getFlowsList() {
+		
 		$string_list = '';
 		foreach ($this->flows as $flow) {
 			$string_list .= $flow->id . ';';
@@ -62,6 +75,15 @@ class Project extends ModuleObjectModel
 
 	public function getTransactions() {
 		
-		return Modules\Transaction::active()->where('project_id',$this->id)->orderBy('datetimeof','desc')->limit(config('settings.page-limit'))->get();
+		$transactions = Modules\Transaction::active()->where('project_id',$this->id)->orderBy('datetimeof','desc')->limit(config('settings.page-limit'));
+
+		return ($transactions->count()) ? $transactions->get() : array();
 	}
+
+	public function getDocuments() {
+
+        $documents = $this->belongsToMany(Modules\Document::class, 'attachments', 'project_id', 'document_id')->where('enable',1);
+
+        return ($documents->count()) ? $documents->get() : array();
+    }
 }

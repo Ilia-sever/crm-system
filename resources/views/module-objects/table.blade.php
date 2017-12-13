@@ -10,7 +10,7 @@
 @endif
 <div class="search">
     <div class="input-group search-input">
-        <input type="text" class="form-control" id="exampleInputAmount" value="{{request('search-value')}}">
+        <input type="text" class="form-control" value="{{request('search-value')}}">
         <button id="search-start" class="input-group-addon">{{trans('strings.operations.search')}}</button>
     </div>
     <div class="form-group search-select">

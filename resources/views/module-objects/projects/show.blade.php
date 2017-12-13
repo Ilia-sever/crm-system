@@ -59,5 +59,7 @@
         <a class="out-link" href="/transactions?search-field=assignment&&search-value={{$data['object']->name}}">{{trans('strings.operations.watch-other')}}</a>
     </div>
     @endif
+
+    @include('module-objects.documents.attachments-list')
     
 @endsection

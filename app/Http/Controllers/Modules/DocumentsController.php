@@ -44,7 +44,6 @@ class DocumentsController extends ModuleController
         ];
 
         return response()->file($document->file_path,$headers);
-        // return response()->download($path,$document->name);
     }
 
 
@@ -102,14 +101,14 @@ class DocumentsController extends ModuleController
 
         $storage_name = Tools\Localizator::translitString(implode('.', $name_parts));
 
-        while (file_exists(storage_path() . DIRECTORY_SEPARATOR . $storage_name . '.' . $file->extension())) {
+        while (file_exists(config('settings.document_directory') . $storage_name . '.' . $file->extension())) {
             
             $storage_name .= '+';
         }
 
         $storage_fullname = $storage_name . '.' . $file->extension();
 
-        $file->move(storage_path(),$storage_fullname);
+        $file->move(config('settings.document_directory'),$storage_fullname);
 
         Modules\Document::createObject([
             'name' => $name,
@@ -152,6 +151,27 @@ class DocumentsController extends ModuleController
         $request_data['errors'] = $errors;
 
         return $request_data;
+    }
+
+    public function getSelectPanel() {
+
+        if(!auth()->user()->can('watch','documents')) return '';
+        
+        return view('module-objects.documents.select-panel');
+    }
+
+    public function getSelectItems($select_search='') {
+
+        $data['select-items'] = array();
+
+        $documents = Modules\Document::active()->where('name','like',"%$select_search%")->orderBy('datetimeof','desc')->limit(5);
+
+        if ($documents->count()) {
+
+            $data['select-items'] = $this->filterObjects('watch','documents',$documents->get());
+        }
+
+        return view('module-objects.documents.select-items',compact('data'));
     }
 
 }

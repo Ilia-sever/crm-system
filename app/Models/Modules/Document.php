@@ -18,14 +18,14 @@ class Document extends ModuleObjectModel
 
         if ($this->isControlledEmployee($employee_id)) return true;
 
-        if ($employee_id == $this->employee_id) return true;
+        foreach ($this->belongsToMany(Modules\Task::class, 'attachments', 'document_id', 'task_id')->where('enable',1)->get() as $task) {
 
-        if ($this->project) {
-            if ($employee_id == $this->project->manager_id) return true;
+            if ($task->isRelatedEmployee($employee_id)) return true;
         }
 
-        if ($this->client) {
-            if ($employee_id == $this->client->manager_id) return true;
+        foreach ($this->belongsToMany(Modules\Project::class, 'attachments', 'document_id', 'project_id')->where('enable',1)->get() as $project) {
+
+            if ($project->isRelatedEmployee($employee_id)) return true;
         }
 
         return false;
@@ -43,6 +43,11 @@ class Document extends ModuleObjectModel
         if (in_array($this->mime_type, $image_mime_types)) return true;
     }
 
+    public function isFileExist() {
+
+        return file_exists($this->file_path);
+    }
+
     protected function getFile() {
 
         return new \Illuminate\Http\File($this->file_path);
@@ -50,7 +55,7 @@ class Document extends ModuleObjectModel
 
     public function getFilePath() {
 
-        return storage_path() . DIRECTORY_SEPARATOR . $this->link;
+        return config('settings.document_directory') . $this->link;
     }
 
     public function getMimeType() {
@@ -82,12 +87,5 @@ class Document extends ModuleObjectModel
         $name_parts = explode('.', $this->name);
 
         return array_pop($name_parts);
-
-
     }
-
-
-
-    
-
 }

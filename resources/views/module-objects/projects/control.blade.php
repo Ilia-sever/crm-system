@@ -30,5 +30,6 @@
     <button class="flows-stages__control">{{trans('strings.operations.edit')}}</button>
 </div>
 
+@include('module-objects.documents.attachments-field')
 
 @endsection

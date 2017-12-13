@@ -42,20 +42,9 @@ class Contact extends ModuleObjectModel
 
     public function getCompanies() {
 
-        $companies = array();
+        $companies = $this->belongsToMany(Modules\Client::class, 'agents', 'contact_id', 'client_id')->where('enable',1);
 
-        $companies_id =  Modules\Internal\Agent::where('contact_id',$this->id)->pluck('client_id');
-
-        foreach ($companies_id as $company_id) {
-
-            $company = Modules\Client::active()->find($company_id);
-
-            if (!$company) continue;
-
-            $companies[] = $company;
-        }
-
-        return $companies;
+        return ($companies->count()) ? $companies->get() : array();
     }
 
     public function getSocnetworks() {

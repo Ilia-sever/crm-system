@@ -913,11 +913,92 @@ h1 {
   	text-align: center;
   	font-weight: bold;
   	color: #fff;
+  	opacity: 0.9;
 }
 
 .document-preview  p {
 	margin: 0 0 0 10px;
 }
+
+.attachments__item {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 5px;
+}
+
+.attachments__item p {
+	width: 100%;
+	margin:0;
+	padding: 5px 10px;
+	background-color: #e6e6e6;
+	border-radius: 5px;
+}
+
+.attachments__example {
+	display: none;
+}
+
+.document-select-list {
+	margin: 0;
+	padding: 0;
+}
+
+.document-select-list > p{
+	margin: 20px 0;
+	width: 100%;
+	text-align: center;
+}
+
+.document-select-list__item {
+	margin: 0;
+	padding: 10px;
+	list-style-type: none;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	cursor: pointer;
+}
+
+.document-select-list__item:hover {
+	background-color: #e6e6e6;
+}
+
+.document-select-list__item > p {
+	margin: 0;
+}
+
+.document-select-list__item .document-preview {
+	width: 100%;
+}
+
+.attachments-list {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.attachments-list li { 
+	padding: 10px 0;
+	margin: 0;
+	list-style-type: none;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	border-bottom: 1px solid #e6e6e6;
+}
+.attachments-list li:last-child {
+	border-bottom: 0;
+}
+.attachments-list li > a {
+	margin-right: 10px;
+}
+
+
+
 
 @media (min-width: 768px) {
 
