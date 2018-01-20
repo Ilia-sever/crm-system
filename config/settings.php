@@ -2,6 +2,8 @@
 
 return [
 
+	'company_name' => 'MyCompany',
+
 	'page-limit' => 15,
 
 	'currency_prefix' => '',

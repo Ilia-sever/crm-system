@@ -9,8 +9,9 @@
 <div class="container-fluid wrapper">
     <header class="row header">
         <div class="logo">
-            <img src="{{URL::asset('images/logo3.png')}}">
-            <span>high level automatization</span>
+            <img class="logo__image" src="{{URL::asset('images/logo_new.png')}}">
+            <span class="logo__title">{{config('settings.company_name')}}</span>
+            <span class="logo__caption">corporative system</span>
         </div>
         <nav class="navigation">
             <ul>

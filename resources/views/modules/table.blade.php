@@ -24,27 +24,29 @@
     </div>
     
 </div>
-<table class="records-table table table-bordered">
-    <thead>
-        <tr>
-            <th class="checkbox-cell">
-                <input type="checkbox" class="checkbox-main">
-            </th>
-            @foreach ($data['common-fields'] as $field)
-            <th>
-                {{trans('strings.fields-name.'. $field)}}
-                <a class="sort-button" id="{{$field}}" value="desc"></a>
-            </th>
-            @endforeach
-            <th class="actions-cell">{{trans('strings.fields-name.actions')}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr class="records-table__row_empty">
-            <td colspan=100>{{trans('strings.messages.loading')}}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="table-wrapper">
+    <table class="records-table table table-bordered">
+        <thead>
+            <tr>
+                <th class="checkbox-cell">
+                    <input type="checkbox" class="checkbox-main">
+                </th>
+                @foreach ($data['common-fields'] as $field)
+                <th>
+                    {{trans('strings.fields-name.'. $field)}}
+                    <a class="sort-button" id="{{$field}}" value="desc"></a>
+                </th>
+                @endforeach
+                <th class="actions-cell">{{trans('strings.fields-name.actions')}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="records-table__row_empty">
+                <td colspan=100>{{trans('strings.messages.loading')}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 @if (auth()->user()->can('delete',"$module_code"))
 <button type="button" class="btn delete-all-button btn-danger">
     {{trans('strings.operations.delete-selected')}}
